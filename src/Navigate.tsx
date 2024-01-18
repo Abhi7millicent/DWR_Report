@@ -13,7 +13,7 @@ const Navigate = () => {
     <div>
       <Navbar />
       <div className="flex">
-        <div>
+        <div className="bg-gray-800">
           <Layout>
             <SideBarLayout />
           </Layout>

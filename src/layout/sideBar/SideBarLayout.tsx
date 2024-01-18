@@ -66,7 +66,7 @@ const SideBarLayout: React.FC = () => {
 
   return (
     <div
-      className={`h-screen bg-gray-800 text-white transition-all delay-150 duration-300 ${
+      className={` bg-gray-800 text-white transition-all delay-150 duration-300 ${
         !isExpanded ? " w-20" : "w-64"
       }`}
       onMouseEnter={() => setIsExpanded(true)}
@@ -88,7 +88,7 @@ const SideBarLayout: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <div className="flex h-screen">
+    <div className="flex bg-gray-800">
       <SideBarLayout />
       {/* Add your content here */}
     </div>
