@@ -1,8 +1,8 @@
 // Import necessary libraries
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { addDays, isSaturday, isSunday, getDate } from "date-fns"; // Import date-fns functions
+import { isSunday } from "date-fns"; // Import date-fns functions
 import CommonModal from "../commonModal/CommonModal";
 import CommonTable from "../commonTable/CommonTable";
 import axios from "axios";
@@ -56,6 +56,7 @@ const Calendar = (props: Props) => {
       // You can perform additional actions on date selection if needed
       console.log("formated Date:", formattedDate);
     }
+    console.log("selected day:", setSelectedDate);
   };
   // Function to customize the rendering of date cells
   const highlightWeekendDays = (date: Date) => {

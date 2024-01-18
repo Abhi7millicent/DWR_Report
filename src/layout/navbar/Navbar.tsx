@@ -1,6 +1,6 @@
 import React from "react";
 import CottageIcon from "@mui/icons-material/Cottage";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   return (

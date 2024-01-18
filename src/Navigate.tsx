@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { Route, Routes } from "react-router";
 import Employee from "./components/employee/Employee";
 import EmployeeRecord from "./components/employee/EmployeeRecord";
