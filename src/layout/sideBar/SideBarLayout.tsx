@@ -66,7 +66,7 @@ const SideBarLayout: React.FC = () => {
 
   return (
     <div
-      className={` bg-gray-800 text-white transition-all delay-150 duration-300 ${
+      className={` bg-gray-800 text-white transition-all delay-150 duration-300 h-screen ${
         !isExpanded ? " w-20" : "w-64"
       }`}
       onMouseEnter={() => setIsExpanded(true)}

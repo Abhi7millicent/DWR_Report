@@ -12,13 +12,13 @@ const Navigate = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex h-screen">
+      <div className="flex">
         <div className="bg-gray-800">
           <Layout>
             <SideBarLayout />
           </Layout>
         </div>
-        <div className="overflow-x-hidden w-full px-10 bg-gray-200">
+        <div className="overflow-auto w-full px-10 bg-gray-200">
           <Routes>
             <Route path="/employee" element={<Employee />} />
             <Route
