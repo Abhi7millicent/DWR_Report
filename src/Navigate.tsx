@@ -12,7 +12,7 @@ const Navigate = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex">
+      <div className="flex h-screen">
         <div className="bg-gray-800">
           <Layout>
             <SideBarLayout />
