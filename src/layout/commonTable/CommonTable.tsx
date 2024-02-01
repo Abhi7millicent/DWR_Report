@@ -24,6 +24,17 @@ const CommonMaterialTable: React.FC<CommonMaterialTableProps> = ({
   const table = useMaterialReactTable({
     columns,
     data,
+    muiTablePaperProps: {
+      sx: {
+        paddingRight: "20px !important",
+        paddingLeft: "20px !important",
+      },
+    },
+    muiTableHeadCellProps: {
+      sx: {
+        minWidth: "max-content !important",
+      },
+    },
   });
 
   return <MaterialReactTable table={table} />;

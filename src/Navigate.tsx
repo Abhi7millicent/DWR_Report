@@ -7,6 +7,8 @@ import Register from "./components/register/Register";
 import Navbar from "./layout/navbar/Navbar";
 import { Layout } from "antd";
 import SideBarLayout from "./layout/sideBar/SideBarLayout";
+import ProjectView from "./components/project/ProjectView";
+import EditEmployeeDetails from "./components/register/editEmployeeDetails/EditEmployeeDetails";
 
 const Navigate = () => {
   return (
@@ -26,10 +28,12 @@ const Navigate = () => {
               element={<EmployeeRecord />}
             />
             <Route
-              path="/employee_record/:id"
+              path="/employee_record_data/:id/:name"
               element={<EmployeeRecordFullData />}
             />
             <Route path="/register" element={<Register />} />
+            <Route path="/project" element={<ProjectView />} />
+            <Route path="/editEmployee/:id" element={<EditEmployeeDetails />} />
           </Routes>
         </div>
       </div>

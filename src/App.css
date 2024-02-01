@@ -63,3 +63,30 @@ body {
   transition: width 3s ease;
   /* You can adjust the transition properties */
 }
+
+.react-tabs {
+  position: relative;
+  overflow: hidden;
+}
+
+.react-tabs .react-tabs__tab-list {
+  transition: transform 0.3s ease-in-out;
+}
+
+.react-tabs .react-tabs__tab {
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.react-tabs .react-tabs__tab--selected {
+  color: blue;
+}
+
+.react-tabs .react-tabs__tab-panel {
+  display: none;
+}
+
+.react-tabs .react-tabs__tab-panel.react-tabs__tab-panel--selected {
+  display: block;
+  transition: opacity 0.3s ease-in-out;
+}

@@ -6,7 +6,7 @@ import CommonTable from "../../layout/commonTable/CommonTable";
 import CloudDownloadSharpIcon from "@mui/icons-material/CloudDownloadSharp";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
+import autoTable, { UserOptions } from "jspdf-autotable";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import DateRange from "../../layout/dateRange/DateRange";
@@ -28,7 +28,7 @@ interface empRecordsFullData {
 const EmployeeRecordFullData: React.FC = () => {
   const [formattedStartDate, setFormattedStartDate] = useState("");
   const [formattedEndDate, setFormattedEndDate] = useState("");
-  const { id } = useParams<{ id: string }>();
+  const { id, name } = useParams();
   const [employeeRecordsFullData, setEmployeeRecordsFullData] = useState<
     empRecordsFullData[]
   >([]);
@@ -95,24 +95,65 @@ const EmployeeRecordFullData: React.FC = () => {
 
         downloadUrl = window.URL.createObjectURL(blob);
       } else if (format === "pdf") {
-        const doc = new jsPDF();
-        const tableData = employeeRecordsFullData.map((record) =>
-          Object.values(record)
-        );
-        const tableHeaders = Object.keys(employeeRecordsFullData[0]);
-
-        autoTable(doc, {
-          head: [tableHeaders],
-          body: tableData,
+        const doc = new jsPDF({
+          orientation: "landscape", // Set the orientation to landscape
         });
 
+        // const tableData = employeeRecordsFullData.map((record) =>
+        //   Object.keys(record)
+        //     .filter((key) => key !== "employeeId") // Exclude "Employee Id" column
+        //     .map((key) => (record as any)[key])
+        // );
+
+        const tableData = employeeRecordsFullData.map((record, index) => {
+          const modifiedRecord = { ...record, id: index + 1 };
+          return Object.keys(modifiedRecord)
+            .filter((key) => key !== "employeeId")
+            .map((key) => (modifiedRecord as any)[key]);
+        });
+        const tableHeaders = Object.keys(employeeRecordsFullData[0]).filter(
+          (header) => header !== "employeeId"
+        );
+
+        const capitalizedTableHeaders = tableHeaders.map(
+          (header) => header.charAt(0).toUpperCase() + header.slice(1)
+        );
+
+        // Set up the autoTable configuration for landscape view
+        const autoTableOptions: UserOptions = {
+          head: [capitalizedTableHeaders],
+          body: tableData,
+          startY: 25,
+          theme: "grid",
+          margin: { top: 30 },
+          styles: { overflow: "linebreak" },
+          didDrawPage: (data) => {
+            // Add header with styling
+            data.doc.setFontSize(18);
+            data.doc.setFont("helvetica", "bold");
+            data.doc.setTextColor(40, 40, 40);
+            data.doc.text("Employee Work Report: " + name, 14, 20);
+
+            // // Add footer
+            // const pageCount = data.doc.internal.getNumberOfPages();
+            data.doc.setFontSize(12);
+            data.doc.setFont("helvetica", "normal");
+            data.doc.setTextColor(40, 40, 40);
+            // const totalPagesExp = "{total_pages_count_string}";
+            data.doc.text("Page " + data.pageNumber, 14, 200);
+          },
+        };
+        // Use autoTable function
+        autoTable(doc, autoTableOptions);
+
+        // Generate blob and download
         const blob = doc.output("blob");
         downloadUrl = URL.createObjectURL(blob);
       }
 
       const link = document.createElement("a");
       link.href = downloadUrl || "";
-      link.download = `EmployeeRecords.${format}`;
+      link.download = `${name}_DWR_Report.${format}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -157,21 +198,21 @@ const EmployeeRecordFullData: React.FC = () => {
 
   const tableHead: MRT_ColumnDef<any>[] = [
     { accessorKey: "0", header: "Sr.No" },
-    { accessorKey: "1", header: "Emp Id" },
-    { accessorKey: "2", header: "Date" },
-    { accessorKey: "3", header: "From Time" },
-    { accessorKey: "4", header: "To Time" },
-    { accessorKey: "5", header: "Project Name" },
-    { accessorKey: "6", header: "Issue/Support/TaskDescription" },
-    { accessorKey: "7", header: "Reported By/Allocated by" },
-    { accessorKey: "8", header: "Bug/New/Change/Support" },
-    { accessorKey: "9", header: "Resolved On/Completed On" },
-    { accessorKey: "10", header: "Comment Solution" },
+    // { accessorKey: "1", header: "Emp Id" },
+    { accessorKey: "1", header: "Date" },
+    { accessorKey: "2", header: "From Time" },
+    { accessorKey: "3", header: "To Time" },
+    { accessorKey: "4", header: "Project Name" },
+    { accessorKey: "5", header: "Issue/Support/TaskDescription" },
+    { accessorKey: "6", header: "Reported By/Allocated by" },
+    { accessorKey: "7", header: "Bug/New/Change/Support" },
+    { accessorKey: "8", header: "Resolved On/Completed On" },
+    { accessorKey: "9", header: "Comment Solution" },
   ];
 
   const tableBody = employeeRecordsFullData.map((record, index) => [
     (index + 1).toString(),
-    record.employeeId,
+    // record.employeeId,
     record.date,
     record.fromTime,
     record.toTime,
@@ -202,6 +243,10 @@ const EmployeeRecordFullData: React.FC = () => {
             <label className="text-sm">PDF</label>
           </button>
         </div>
+      </div>
+      <div className="flex mt-2">
+        <label className="font-semibold">Name:</label>
+        <div className="px-2">{name}</div>
       </div>
       <div className="mt-4 ">
         <CommonTable tableHead={tableHead} tableBody={tableBody} />

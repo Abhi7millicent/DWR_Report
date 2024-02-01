@@ -8,6 +8,8 @@ import Calendar from "../../layout/calendar/Calendar";
 import { MRT_ColumnDef } from "material-react-table";
 import ViewListSharpIcon from "@mui/icons-material/ViewListSharp";
 import WysiwygSharpIcon from "@mui/icons-material/WysiwygSharp";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import UploadDWR from "../../layout/upload/UploadDWR";
 
 interface empData {
   id: number;
@@ -28,6 +30,9 @@ export interface employeeIdData {
 const Employee: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [empId, setEmpId] = useState<employeeIdData | null>(null);
+  const [empIdForUpload, setEmpIdForUpload] = useState<employeeIdData | null>(
+    null
+  );
   const [employeeData, setEmployeeData] = useState<empData[]>([]);
 
   // const handleDataFromChild = async (data: string) => {
@@ -63,36 +68,58 @@ const Employee: React.FC = () => {
     setIsModalOpen(true);
     setEmpId({ id: Id }); // Corrected the way of setting empId
   };
+  const openModalForUpload = (Id: string) => {
+    setIsModalOpen(true);
+    setEmpIdForUpload({ id: Id }); // Corrected the way of setting empId
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setEmpId(null);
+    setEmpIdForUpload(null);
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [
     { accessorKey: "0", header: "Sr.No" },
-    { accessorKey: "1", header: "Employee Name" },
-    { accessorKey: "2", header: "Single View" },
-    { accessorKey: "3", header: "Full View" },
-    { accessorKey: "4", header: "Calendar" },
+    { accessorKey: "1", header: "Employee Id" },
+    { accessorKey: "2", header: "Employee Name" },
+    { accessorKey: "3", header: "Single View" },
+    { accessorKey: "4", header: "Full View" },
+    { accessorKey: "5", header: "Calendar" },
+    { accessorKey: "6", header: "Upload" },
     // ... add the rest of your headers in a similar fashion
   ];
 
   // const tableHead = ["Sr.No", "Employee Name", "Record", "Calendar"];
   const tableBody = employeeData.map((empData, index) => [
     index + 1,
-    `${empData.firstName} ${empData.lastName}`,
+    empData.id,
+    <a key={index} href={`/editEmployee/${empData.id}`}>
+      {empData.firstName} {empData.lastName}
+    </a>,
     <a
       key={index}
       href={`/employee_record/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
     >
       <ViewListSharpIcon />
     </a>,
-    <a key={index} href={`/employee_record/${empData.id}`}>
+    <a
+      key={index}
+      href={`/employee_record_data/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
+    >
       <WysiwygSharpIcon />
     </a>,
     <button key={index} onClick={() => openModal(empData.id.toString())}>
       <CalendarMonthIcon />
     </button>,
+    <a>
+      <button
+        key={index}
+        onClick={() => openModalForUpload(empData.id.toString())}
+      >
+        <DriveFolderUploadIcon />
+      </button>
+    </a>,
   ]);
 
   return (
@@ -108,6 +135,7 @@ const Employee: React.FC = () => {
       <div className="w-fit">
         <CommonModal isOpen={isModalOpen} onClose={closeModal}>
           {empId && <Calendar data={empId} />}
+          {empIdForUpload && <UploadDWR data={empIdForUpload} />}
         </CommonModal>
       </div>
     </div>

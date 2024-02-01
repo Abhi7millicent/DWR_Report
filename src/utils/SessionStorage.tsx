@@ -8,4 +8,8 @@ export const SetSessionItem = (key: string, value: string): void => {
   return sessionStorage.setItem(key, value);
 };
 
+export function clearSessionStorage(): void {
+  sessionStorage.clear();
+}
+
 // export default { GetSessionItem, SetSessionItem };

@@ -30,7 +30,7 @@ function getItem(
 
 const sidebarItems: MenuItem[] = [
   getItem("Option 1", "1", <PieChartOutlined />),
-  getItem("Option 2", "2", <DesktopOutlined />),
+  getItem("Project", "project", <DesktopOutlined />),
   getItem("Register", "register", <ContainerOutlined />),
   getItem("Navigation One", "sub1", <MailOutlined />, [
     getItem("Option 5", "5"),
