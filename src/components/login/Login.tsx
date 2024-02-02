@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { SetSessionItem } from "../../utils/SessionStorage";
 import { useNavigate } from "react-router";
+import "../../App.css"
+import loginBackground from "../../assets/logo-color.png"
+import { motion } from "framer-motion";
 
 const Login: React.FC = () => {
   const [userId, setUserId] = useState<string>("");
@@ -33,17 +36,16 @@ const Login: React.FC = () => {
 
   return (
     <div
-      className="flex items-center justify-center h-screen"
-      style={{
-        background: "linear-gradient(to right, violet, white, yellow)",
-      }}
-    >
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
+      className="flex items-center flex-col justify-center h-screen gap-4">
+       <motion.div animate={{ opacity:1,scale:1 }} initial={{opacity:0 ,scale:0}} transition={{duration:0.6}}>
+       <img src={loginBackground} width="150" alt="images"/>
+        </motion.div>
+      <motion.div animate={{opacity:1,y:0}} initial={{y:300,opacity:0}} transition={{duration:0.5,ease:"easeOut"}} className="bg-white p-8 rounded shadow-md w-96 rounded-md">
+        <h2 className="text-2xl font-bold mb-4 text-center text-[#226d6dbf]">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-sm font-bold mb-2"
               htmlFor="userId"
             >
               UserId
@@ -51,7 +53,7 @@ const Login: React.FC = () => {
             <input
               type="text"
               id="userId"
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full text-sm px-3 py-2 border-[#226d6dbf] border rounded-md outline-[#226d6d8c] outline-[0.3px] "
               placeholder="Enter your userId"
               value={userId}
               required
@@ -68,7 +70,7 @@ const Login: React.FC = () => {
             <input
               type="password"
               id="password"
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 text-sm py-2 border-[#226d6dbf] border rounded-md outline-[#226d6d8c] outline-[0.3px] "
               placeholder="Enter your password"
               value={password}
               required
@@ -77,12 +79,12 @@ const Login: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            className="w-full text-white py-2 rounded-md bg-[#226d6dbf] hover:bg-[#1e5959d0] transition-all"
           >
             Login
           </button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };
