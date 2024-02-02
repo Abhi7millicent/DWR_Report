@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { SetSessionItem } from "../../utils/SessionStorage";
 import { useNavigate } from "react-router";
-import "../../App.css"
-import loginBackground from "../../assets/logo-color.png"
+import "../../App.css";
+import loginBackground from "../../assets/logo-color.png";
 import { motion } from "framer-motion";
 
 const Login: React.FC = () => {
@@ -35,19 +35,26 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div
-      className="flex items-center flex-col justify-center h-screen gap-4">
-       <motion.div animate={{ opacity:1,scale:1 }} initial={{opacity:0 ,scale:0}} transition={{duration:0.6}}>
-       <img src={loginBackground} width="150" alt="images"/>
-        </motion.div>
-      <motion.div animate={{opacity:1,y:0}} initial={{y:300,opacity:0}} transition={{duration:0.5,ease:"easeOut"}} className="bg-white p-8 rounded shadow-md w-96 rounded-md">
-        <h2 className="text-2xl font-bold mb-4 text-center text-[#226d6dbf]">Login</h2>
+    <div className="flex items-center flex-col justify-center h-screen gap-4">
+      <motion.span
+        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, scale: 0 }}
+        transition={{ duration: 0.6, repeatType: "loop" }}
+      >
+        <img src={loginBackground} width="150" alt="images" />
+      </motion.span>
+      <motion.span
+        animate={{ opacity: 1, y: 0 }}
+        initial={{ y: 300, opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="bg-white p-8 rounded shadow-md w-96 rounded-md"
+      >
+        <h2 className="text-2xl font-bold mb-4 text-center text-[#226d6dbf]">
+          Login
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              className="block text-sm font-bold mb-2"
-              htmlFor="userId"
-            >
+            <label className="block text-sm font-bold mb-2" htmlFor="userId">
               UserId
             </label>
             <input
@@ -84,7 +91,7 @@ const Login: React.FC = () => {
             Login
           </button>
         </form>
-      </motion.div>
+      </motion.span>
     </div>
   );
 };
