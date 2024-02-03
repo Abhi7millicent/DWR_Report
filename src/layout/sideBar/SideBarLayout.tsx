@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
-
+import "../../App.css";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -29,7 +29,8 @@ function getItem(
 }
 
 const sidebarItems: MenuItem[] = [
-  getItem("Option 1", "1", <PieChartOutlined />),
+  getItem("Dashboard", "dashboard", <PieChartOutlined />),
+  getItem("Employee", "employee", <PieChartOutlined />),
   getItem("Project", "project", <DesktopOutlined />),
   getItem("Register", "register", <ContainerOutlined />),
   getItem("Navigation One", "sub1", <MailOutlined />, [
@@ -49,9 +50,11 @@ const sidebarItems: MenuItem[] = [
 ];
 
 const SideBarLayout: React.FC = () => {
-  const [selectedKey, setSelectedKey] = useState("");
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedKey, setSelectedKey] = useState("employee");
+  const [isExpanded, setIsExpanded] = useState(true);
   const navigate = useNavigate();
+
+  console.log(selectedKey, "selectedKey");
 
   const handleMenuClick = (e: any) => {
     setSelectedKey(e.key);
@@ -62,23 +65,24 @@ const SideBarLayout: React.FC = () => {
     if (selectedKey !== "") {
       navigate(`/${selectedKey}`);
     }
-  }, [selectedKey, navigate]);
+  }, [selectedKey]);
 
   return (
     <div
-      className={` bg-gray-800 text-white transition-all delay-150 duration-300 h-screen ${
+      className={` text-white transition-all delay-150 duration-300 h-screen ${
         !isExpanded ? " w-20" : "w-64"
       }`}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
+      // onMouseEnter={() => setIsExpanded(true)}
+      // onMouseLeave={() => setIsExpanded(false)}
     >
       <Menu
+        selectedKeys={[selectedKey]}
         mode="vertical"
-        theme="dark"
+        // theme="dark"
         inlineCollapsed={!isExpanded}
         items={sidebarItems}
         onClick={handleMenuClick}
-        className={`transition-all delay-150 duration-300 ${
+        className={`transition-all delay-150 duration-300  ${
           !isExpanded ? " w-20" : "w-64"
         }`}
       />
@@ -88,7 +92,7 @@ const SideBarLayout: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <div className="flex bg-gray-800">
+    <div className="flex bg-white">
       <SideBarLayout />
       {/* Add your content here */}
     </div>
