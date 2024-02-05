@@ -51,7 +51,7 @@ const sidebarItems: MenuItem[] = [
 ];
 
 const SideBarLayout: React.FC = () => {
-  const [selectedKey, setSelectedKey] = useState("employee");
+  const [selectedKey, setSelectedKey] = useState("");
   const [isExpanded, setIsExpanded] = useState(true);
   const navigate = useNavigate();
 
