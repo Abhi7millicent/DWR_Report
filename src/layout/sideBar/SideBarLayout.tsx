@@ -72,8 +72,8 @@ const SideBarLayout: React.FC = () => {
       className={` text-white transition-all delay-150 duration-300 h-screen ${
         !isExpanded ? " w-20" : "w-64"
       }`}
-      // onMouseEnter={() => setIsExpanded(true)}
-      // onMouseLeave={() => setIsExpanded(false)}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
     >
       <Menu
         selectedKeys={[selectedKey]}
