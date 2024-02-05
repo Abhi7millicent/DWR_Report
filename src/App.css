@@ -10,12 +10,14 @@
   padding: 2rem;
   text-align: center; */
   --font-family: 'Poppins', sans-serif;
+  --font-family: 'Poppins', sans-serif;
   --font-size-h1: "32px";
   --font-size-h2: "24px";
   --font-size-h3: "20px";
   --font-size-h4: "16px";
   --font-size-h5: "14px";
   --font-size-h6: "12px";
+  --primary-color: #226d6dbf;
 }
 
 /* @layer base{
@@ -61,6 +63,24 @@
 
 .fs-h6 {
   font-size: var(--font-size-h6);
+}
+
+.btn-background-color {
+  background-color: var(--primary-color);
+}
+
+.input-border {
+  border: 1px solid var(--primary-color);
+  outline: #226d6d8c;
+
+}
+
+.btn-background-color:hover {
+  background-color: #1e5959d0;
+}
+
+.text-color {
+  color: var(--primary-color);
 }
 
 body {
@@ -149,4 +169,23 @@ body {
 .react-tabs .react-tabs__tab-panel.react-tabs__tab-panel--selected {
   display: block;
   transition: opacity 0.3s ease-in-out;
+}
+
+.ant-menu-item {
+  color: var(--primary-color) !important;
+}
+
+.ant-menu-item-selected {
+  color: var(--primary-color) !important;
+  background-color: #ace1e180 !important;
+}
+
+.ant-menu-submenu-title {
+  color: var(--primary-color) !important;
+
+}
+
+.ant-menu-submenu-selected {
+  color: var(--primary-color) !important;
+  background-color: #ace1e180 !important;
 }

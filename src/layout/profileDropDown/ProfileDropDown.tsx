@@ -12,7 +12,7 @@ const ProfileDropDown = () => {
     navigate("/");
   };
   return (
-    <div className="flex flex-col ProfileDropDown bg-gray-800 z-50 transition-all duration-400 delay-75">
+    <div className="flex flex-col ProfileDropDown bg-white z-50 transition-all duration-400 delay-75">
       <ul className="flex flex-col gap-4">
         <li className="cursor-pointer">
           <AccountCircleIcon />
