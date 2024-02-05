@@ -6,6 +6,7 @@ import {
   DesktopOutlined,
   MailOutlined,
   PieChartOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
@@ -30,7 +31,7 @@ function getItem(
 
 const sidebarItems: MenuItem[] = [
   getItem("Dashboard", "dashboard", <PieChartOutlined />),
-  getItem("Employee", "employee", <PieChartOutlined />),
+  getItem("Employee", "employee", <UserOutlined />),
   getItem("Project", "project", <DesktopOutlined />),
   getItem("Register", "register", <ContainerOutlined />),
   getItem("Navigation One", "sub1", <MailOutlined />, [
