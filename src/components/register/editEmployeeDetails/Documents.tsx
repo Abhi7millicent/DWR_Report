@@ -1,19 +1,7 @@
-import { MRT_ColumnDef } from "material-react-table";
-import { useEffect, useState } from "react";
-import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CommonTable from "../../../layout/commonTable/CommonTable";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { useDropzone } from "react-dropzone"; // Import useDropzone
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import axios from "axios";
-
-interface DocumentData {
-  id: number;
-  documentType: string;
-  description: string;
-  employeeId: string;
-}
 
 type TQueryParam = {
   id: any;
@@ -24,25 +12,9 @@ const Documents = () => {
   const [description, setDescription] = useState<string>("");
   const { id } = useParams<TQueryParam>();
   const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
-  const [data, setData] = useState<DocumentData[]>([]);
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(e.target.value);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<DocumentData[]>(
-          `http://localhost:8080/api/DWR/document/list/${id}`
-        );
-        console.log("documentData:", response.data);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching employee data:", error);
-      }
-    };
-    fetchData();
-  }, [id]);
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -98,37 +70,6 @@ const Documents = () => {
       // Handle error or display a message to the user
     }
   };
-
-  const handleDeleteClick = (id: number) => {
-    console.log(id);
-    // Add logic to delete the document with the given id
-  };
-
-  const tableHead: MRT_ColumnDef<any>[] = [
-    { accessorKey: "0", header: "Sr.No" },
-    { accessorKey: "1", header: "Document Type" },
-    { accessorKey: "2", header: "Description" },
-    { accessorKey: "3", header: "Download" },
-    { accessorKey: "4", header: "Delete" },
-  ];
-
-  const tableBody = data.map((documentData, index) => [
-    index + 1,
-    documentData.documentType,
-    documentData.description,
-    <a
-      key={`download-${index}`}
-      href={`https://example.com/download/${documentData.id}`}
-    >
-      <CloudDownloadIcon />
-    </a>,
-    <a
-      key={`delete-${index}`}
-      onClick={() => handleDeleteClick(documentData.id)}
-    >
-      <DeleteIcon fontSize="small" className="text-red-600" />
-    </a>,
-  ]);
 
   return (
     <div className="p-4">
@@ -189,9 +130,6 @@ const Documents = () => {
                   Add
                 </button>
               </div>
-            </div>
-            <div className="mt-4">
-              <CommonTable tableHead={tableHead} tableBody={tableBody} />
             </div>
           </div>
         </div>

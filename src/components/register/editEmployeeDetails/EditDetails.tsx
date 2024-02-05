@@ -1,13 +1,33 @@
-import { useState, useEffect } from "react";
-import PersonIcon from "@mui/icons-material/Person";
-import EmailIcon from "@mui/icons-material/Email";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
+import React, { useState, useEffect, FormEvent } from "react";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  TextField,
+  Grid,
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
 
-const EditDetails = () => {
-  const [employeeData, setEmployeeData] = useState({
+interface EmployeeData {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  reporting: string;
+  loginId: string;
+  password: string;
+}
+
+const EditDetails: React.FC = () => {
+  const [employeeData, setEmployeeData] = useState<EmployeeData>({
     firstName: "",
     middleName: "",
     lastName: "",
@@ -28,7 +48,7 @@ const EditDetails = () => {
         );
 
         if (response.ok) {
-          const data = await response.json();
+          const data: EmployeeData = await response.json();
           console.log("data", data);
           setEmployeeData(data);
         } else {
@@ -46,11 +66,21 @@ const EditDetails = () => {
     const { name, value } = e.target;
     setEmployeeData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name as string]: value as string,
     }));
   };
 
-  const handleSubmit = async (e: any) => {
+  // const handleSelectChange = (
+  //   event: SelectChangeEvent<{ name?: string; value: unknown }>
+  // ) => {
+  //   const { name, value } = event.target;
+  //   setEmployeeData((prevData) => ({
+  //     ...prevData,
+  //     [name as string]: { name, value },
+  //   }));
+  // };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const requestData = {
@@ -87,191 +117,91 @@ const EditDetails = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-center">
-        <div className="bg-white p-8 shadow-md rounded-md w-full">
-          <h2 className="text-2xl font-semibold mb-4">Edit Details</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="flex justify-between mb-4">
-              <div className="w-1/3 p-4">
-                <div className="relative">
-                  <div className="absolute bottom-2 -left-5">
-                    <PersonIcon />
-                  </div>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
-                    onChange={handleChange}
-                    placeholder="First Name*"
-                    required
-                    value={employeeData.firstName}
-                  />
-                  <label
-                    htmlFor="firstName"
-                    className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                  >
-                    First Name*
-                  </label>
-                </div>
-              </div>
+    <div>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="edit-details-content"
+          id="edit-details-header"
+        >
+          <Typography>Edit Employee Details</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="First Name"
+                fullWidth
+                value={employeeData.firstName}
+                onChange={handleChange}
+                name="firstName"
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Middle Name"
+                fullWidth
+                value={employeeData.middleName}
+                onChange={handleChange}
+                name="middleName"
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Last Name"
+                fullWidth
+                value={employeeData.lastName}
+                onChange={handleChange}
+                name="lastName"
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Email"
+                fullWidth
+                type="email"
+                value={employeeData.email}
+                onChange={handleChange}
+                name="email"
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <FormControl fullWidth>
+                <InputLabel id="role">Role*</InputLabel>
+                <Select
+                  labelId="role"
+                  id="demo-simple-select"
+                  value={employeeData.role}
+                  label="Role*"
+                  onChange={handleChange}
+                >
+                  <MenuItem value="admin">Admin</MenuItem>
+                  <MenuItem value="softwareEngineer">
+                    Software Engineer
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
 
-              <div className="w-1/3 p-4">
-                <div className="relative">
-                  <input
-                    type="text"
-                    id="middleName"
-                    name="middleName"
-                    className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
-                    placeholder="Middle Name*"
-                    onChange={handleChange}
-                    required
-                    value={employeeData.middleName}
-                  />
-                  <label
-                    htmlFor="middleName"
-                    className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                  >
-                    Middle Name*
-                  </label>
-                </div>
-              </div>
-
-              <div className="w-1/3 p-4">
-                <div className="relative">
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
-                    placeholder="Last Name*"
-                    onChange={handleChange}
-                    required
-                    value={employeeData.lastName}
-                  />
-                  <label
-                    htmlFor="lastName"
-                    className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                  >
-                    Last Name*
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-between mb-4">
-              <div className="w-1/3 p-4">
-                <div className="relative">
-                  <div className="absolute bottom-2 -left-5">
-                    <EmailIcon />
-                  </div>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
-                    placeholder="Email*"
-                    onChange={handleChange}
-                    required
-                    value={employeeData.email}
-                  />
-                  <label
-                    htmlFor="email"
-                    className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                  >
-                    Email*
-                  </label>
-                </div>
-              </div>
-
-              <div className="w-1/3 p-4">
-                <div className="relative">
-                  <div className="absolute bottom-2 -left-5">
-                    <EngineeringIcon />
-                  </div>
-                  <select
-                    id="role"
-                    name="role"
-                    className="peer mt-1 p-2 w-full border-b border-gray-300 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent"
-                    onChange={handleChange}
-                    required
-                    value={employeeData.role}
-                  >
-                    <option value="" disabled>
-                      Select
-                    </option>
-                    <option value="admin">Admin</option>
-                    <option value="softwareEngineer">Software Engineer</option>
-                  </select>
-                  <label
-                    htmlFor="role"
-                    className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                  >
-                    Role*
-                  </label>
-                </div>
-              </div>
-
-              <div className="w-1/3 p-4">
-                <div className="relative">
-                  <div className="absolute bottom-2 -left-5">
-                    <SupervisorAccountIcon />
-                  </div>
-                  <input
-                    type="text"
-                    id="reporting"
-                    name="reporting"
-                    className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
-                    placeholder="Reporting"
-                    onChange={handleChange}
-                    value={employeeData.reporting}
-                  />
-                  <label
-                    htmlFor="reporting"
-                    className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                  >
-                    Reporting*
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-between mb-4">
-              <div className="w-1/3 p-4">
-                <div className="relative">
-                  <div className="absolute bottom-2 -left-5">
-                    <ContactEmergencyIcon />
-                  </div>
-                  <input
-                    type="text"
-                    id="loginId"
-                    name="loginId"
-                    className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
-                    placeholder="UserId*"
-                    onChange={handleChange}
-                    required
-                    value={employeeData.loginId}
-                  />
-                  <label
-                    htmlFor="loginId"
-                    className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                  >
-                    Login Id*
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-            >
-              Update
-            </button>
-          </form>
-        </div>
-      </div>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Reporting"
+                fullWidth
+                value={employeeData.reporting}
+                onChange={handleChange}
+                name="reporting"
+              />
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Update
+        </Button>
+      </Accordion>
     </div>
   );
 };

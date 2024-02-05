@@ -1,8 +1,10 @@
 // import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import EditDetails from "./EditDetails";
-import Documents from "./Documents";
 import SalaryDetails from "./SalaryDetails";
+import ViewAddressDetails from "./ViewAddressDetails";
+import ViewDocuments from "./ViewDocumments";
+import ViewEducationDetails from "./ViewEducationDetails";
 
 const EditEmployeeDetails = () => {
   return (
@@ -19,6 +21,16 @@ const EditEmployeeDetails = () => {
             >
               Details
             </Tab>
+
+            <Tab
+              style={{
+                padding: "4px",
+                paddingLeft: "5px",
+                paddingRight: "5px",
+              }}
+            >
+              Educational Details
+            </Tab>
             <Tab
               style={{
                 padding: "4px",
@@ -28,31 +40,28 @@ const EditEmployeeDetails = () => {
             >
               Documents
             </Tab>
-            <Tab
-              style={{
-                padding: "4px",
-                paddingLeft: "5px",
-                paddingRight: "5px",
-              }}
-            >
-              Salary
-            </Tab>
           </TabList>
         </div>
 
         <TabPanel>
           <h2>
-            <EditDetails />
+            <div className="p-4">
+              <EditDetails />
+              <ViewAddressDetails />
+              <SalaryDetails />
+            </div>
+          </h2>
+        </TabPanel>
+
+        <TabPanel>
+          <h2>
+            {/* <EducationDetails /> */}
+            <ViewEducationDetails />
           </h2>
         </TabPanel>
         <TabPanel>
           <h2>
-            <Documents />
-          </h2>
-        </TabPanel>
-        <TabPanel>
-          <h2>
-            <SalaryDetails />
+            <ViewDocuments />
           </h2>
         </TabPanel>
       </Tabs>

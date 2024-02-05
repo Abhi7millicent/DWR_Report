@@ -9,7 +9,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center; */
-  --font-family :'Poppins', sans-serif;
+  --font-family: 'Poppins', sans-serif;
   --font-size-h1: "32px";
   --font-size-h2: "24px";
   --font-size-h3: "20px";
@@ -17,6 +17,7 @@
   --font-size-h5: "14px";
   --font-size-h6: "12px";
 }
+
 /* @layer base{
   html{
     font-family: 'Poppins', sans-serif;
@@ -26,41 +27,49 @@
   font-weight: 300;
 }
 
-.fw-500  {
+.fw-500 {
   font-weight: 500;
 }
 
-.fw-600{
+.fw-600 {
   font-weight: 600;
 }
 
-.fw-800  {
+.fw-800 {
   font-weight: 800;
 }
-.fs-h1{
+
+.fs-h1 {
   font-size: var(--font-size-h1);
 }
-.fs-h2{
+
+.fs-h2 {
   font-size: var(--font-size-h2);
 }
-.fs-h3{
+
+.fs-h3 {
   font-size: var(--font-size-h3);
 }
-.fs-h4{
+
+.fs-h4 {
   font-size: var(--font-size-h5);
 }
-.fs-h5{
+
+.fs-h5 {
   font-size: var(--font-size-h5);
 }
-.fs-h6{
+
+.fs-h6 {
   font-size: var(--font-size-h6);
 }
+
 body {
   width: 100vw;
   height: 100vh;
   margin: 0px;
   padding: 0px;
   overflow-x: hidden;
+  /* overflow-Y: hidden; */
   background-color: #E5E7EB !important;
   font-family: var(--font-family) !important;
 }

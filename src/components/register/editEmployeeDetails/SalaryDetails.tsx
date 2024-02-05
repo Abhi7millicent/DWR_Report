@@ -1,201 +1,163 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  TextField,
+  Grid,
+  Button,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useParams } from "react-router";
 
-const SalaryDetails = () => {
-  const [formData, setFormData] = useState({
+interface SalaryDetails {
+  bankAccountName: string;
+  ifscCode: string;
+  accountNo: string;
+  uan: string;
+  epfoNo: string;
+  panNo: string;
+  annualSalary: string;
+  monthlySalary: string;
+}
+
+const SalaryDetails: React.FC = () => {
+  const { id } = useParams();
+  const [formData, setFormData] = useState<SalaryDetails>({
     bankAccountName: "",
     ifscCode: "",
-    accountNumber: "",
-    uanNumber: "",
-    epfo: "",
-    pan: "",
+    accountNo: "",
+    uan: "",
+    epfoNo: "",
+    panNo: "",
     annualSalary: "",
     monthlySalary: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const apiEndpoint = `http://localhost:8080/api/DWR/employeeSalary/update/${id}`;
 
-    // If the changed field is 'annualSalary', calculate 'monthlySalary'
-    if (name === "annualSalary") {
-      const annualSalary = parseFloat(value);
-      const monthlySalary = isNaN(annualSalary)
-        ? ""
-        : (annualSalary / 12).toFixed(2);
+  useEffect(() => {
+    // Fetch data from the API and set it to form fields
+    fetch(`http://localhost:8080/api/DWR/employeeSalary/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setFormData(data); // Assuming the API returns the data in the same shape as SalaryDetails
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, [id]);
 
+  const handleInputChange =
+    (field: keyof SalaryDetails) => (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
-        monthlySalary,
+        [field]: value,
       }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // You can perform form submission logic here
-    console.log("Form submitted with data:", formData);
+      // Add logic to calculate monthly salary based on annual salary
+      if (field === "annualSalary") {
+        const monthlySalary = (parseFloat(value) / 12).toFixed(2);
+        setFormData((prevData) => ({
+          ...prevData,
+          monthlySalary,
+        }));
+      }
+    };
+
+  const handleSaveSalary = () => {
+    // Similar logic to save data to API as in the previous example
+    fetch(apiEndpoint, {
+      method: "PUT", // Assuming you want to update data using a PUT request
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    }).catch((error) => console.error("Error saving data:", error));
   };
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-center">
-        <div className="bg-white p-8 shadow-md rounded-md w-full">
-          <h2 className="text-2xl font-semibold mb-4">Salary Details</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-4 gap-4">
-              <div className="mb-4">
-                <label
-                  htmlFor="bankAccountName"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Bank Account Name
-                </label>
-                <input
-                  type="text"
-                  id="bankAccountName"
-                  name="bankAccountName"
-                  value={formData.bankAccountName}
-                  onChange={handleChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="ifscCode"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  IFSC Code
-                </label>
-                <input
-                  type="text"
-                  id="ifscCode"
-                  name="ifscCode"
-                  value={formData.ifscCode}
-                  onChange={handleChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="accountNumber"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Account No
-                </label>
-                <input
-                  type="text"
-                  id="accountNumber"
-                  name="accountNumber"
-                  value={formData.accountNumber}
-                  onChange={handleChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="uanNumber"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  UAN No
-                </label>
-                <input
-                  type="text"
-                  id="uanNumber"
-                  name="uanNumber"
-                  value={formData.uanNumber}
-                  onChange={handleChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="epfo"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  EPFO No
-                </label>
-                <input
-                  type="text"
-                  id="epfo"
-                  name="epfo"
-                  value={formData.epfo}
-                  onChange={handleChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="pan"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Pan No
-                </label>
-                <input
-                  type="text"
-                  id="pan"
-                  name="pan"
-                  value={formData.pan}
-                  onChange={handleChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="annualSalary"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Annual Salary
-                </label>
-                <input
-                  type="text"
-                  id="annualSalary"
-                  name="annualSalary"
-                  value={formData.annualSalary}
-                  onChange={handleChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="monthlySalary"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Monthly Salary
-                </label>
-                <input
-                  type="text"
-                  id="monthlySalary"
-                  name="monthlySalary"
-                  value={formData.monthlySalary}
-                  onChange={handleChange}
-                  className="mt-1 p-2 w-full border rounded-md"
-                  required
-                />
-              </div>
-            </div>
-            {/* Add more fields as needed */}
-
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+    <div className="mt-4">
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="salary-details-content"
+          id="salary-details-header"
+        >
+          <Typography>Salary Details</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Bank Account Name"
+                fullWidth
+                value={formData.bankAccountName}
+                onChange={handleInputChange("bankAccountName")}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="IFSC Code"
+                fullWidth
+                value={formData.ifscCode}
+                onChange={handleInputChange("ifscCode")}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Account Number"
+                fullWidth
+                value={formData.accountNo}
+                onChange={handleInputChange("accountNo")}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="UAN Number"
+                fullWidth
+                value={formData.uan}
+                onChange={handleInputChange("uan")}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="EPFO Number"
+                fullWidth
+                value={formData.epfoNo}
+                onChange={handleInputChange("epfoNo")}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="PAN Number"
+                fullWidth
+                value={formData.panNo}
+                onChange={handleInputChange("panNo")}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Annual Salary"
+                fullWidth
+                value={formData.annualSalary}
+                onChange={handleInputChange("annualSalary")}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Monthly Salary"
+                fullWidth
+                value={formData.monthlySalary}
+                onChange={handleInputChange("monthlySalary")}
+              />
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+        <Button variant="contained" color="primary" onClick={handleSaveSalary}>
+          Save Salary Details
+        </Button>
+      </Accordion>
     </div>
   );
 };
