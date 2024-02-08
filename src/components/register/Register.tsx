@@ -8,6 +8,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import HttpsIcon from "@mui/icons-material/Https";
 import SyncLockIcon from "@mui/icons-material/SyncLock";
+import { useNavigate } from "react-router";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,7 +24,7 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
-
+  const navigate = useNavigate();
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -67,7 +68,8 @@ const Register = () => {
 
       if (response.ok) {
         // Registration successful
-        alert("Registration successful!");
+        // alert("Registration successful!");
+        navigate("/employee");
         // Additional actions if needed (e.g., redirect to another page)
       } else {
         // Registration failed

@@ -11,6 +11,7 @@ import {
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import "../../App.css";
+import { GetSessionItem } from "../../utils/SessionStorage";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -28,27 +29,35 @@ function getItem(
     type,
   } as MenuItem;
 }
+const employeeRole = GetSessionItem("role");
+console.log(employeeRole, "employeeRole");
 
-const sidebarItems: MenuItem[] = [
-  getItem("Dashboard", "dashboard", <PieChartOutlined />),
-  getItem("Employee", "employee", <UserOutlined />),
-  getItem("Project", "project", <DesktopOutlined />),
-  getItem("Register", "register", <ContainerOutlined />),
-  getItem("Navigation One", "sub1", <MailOutlined />, [
-    getItem("Option 5", "5"),
-    getItem("Option 6", "6"),
-    getItem("Option 7", "7"),
-    getItem("Option 8", "8"),
-  ]),
-  getItem("Navigation Two", "sub2", <AppstoreOutlined />, [
-    getItem("Option 9", "9"),
-    getItem("Option 10", "10"),
-    getItem("Submenu", "sub3", null, [
-      getItem("Option 11", "11"),
-      getItem("Option 12", "12"),
-    ]),
-  ]),
-];
+const sidebarItems: MenuItem[] =
+  employeeRole === "softwareEngineer"
+    ? [
+        getItem("Dashboard", "dashboard", <PieChartOutlined />),
+        getItem("DWR Report", "dwrreport", <PieChartOutlined />),
+      ]
+    : [
+        getItem("Dashboard", "dashboard", <PieChartOutlined />),
+        getItem("Employee", "employee", <UserOutlined />),
+        getItem("Project", "project", <DesktopOutlined />),
+        getItem("Register", "register", <ContainerOutlined />),
+        getItem("Navigation One", "sub1", <MailOutlined />, [
+          getItem("Option 5", "5"),
+          getItem("Option 6", "6"),
+          getItem("Option 7", "7"),
+          getItem("Option 8", "8"),
+        ]),
+        getItem("Navigation Two", "sub2", <AppstoreOutlined />, [
+          getItem("Option 9", "9"),
+          getItem("Option 10", "10"),
+          getItem("Submenu", "sub3", null, [
+            getItem("Option 11", "11"),
+            getItem("Option 12", "12"),
+          ]),
+        ]),
+      ];
 
 const SideBarLayout: React.FC = () => {
   const [selectedKey, setSelectedKey] = useState("");
@@ -59,6 +68,8 @@ const SideBarLayout: React.FC = () => {
 
   const handleMenuClick = (e: any) => {
     setSelectedKey(e.key);
+    console.log(e, "menu");
+
     console.log("Clicked item key:", e.key);
   };
 
