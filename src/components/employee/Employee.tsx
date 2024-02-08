@@ -10,6 +10,8 @@ import ViewListSharpIcon from "@mui/icons-material/ViewListSharp";
 import WysiwygSharpIcon from "@mui/icons-material/WysiwygSharp";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import UploadDWR from "../../layout/upload/UploadDWR";
+import ControlPointRoundedIcon from "@mui/icons-material/ControlPointRounded";
+import Register from "../register/Register";
 
 interface empData {
   id: number;
@@ -48,25 +50,25 @@ const Employee: React.FC = () => {
   //   }
   // };
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get<empData[]>(
+        "http://localhost:8080/api/DWR/list"
+      );
+      setEmployeeData(response.data);
+    } catch (error) {
+      console.error("Error fetching employee data:", error);
+    }
+  };
+
   useEffect(() => {
     // Fetch data from the API
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<empData[]>(
-          "http://localhost:8080/api/DWR/list"
-        );
-        setEmployeeData(response.data);
-      } catch (error) {
-        console.error("Error fetching employee data:", error);
-      }
-    };
 
     fetchData();
   }, []); // Empty dependency array means the effect runs once when the component mounts
 
-  const openModal = (Id: string) => {
+  const openModal = () => {
     setIsModalOpen(true);
-    setEmpId({ id: Id }); // Corrected the way of setting empId
   };
   const openModalForUpload = (Id: string) => {
     setIsModalOpen(true);
@@ -77,6 +79,7 @@ const Employee: React.FC = () => {
     setIsModalOpen(false);
     setEmpId(null);
     setEmpIdForUpload(null);
+    fetchData();
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [
@@ -109,9 +112,15 @@ const Employee: React.FC = () => {
     >
       <WysiwygSharpIcon />
     </a>,
-    <button key={index} onClick={() => openModal(empData.id.toString())}>
+    <a
+      key={index}
+      href={`/attendance/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
+    >
       <CalendarMonthIcon />
-    </button>,
+    </a>,
+    // <button key={index} onClick={() => openModal(empData.id.toString())}>
+    //   <CalendarMonthIcon />
+    // </button>,
     <a>
       <button
         key={index}
@@ -123,20 +132,31 @@ const Employee: React.FC = () => {
   ]);
 
   return (
-    <div>
-      <div className="p-4">
-        {/* <div className="flex justify-end">
-          <CommonSearchBar sendDataToParent={handleDataFromChild} />
-        </div> */}
-        <div className="mt-4">
-          <CommonTable tableHead={tableHead} tableBody={tableBody} />
+    <div className=" mt-4">
+      <div className="flex items-center justify-center">
+        <div className="bg-white p-8 shadow-md rounded-md w-full">
+          <div className="flex justify-between">
+            <h2 className="text-2xl font-semibold mb-4 px-4">Employee List</h2>
+            <a onClick={openModal} className="px-4">
+              <ControlPointRoundedIcon
+                fontSize="large"
+                className="text-green-600"
+              />
+            </a>
+          </div>
+          <div className="p-4">
+            <div>
+              <CommonTable tableHead={tableHead} tableBody={tableBody} />
+            </div>
+          </div>
+          <div className="w-fit">
+            <CommonModal isOpen={isModalOpen} onClose={closeModal}>
+              {empId && <Calendar data={empId} />}
+              {empIdForUpload && <UploadDWR data={empIdForUpload} />}
+              {!empIdForUpload && <Register />}
+            </CommonModal>
+          </div>
         </div>
-      </div>
-      <div className="w-fit">
-        <CommonModal isOpen={isModalOpen} onClose={closeModal}>
-          {empId && <Calendar data={empId} />}
-          {empIdForUpload && <UploadDWR data={empIdForUpload} />}
-        </CommonModal>
       </div>
     </div>
   );

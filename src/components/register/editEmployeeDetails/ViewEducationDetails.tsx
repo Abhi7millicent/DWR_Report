@@ -39,9 +39,17 @@ const ViewEducationDetails = () => {
     fetchData();
   }, [id]);
 
-  const handleDeleteClick = (id: number) => {
-    console.log(id);
-    // Add logic to delete the document with the given id
+  const handleDeleteClick = async (eduid: number) => {
+    try {
+      await axios.put(
+        `http://localhost:8080/api/DWR/educationalDetails/delete/${eduid}`
+      );
+      alert("Deleted sucessfully");
+      console.log("Deleted educational detail with ID:", eduid);
+      fetchData(); // Refresh the data after deletion
+    } catch (error) {
+      console.error("Error deleting educational detail:", error);
+    }
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [

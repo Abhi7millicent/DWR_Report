@@ -9,11 +9,17 @@ import { Layout } from "antd";
 import SideBarLayout from "./layout/sideBar/SideBarLayout";
 import ProjectView from "./components/project/ProjectView";
 import EditEmployeeDetails from "./components/register/editEmployeeDetails/EditEmployeeDetails";
+import AttendanceCalendar from "./layout/calendar/AttendanceCalendar";
+import Request from "./components/notification/Request";
+import ApplyLeave from "./components/leaveManagement/ApplyLeave";
+import ViewAppliedLeave from "./components/leaveManagement/ViewAppliedLeave";
 
 const Navigate = () => {
   return (
     <div>
-      <Navbar />
+      <div>
+        <Navbar />
+      </div>
       <div className="flex">
         <div className="bg-gray-800">
           <Layout>
@@ -32,8 +38,15 @@ const Navigate = () => {
               element={<EmployeeRecordFullData />}
             />
             <Route path="/register" element={<Register />} />
+            <Route path="/viewLeave" element={<ViewAppliedLeave />} />
+            <Route path="/applyleave" element={<ApplyLeave />} />
+            <Route path="/request" element={<Request />} />
             <Route path="/project" element={<ProjectView />} />
             <Route path="/editEmployee/:id" element={<EditEmployeeDetails />} />
+            <Route
+              path="/attendance/:id/:name"
+              element={<AttendanceCalendar />}
+            />
           </Routes>
         </div>
       </div>

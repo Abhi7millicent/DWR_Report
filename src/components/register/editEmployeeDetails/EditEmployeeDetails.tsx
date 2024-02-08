@@ -5,6 +5,7 @@ import SalaryDetails from "./SalaryDetails";
 import ViewAddressDetails from "./ViewAddressDetails";
 import ViewDocuments from "./ViewDocumments";
 import ViewEducationDetails from "./ViewEducationDetails";
+import PersonalData from "./PersonalData";
 
 const EditEmployeeDetails = () => {
   return (
@@ -49,6 +50,7 @@ const EditEmployeeDetails = () => {
               <EditDetails />
               <ViewAddressDetails />
               <SalaryDetails />
+              <PersonalData />
             </div>
           </h2>
         </TabPanel>

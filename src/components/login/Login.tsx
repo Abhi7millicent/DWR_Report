@@ -40,7 +40,11 @@ const Login: React.FC = () => {
         SetSessionItem("status", response.data.status.toString());
         SetSessionItem("token", response.data.token);
         SetSessionItem("role", response.data.role);
-        navigate("/employee");
+        if (response.data.role === "admin") {
+          navigate("/employee");
+        } else if (response.data.role === "softwareEngineer") {
+          navigate("/employee");
+        }
         setLoading(true);
       } else {
         console.log("Invalid credentials");
