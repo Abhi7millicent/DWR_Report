@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { employeeIdData } from "../../components/employee/Employee";
-import { FaFileUpload } from "react-icons/fa"; // Import the File Upload icon from Font Awesome
+import { CloudUploadOutlined } from "@ant-design/icons";
 
 type Props = {
   data: employeeIdData | null; // Adjusted to accept null
@@ -73,7 +73,9 @@ const UploadDWR = (props: Props) => {
       onDrop={handleDrop}
     >
       <label htmlFor="fileInput" className="cursor-pointer flex items-center">
-        <FaFileUpload className="mr-2" />
+        <div>
+          <CloudUploadOutlined className="mr-2" color="black" />
+        </div>
         <span>Drag & Drop or Select File</span>
       </label>
       <input
