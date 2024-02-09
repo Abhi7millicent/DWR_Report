@@ -24,6 +24,7 @@ const CommonMaterialTable: React.FC<CommonMaterialTableProps> = ({
   const table = useMaterialReactTable({
     columns,
     data,
+    enableHiding: false,
     muiTablePaperProps: {
       sx: {
         paddingRight: "20px !important",
@@ -35,6 +36,13 @@ const CommonMaterialTable: React.FC<CommonMaterialTableProps> = ({
         minWidth: "max-content !important",
       },
     },
+    muiTableBodyCellProps: {
+      sx: {
+        textAlign: "center",
+      },
+    },
+    enableDensityToggle: false,
+    enableColumnActions: false,
   });
 
   return <MaterialReactTable table={table} />;

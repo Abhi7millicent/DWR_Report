@@ -6,6 +6,7 @@ import {
   MailOutlined,
   PieChartOutlined,
   UserOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
@@ -34,20 +35,68 @@ function getItem(
     onClick, // Include onClick handler
   } as MenuItem;
 }
-const employeeRole = GetSessionItem("role");
 
-const SideBarLayout: React.FC = () => {
+const SideBarLayout: React.FC<{ sidebarItems: any[] }> = ({ sidebarItems }) => {
   const [selectedKey, setSelectedKey] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+
+  const handleMenuClick = (e: any) => {
+    setSelectedKey(e.key);
+  };
+
   useEffect(() => {
-    console.log("employeeRole:", employeeRole);
-  }, [employeeRole]);
+    if (selectedKey !== "") {
+      navigate(`/${selectedKey}`);
+    }
+  }, [selectedKey]);
+
+  return (
+    <>
+      <div
+        className={` text-white transition-all delay-150 duration-300   ${
+          !isExpanded ? " w-20" : "w-64"
+        } `}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+      >
+        <Menu
+          selectedKeys={[selectedKey]}
+          mode="vertical"
+          inlineCollapsed={!isExpanded}
+          items={sidebarItems}
+          onClick={handleMenuClick}
+          className={`transition-all delay-150 duration-300  ${
+            !isExpanded ? " w-20" : "w-64"
+          }`}
+        />
+      </div>
+    </>
+  );
+};
+
+const App: React.FC = () => {
+  // State to store employee role
+  const [employeeRole, setEmployeeRole] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch employee role asynchronously
+    const role = GetSessionItem("role");
+    if (role) {
+      setEmployeeRole(role);
+    }
+  }, []);
+
+  function handleLogout() {
+    clearSessionStorage();
+    navigate("/");
+  }
   const sidebarItems: MenuItem[] =
     employeeRole === "softwareEngineer"
       ? [
           getItem("Dashboard", "dashboard", <PieChartOutlined />),
-          getItem("DWR Report", "dwrreport", <PieChartOutlined />),
+          getItem("DWR Report", "employee", <FileTextOutlined />),
           getItem("Setting", "sub3", <SettingsSuggestIcon fontSize="large" />, [
             getItem("Profile", "profile", <AccountCircleIcon />),
             getItem(
@@ -60,7 +109,8 @@ const SideBarLayout: React.FC = () => {
             ), // Add onClick handler for Logout
           ]),
         ]
-      : [
+      : employeeRole === "admin"
+      ? [
           getItem("Dashboard", "dashboard", <PieChartOutlined />),
           getItem("Employee", "employee", <UserOutlined />),
           getItem("Project", "project", <DesktopOutlined />),
@@ -89,49 +139,11 @@ const SideBarLayout: React.FC = () => {
               handleLogout
             ), // Add onClick handler for Logout
           ]),
-        ];
-
-  function handleLogout() {
-    clearSessionStorage();
-    navigate("/");
-  }
-
-  const handleMenuClick = (e: any) => {
-    setSelectedKey(e.key);
-  };
-
-  useEffect(() => {
-    if (selectedKey !== "") {
-      navigate(`/${selectedKey}`);
-    }
-  }, [selectedKey]);
-
+        ]
+      : [];
   return (
-    <div
-      className={` text-white transition-all delay-150 duration-300 h-screen ${
-        !isExpanded ? " w-20" : "w-64"
-      }`}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-    >
-      <Menu
-        selectedKeys={[selectedKey]}
-        mode="vertical"
-        inlineCollapsed={!isExpanded}
-        items={sidebarItems}
-        onClick={handleMenuClick}
-        className={`transition-all delay-150 duration-300  ${
-          !isExpanded ? " w-20" : "w-64"
-        }`}
-      />
-    </div>
-  );
-};
-
-const App: React.FC = () => {
-  return (
-    <div className="flex bg-white">
-      <SideBarLayout />
+    <div className="flex bg-white h-[calc(100vh-5rem)]">
+      <SideBarLayout sidebarItems={sidebarItems} />
       {/* Add your content here */}
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -9,8 +9,16 @@ import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import HttpsIcon from "@mui/icons-material/Https";
 import SyncLockIcon from "@mui/icons-material/SyncLock";
 import { useNavigate } from "react-router";
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
 
-const Register = () => {
+const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  const modalClasses = isOpen
+    ? "fixed inset-0 flex items-center justify-center "
+    : "hidden";
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -56,7 +64,6 @@ const Register = () => {
     };
 
     try {
-      console.log("Data:", requestData);
       // Send POST request to the API
       const response = await fetch("http://localhost:8080/api/DWR/save", {
         method: "POST",
@@ -70,6 +77,18 @@ const Register = () => {
         // Registration successful
         // alert("Registration successful!");
         navigate("/employee");
+        onClose();
+        setFormData({
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          email: "",
+          role: "",
+          reporting: "",
+          loginId: "",
+          password: "",
+          confirmPassword: "",
+        });
         // Additional actions if needed (e.g., redirect to another page)
       } else {
         // Registration failed
@@ -89,8 +108,9 @@ const Register = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-center">
+    <div className={`${modalClasses} z-10`}>
+      <div className="flex items-center  mt-3 justify-center">
+        {children}
         <div className="bg-white p-8 shadow-md rounded-md w-full">
           <h2 className="text-2xl font-semibold mb-4">Registration</h2>
           <form onSubmit={handleSubmit}>
@@ -104,7 +124,8 @@ const Register = () => {
                     type="text"
                     id="firstName"
                     name="firstName"
-                    className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
+                    value={formData.firstName}
+                    className="peer mt-1 p-2 w-full border-b border-[var(--primary-color)] text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     onChange={handleChange}
                     placeholder="First Name*"
                     required
@@ -124,6 +145,7 @@ const Register = () => {
                     type="text"
                     id="middleName"
                     name="middleName"
+                    value={formData.middleName}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="Middle Name*"
                     onChange={handleChange}
@@ -143,6 +165,7 @@ const Register = () => {
                     type="text"
                     id="lastName"
                     name="lastName"
+                    value={formData.lastName}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="Last Name*"
                     onChange={handleChange}
@@ -167,6 +190,7 @@ const Register = () => {
                     type="email"
                     id="email"
                     name="email"
+                    value={formData.email}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="Email*"
                     onChange={handleChange}
@@ -188,6 +212,7 @@ const Register = () => {
                   <select
                     id="role"
                     name="role"
+                    value={formData.role}
                     className="peer mt-1 p-2 w-full border-b border-gray-300 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent"
                     onChange={handleChange}
                     required
@@ -216,6 +241,7 @@ const Register = () => {
                     type="text"
                     id="reporting"
                     name="reporting"
+                    value={formData.reporting}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="Reporting"
                     onChange={handleChange}
@@ -239,6 +265,7 @@ const Register = () => {
                     type="text"
                     id="loginId"
                     name="loginId"
+                    value={formData.loginId}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="UserId*"
                     onChange={handleChange}
@@ -261,6 +288,7 @@ const Register = () => {
                     type={showPassword ? "text" : "password"}
                     id="password"
                     name="password"
+                    value={formData.password}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="Password*"
                     onChange={handleChange}
@@ -289,6 +317,7 @@ const Register = () => {
                     type={showConfirmPassword ? "text" : "password"}
                     id="confirmPassword"
                     name="confirmPassword"
+                    value={formData.confirmPassword}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="Confirm Password*"
                     onChange={handleChange}
@@ -313,12 +342,18 @@ const Register = () => {
                 </div>
               </div>
             </div>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-            >
-              Register
-            </button>
+            <div className="flex justify-between">
+              <div>
+                <button onClick={onClose} className="btn-close">
+                  Close
+                </button>
+              </div>
+              <div>
+                <button type="submit" className="btn">
+                  Register
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>

@@ -20,8 +20,8 @@ const Navigate = () => {
       <div>
         <Navbar />
       </div>
-      <div className="flex">
-        <div className="bg-gray-800">
+      <div className="flex  h-[calc(100vh-5rem)]">
+        <div className="bg-gray-200 ">
           <Layout>
             <SideBarLayout />
           </Layout>

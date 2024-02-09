@@ -3,16 +3,16 @@ import axios from "axios";
 import CommonTable from "../../layout/commonTable/CommonTable";
 // import CommonSearchBar from "../../layout/commonSearchBar/CommonSearchBar";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import CommonModal from "../../layout/commonModal/CommonModal";
+// import CommonModal from "../../layout/commonModal/CommonModal";
 import Calendar from "../../layout/calendar/Calendar";
 import { MRT_ColumnDef } from "material-react-table";
 import ViewListSharpIcon from "@mui/icons-material/ViewListSharp";
 import WysiwygSharpIcon from "@mui/icons-material/WysiwygSharp";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import UploadDWR from "../../layout/upload/UploadDWR";
-import ControlPointRoundedIcon from "@mui/icons-material/ControlPointRounded";
+// import Register  from "../register/Register";
+import "../../App.css";
 import Register from "../register/Register";
-
 interface empData {
   id: number;
   firstName: string;
@@ -35,6 +35,7 @@ const Employee: React.FC = () => {
   const [empIdForUpload, setEmpIdForUpload] = useState<employeeIdData | null>(
     null
   );
+
   const [employeeData, setEmployeeData] = useState<empData[]>([]);
 
   // const handleDataFromChild = async (data: string) => {
@@ -83,13 +84,18 @@ const Employee: React.FC = () => {
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [
-    { accessorKey: "0", header: "Sr.No" },
-    { accessorKey: "1", header: "Employee Id" },
-    { accessorKey: "2", header: "Employee Name" },
-    { accessorKey: "3", header: "Single View" },
-    { accessorKey: "4", header: "Full View" },
-    { accessorKey: "5", header: "Calendar" },
-    { accessorKey: "6", header: "Upload" },
+    {
+      accessorKey: "0",
+      header: "Sr.No",
+      size: 15,
+      visibleInShowHideMenu: true,
+    },
+    { accessorKey: "1", header: "Employee Id", size: 15 },
+    { accessorKey: "2", header: "Employee Name", size: 40 },
+    { accessorKey: "3", header: "Single View", size: 15 },
+    { accessorKey: "4", header: "Full View", size: 15 },
+    { accessorKey: "5", header: "Calendar", size: 15 },
+    { accessorKey: "6", header: "Upload", size: 15 },
     // ... add the rest of your headers in a similar fashion
   ];
 
@@ -132,29 +138,34 @@ const Employee: React.FC = () => {
   ]);
 
   return (
-    <div className=" mt-4">
+    <div className="mt-4 mb-4 h-[calc(100vh-5rem)]">
       <div className="flex items-center justify-center">
-        <div className="bg-white p-8 shadow-md rounded-md w-full">
+        <div className="bg-white p-8 shadow-md rounded-md w-full mb-4 ">
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4 px-4">Employee List</h2>
             <a onClick={openModal} className="px-4">
-              <ControlPointRoundedIcon
-                fontSize="large"
-                className="text-green-600"
-              />
+              {/* <ControlPointRoundedIcon className="text-color" /> */}
+              {/* <button className="btn-background-color text-white py-2 rounded-md p-3"> */}
+              <button className="btn btn-background-color:hover">
+                Add Employee
+              </button>
             </a>
           </div>
-          <div className="p-4">
+          <div className="p-4 ">
             <div>
               <CommonTable tableHead={tableHead} tableBody={tableBody} />
             </div>
           </div>
           <div className="w-fit">
-            <CommonModal isOpen={isModalOpen} onClose={closeModal}>
-              {empId && <Calendar data={empId} />}
-              {empIdForUpload && <UploadDWR data={empIdForUpload} />}
-              {!empIdForUpload && <Register />}
-            </CommonModal>
+            {!empIdForUpload && (
+              <Register isOpen={isModalOpen} onClose={closeModal}>
+                {empId && <Calendar data={empId} />}
+                {empIdForUpload && <UploadDWR data={empIdForUpload} />}
+                {/* {!empIdForUpload && (
+                  <Register isOpen={isModalOpen} onClose={closeModal} />
+                )} */}
+              </Register>
+            )}
           </div>
         </div>
       </div>

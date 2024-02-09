@@ -18,6 +18,8 @@
   --font-size-h5: "14px";
   --font-size-h6: "12px";
   --primary-color: #226d6dbf;
+  --primary-color--hover: #1e5959d0;
+  --secondary-color: #fff;
 }
 
 /* @layer base{
@@ -65,6 +67,30 @@
   font-size: var(--font-size-h6);
 }
 
+.btn {
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+  height: 45px;
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  text-align: center;
+  padding: 6px;
+}
+
+.btn-close {
+  color: white;
+  background-color: #8a878f;
+  height: 45px;
+  text-align: center;
+  border: 1px solid #8a878f;
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.btn-close:hover {
+  background-color: #8a878fd9;
+}
+
 .btn-background-color {
   background-color: var(--primary-color);
 }
@@ -76,7 +102,11 @@
 }
 
 .btn-background-color:hover {
-  background-color: #1e5959d0;
+  background-color: var(--primary-color--hover);
+}
+
+.btn:hover {
+  background-color: var(--primary-color--hover);
 }
 
 .text-color {

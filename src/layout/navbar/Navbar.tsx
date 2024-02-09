@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   // };
 
   return (
-    <nav className="bg-slate-50 p-4">
+    <nav className="bg-slate-50 p-4 h-[5rem]">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or brand */}
         <img src={loginBackground} width="100" alt="images" />
