@@ -16,6 +16,7 @@ import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import { clearSessionStorage } from "../../utils/SessionStorage";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -35,6 +36,8 @@ function getItem(
     onClick, // Include onClick handler
   } as MenuItem;
 }
+const employeeRole = GetSessionItem("role");
+const employeeId = GetSessionItem("id");
 
 const SideBarLayout: React.FC<{ sidebarItems: any[] }> = ({ sidebarItems }) => {
   const [selectedKey, setSelectedKey] = useState("");
@@ -96,7 +99,11 @@ const App: React.FC = () => {
     employeeRole === "softwareEngineer"
       ? [
           getItem("Dashboard", "dashboard", <PieChartOutlined />),
-          getItem("DWR Report", "employee", <FileTextOutlined />),
+          getItem(
+            "Attendance",
+            `attendance/${employeeId}`,
+            <CalendarMonthIcon />
+          ),
           getItem("Setting", "sub3", <SettingsSuggestIcon fontSize="large" />, [
             getItem("Profile", "profile", <AccountCircleIcon />),
             getItem(
@@ -128,7 +135,7 @@ const App: React.FC = () => {
               getItem("Option 12", "12"),
             ]),
           ]),
-          getItem("Setting", "sub3", <SettingsSuggestIcon fontSize="large" />, [
+          getItem("Setting", "sub4", <SettingsSuggestIcon fontSize="large" />, [
             getItem("Profile", "profile", <AccountCircleIcon />),
             getItem(
               "Logout",

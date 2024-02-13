@@ -7,13 +7,16 @@ import {
   MenuItem,
   Grid,
 } from "@mui/material";
+import { useParams } from "react-router";
+import axios from "axios"; // Import Axios
 
-const ApplyLeave: React.FC = () => {
+const ApplyLeave: React.FC<{ balanced: number }> = ({ balanced }) => {
   const [leaveType, setLeaveType] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
-  const [numberOfDays, setNumberOfDays] = useState<number>(0);
+  // const [numberOfDays, setNumberOfDays] = useState<number>(0);
+  const { id } = useParams();
 
   const handleLeaveTypeChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -37,7 +40,7 @@ const ApplyLeave: React.FC = () => {
     setEndDate(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Calculate number of days based on start and end date
@@ -45,17 +48,37 @@ const ApplyLeave: React.FC = () => {
     const end = new Date(endDate);
     const differenceInTime = end.getTime() - start.getTime();
     const calculatedNumberOfDays = differenceInTime / (1000 * 3600 * 24) + 1; // Convert milliseconds to days
+    const balancedLeave = balanced - calculatedNumberOfDays;
+    console.log("balancedLeave:", balancedLeave);
 
-    setNumberOfDays(calculatedNumberOfDays);
+    // useEffect  (() =>{
+    //   setNumberOfDays(calculatedNumberOfDays);
+    // },[calculatedNumberOfDays]);
 
-    // Show data in console
-    console.log({
+    // console.log("numberOfDays:",numberOfDays);
+
+    // Prepare data to send
+    const data = {
       leaveType,
       description,
       startDate,
       endDate,
-      numberOfDays: calculatedNumberOfDays,
-    });
+      noOfDays: calculatedNumberOfDays,
+      balancedLeave,
+    };
+
+    try {
+      // Send POST request using Axios
+      const response = await axios.post(
+        `http://localhost:8080/api/DWR/leavemanagement/save/${id}`,
+        data
+      );
+      console.log("Leave application submitted successfully:", response.data);
+      // Optionally, you can handle success here, like showing a success message to the user
+    } catch (error) {
+      console.error("Error submitting leave application:", error);
+      // Optionally, you can handle errors here, like showing an error message to the user
+    }
   };
 
   return (
@@ -68,7 +91,7 @@ const ApplyLeave: React.FC = () => {
             </Typography>
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   <TextField
                     select
                     label="Leave Type"
@@ -82,16 +105,8 @@ const ApplyLeave: React.FC = () => {
                     <MenuItem value="personal">Personal Leave</MenuItem>
                   </TextField>
                 </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Description"
-                    value={description}
-                    onChange={handleDescriptionChange}
-                    fullWidth
-                    margin="normal"
-                  />
-                </Grid>
-                <Grid item xs={6}>
+
+                <Grid item xs={4}>
                   <TextField
                     label="Start Date"
                     type="date"
@@ -104,7 +119,7 @@ const ApplyLeave: React.FC = () => {
                     margin="normal"
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   <TextField
                     label="End Date"
                     type="date"
@@ -113,6 +128,15 @@ const ApplyLeave: React.FC = () => {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    fullWidth
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Description"
+                    value={description}
+                    onChange={handleDescriptionChange}
                     fullWidth
                     margin="normal"
                   />

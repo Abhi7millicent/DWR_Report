@@ -5,7 +5,15 @@ import axios from "axios";
 import { useParams } from "react-router";
 import SelectedDateData from "./SelectedDateData";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import BorderColor from "@mui/icons-material/BorderColor";
+import ViewAppliedLeave from "../../components/leaveManagement/ViewAppliedLeave";
+// import BorderColor from "@mui/icons-material/BorderColor";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../App/store";
+import {
+  fetchDataStart,
+  fetchDataSuccess,
+  fetchDataFailure,
+} from "../../features/attendanceSlice";
 
 interface empRecordsData {
   id: number;
@@ -31,9 +39,12 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
     empRecordsData[]
   >([]);
   const [selectedDate, setSelectedDate] = useState("");
+  const [todaysDate, setTodaysDate] = useState("");
   const [isStart, setIsStart] = useState(true); // State to track start/end
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const dispatch = useDispatch();
+  const { data } = useSelector((state: RootState) => state.attendance);
 
   useEffect(() => {
     const inputDate = new Date(currentDate);
@@ -43,7 +54,47 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
 
     const formattedDate = `${year}-${month}-${day}`;
     setSelectedDate(formattedDate);
+
+    const currentDate1 = new Date();
+    const year1 = currentDate1.getFullYear();
+    const month1 = String(currentDate1.getMonth() + 1).padStart(2, "0");
+    const day1 = String(currentDate1.getDate()).padStart(2, "0");
+    const formattedDate1 = `${year1}-${month1}-${day1}`;
+    setTodaysDate(formattedDate1);
   }, [currentDate]);
+
+  const fetchSelectedDateData = async () => {
+    dispatch(fetchDataStart());
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/DWR/attandancemanagement/data/${id}/${selectedDate}`
+      );
+      console.log("data", response.data);
+      setStartTime(response.data.startTime);
+      setEndTime(response.data.endTime);
+      console.log("startTime:", response.data.startTime);
+      dispatch(fetchDataSuccess(response.data));
+    } catch (error: any) {
+      dispatch(fetchDataFailure(error.message));
+      if (axios.isCancel(error)) {
+        // Request was canceled
+        console.log("Request canceled:", error.message);
+      } else {
+        // Handle other errors
+        console.error("Error fetching attendance data:");
+        setStartTime("");
+        setEndTime("");
+      }
+    }
+  };
+
+  useEffect(() => {
+    console.log("redux:", data);
+  }, [data]);
+
+  // useEffect(() => {
+  //   fetchSelectedDateData();
+  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,7 +119,7 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
     const source = axios.CancelToken.source();
 
     fetchData();
-
+    fetchSelectedDateData();
     // Cleanup function to cancel the request if the component unmounts
     return () => {
       source.cancel("Component is unmounting");
@@ -99,29 +150,66 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
     "8": record.solution,
   }));
 
-  const handleToggleStart = (e: any) => {
+  const handleToggleStart = async (e: any) => {
     e.preventDefault();
-    const confirmation = window.confirm(
-      "Are you sure you want to Start the day?"
-    );
-    if (confirmation) {
-      const currentTime = new Date().toLocaleTimeString();
-      console.log("Start time:", currentTime);
-      setStartTime(currentTime);
-      setIsStart(!isStart);
+    try {
+      const confirmation = window.confirm(
+        "Are you sure you want to start the day?"
+      );
+      if (confirmation) {
+        const currentTime = new Date().toLocaleTimeString();
+        console.log("Start time:", currentTime);
+        setIsStart(!isStart);
+
+        const response = await axios.post(
+          `http://localhost:8080/api/DWR/attandancemanagement/save/${id}`,
+          {
+            date: selectedDate,
+            startTime: currentTime,
+          }
+        );
+
+        console.log("Attendance started successfully!", response.data);
+        fetchSelectedDateData();
+        // Handle response if needed
+      } else {
+        console.log("Attendance start cancelled.");
+        // Handle cancellation if needed
+      }
+    } catch (error) {
+      console.error("Error starting attendance:", error);
+      // Handle errors as needed
     }
   };
 
-  const handleToggleEnd = (e: any) => {
+  const handleToggleEnd = async (e: any) => {
     e.preventDefault();
-    const confirmation = window.confirm(
-      "Are you sure you want to End the day?"
-    );
-    if (confirmation) {
-      const currentTime = new Date().toLocaleTimeString();
-      console.log("End time:", currentTime);
-      setEndTime(currentTime);
-      setIsStart(!isStart);
+    try {
+      const confirmation = window.confirm(
+        "Are you sure you want to End the day?"
+      );
+      if (confirmation) {
+        const currentTime = new Date().toLocaleTimeString();
+        console.log("End time:", currentTime);
+        setIsStart(!isStart);
+
+        const response = await axios.put(
+          `http://localhost:8080/api/DWR/attandancemanagement/update/${id}`,
+          {
+            date: selectedDate,
+            endTime: currentTime,
+          }
+        );
+
+        console.log("Attendance updated successfully!", response.data);
+        fetchSelectedDateData();
+      } else {
+        console.log("Attendance updated cancelled.");
+        // Handle cancellation if needed
+      }
+    } catch (error) {
+      console.error("Error updated attendance:", error);
+      // Handle errors as needed
     }
   };
 
@@ -135,14 +223,15 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
             </h2>
             <div>
               {/* Toggle button for start/end */}
-              {isStart ? (
+              {isStart && selectedDate === todaysDate && !startTime && (
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-lg"
                   onClick={handleToggleStart}
                 >
                   Start
                 </button>
-              ) : (
+              )}
+              {startTime && selectedDate === todaysDate && (
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-lg"
                   onClick={handleToggleEnd}
@@ -163,12 +252,16 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
               >
                 <Tab>Selected Date Data</Tab>
                 <Tab>Employee Records Table</Tab>
+                <Tab>Apply Leave</Tab>
               </TabList>
               <TabPanel>
                 <SelectedDateData startTime={startTime} endTime={endTime} />
               </TabPanel>
               <TabPanel>
                 <CommonTable tableHead={tableHead} tableBody={tableBody} />
+              </TabPanel>
+              <TabPanel>
+                <ViewAppliedLeave />
               </TabPanel>
             </Tabs>
           </div>
