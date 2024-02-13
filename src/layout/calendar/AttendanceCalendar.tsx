@@ -1,68 +1,86 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DateDetails from "./DateDetails";
 import { useParams } from "react-router";
 
-const AttendanceCalendar = () => {
-  // State to track current date
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [todaysDate, setTodaysDate] = useState(new Date());
-  const { name } = useParams();
-  // const todaysDate = new Date();
+const AttendanceCalendar: React.FC = () => {
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  // const [todaysDate, setTodaysDate] = useState<Date>(new Date());
+  const todaysDate = new Date();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [attendanceData, setAttendanceData] = useState<{
+    [date: string]: string;
+  }>({});
+  const { id, name } = useParams<{ id: string; name: string }>();
 
-  // Function to move to the previous month
+  useEffect(() => {
+    // Fetch attendance data for the current month and year
+    console.log(
+      "currentDate:",
+      (currentDate.getMonth() + 1).toString().padStart(2, "0"),
+      "-",
+      currentDate.getFullYear()
+    );
+    fetch(
+      `http://localhost:8080/api/DWR/attandancemanagement/attendance/${(
+        currentDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${currentDate.getFullYear()}/${id}`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setAttendanceData(data);
+        console.log("attendance data:", data);
+      })
+      .catch((error) =>
+        console.error("Error fetching attendance data:", error)
+      );
+  }, [currentDate, id]);
+
   const goToPreviousMonth = () => {
     setCurrentDate(
       (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1, 1)
     );
-    setTodaysDate(new Date());
   };
 
-  // Function to move to the next month
   const goToNextMonth = () => {
     setCurrentDate(
       (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1, 1)
     );
-    setTodaysDate(new Date());
   };
 
-  // Function to handle month change
-  const handleMonthChange = (e: any) => {
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const month = parseInt(e.target.value);
     setCurrentDate((prevDate) => new Date(prevDate.getFullYear(), month, 1));
   };
 
-  // Function to handle year change
-  const handleYearChange = (e: any) => {
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const year = parseInt(e.target.value);
     setCurrentDate((prevDate) => new Date(year, prevDate.getMonth(), 1));
   };
 
-  // Get the current month
   const currentMonth = currentDate.getMonth();
-
-  // Get the current year
   const currentYear = currentDate.getFullYear();
-
-  // Get the number of days in the current month
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-  // Get the starting day of the month
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-
-  // Create an array to hold the days of the month
   const daysArray = Array.from(
     { length: daysInMonth },
     (_, index) => index + 1
   );
 
-  // Define Tailwind CSS classes
-  const dayClass = "border border-gray-200 p-2";
+  const dayClass = "border border-gray-200 p-2 text-center";
   const sundayClass = "bg-blue-400";
-  const saturdayClass = "bg-blue-400"; // Define Saturday class
+  const saturdayClass = "bg-blue-400";
   const currentDateClass = "bg-yellow-300";
+  const presentClass = "bg-green-400";
+  const absentClass = "bg-red-400";
+  const halfDayClass = "bg-purple-400";
 
-  // Function to determine if a Saturday is the 2nd or 4th Saturday in the month
   const is2ndOr4thSaturday = (day: number) => {
     const date = new Date(currentYear, currentMonth, day);
     const dayOfWeek = date.getDay();
@@ -70,9 +88,18 @@ const AttendanceCalendar = () => {
     return dayOfWeek === 6 && (weekOfMonth === 2 || weekOfMonth === 4);
   };
 
-  // Function to handle click on a day
   const handleDayClick = (day: number) => {
     setSelectedDate(new Date(currentYear, currentMonth, day));
+  };
+
+  const getDayStatus = (day: number) => {
+    const formattedDate = `${currentYear}-${currentMonth + 1 < 10 ? "0" : ""}${
+      currentMonth + 1
+    }-${day < 10 ? "0" : ""}${day}`;
+    // console.log("attendanceData:", attendanceData);
+    // console.log("formattedDate:", formattedDate);
+    // console.log("status:" + attendanceData[formattedDate]);
+    return attendanceData[formattedDate];
   };
 
   return (
@@ -122,30 +149,42 @@ const AttendanceCalendar = () => {
           ))}
           {/* Render days of the month */}
           {daysArray.map((day) => {
-            // const currentDateObj = new Date(currentYear, currentMonth, day);
+            const status = getDayStatus(day);
+            // console.log("dateStatus:", status, " day:", day);
             const isCurrentDate =
               day === todaysDate.getDate() &&
               currentMonth === todaysDate.getMonth() &&
               currentYear === todaysDate.getFullYear();
-
             const isCurrentMonth = currentMonth === currentDate.getMonth();
             const isCurrentYear = currentYear === currentDate.getFullYear();
+            const dayClassNames = [
+              dayClass,
+              new Date(currentYear, currentMonth, day).getDay() === 0
+                ? sundayClass
+                : "",
+              new Date(currentYear, currentMonth, day).getDay() === 6
+                ? is2ndOr4thSaturday(day)
+                  ? saturdayClass
+                  : ""
+                : "",
+              isCurrentDate && isCurrentMonth && isCurrentYear
+                ? currentDateClass
+                : "",
+              status === "Present"
+                ? presentClass
+                : status === "Absent"
+                ? absentClass
+                : status === "Halfday"
+                ? halfDayClass
+                : "",
+            ]
+              .join(" ")
+              .trim();
+
             return (
               <div
                 key={day}
-                className={`${dayClass} ${
-                  new Date(currentYear, currentMonth, day).getDay() === 0
-                    ? sundayClass
-                    : new Date(currentYear, currentMonth, day).getDay() === 6
-                    ? is2ndOr4thSaturday(day)
-                      ? saturdayClass
-                      : ""
-                    : ""
-                }${
-                  isCurrentDate && isCurrentMonth && isCurrentYear
-                    ? currentDateClass
-                    : ""
-                }`}
+                className={dayClassNames}
                 onClick={() => handleDayClick(day)}
               >
                 {day}

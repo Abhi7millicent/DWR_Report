@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { employeeIdData } from "../../components/employee/Employee";
 import { CloudUploadOutlined } from "@ant-design/icons";
+import { useParams } from "react-router";
 
 type Props = {
   data: employeeIdData | null; // Adjusted to accept null
@@ -11,6 +12,7 @@ const UploadDWR = (props: Props) => {
   const { data } = props;
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState<boolean>(false);
+  const { id } = useParams();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -19,14 +21,15 @@ const UploadDWR = (props: Props) => {
   };
 
   const handleUpload = async () => {
-    if (file && data) {
+    console.log("data:", data);
+    if (file) {
       // Ensure both file and data are not null
       try {
         const formData = new FormData();
         formData.append("file", file);
 
         // Replace the URL with your actual API endpoint
-        const apiUrl = `http://localhost:8080/api/DWR/employeeRecordData/import/${data.id}`;
+        const apiUrl = `http://localhost:8080/api/DWR/employeeRecordData/import/${id}`;
 
         await axios.post(apiUrl, formData, {
           headers: {

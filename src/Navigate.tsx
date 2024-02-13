@@ -11,7 +11,7 @@ import ProjectView from "./components/project/ProjectView";
 import EditEmployeeDetails from "./components/register/editEmployeeDetails/EditEmployeeDetails";
 import AttendanceCalendar from "./layout/calendar/AttendanceCalendar";
 import Request from "./components/notification/Request";
-import ApplyLeave from "./components/leaveManagement/ApplyLeave";
+// import ApplyLeave from "./components/leaveManagement/ApplyLeave";
 import ViewAppliedLeave from "./components/leaveManagement/ViewAppliedLeave";
 
 const Navigate = () => {
@@ -39,7 +39,6 @@ const Navigate = () => {
             />
             <Route path="/register" element={<Register />} />
             <Route path="/viewLeave" element={<ViewAppliedLeave />} />
-            <Route path="/applyleave" element={<ApplyLeave />} />
             <Route path="/request" element={<Request />} />
             <Route path="/project" element={<ProjectView />} />
             <Route path="/editEmployee/:id" element={<EditEmployeeDetails />} />
@@ -47,6 +46,7 @@ const Navigate = () => {
               path="/attendance/:id/:name"
               element={<AttendanceCalendar />}
             />
+            <Route path="/attendance/:id" element={<AttendanceCalendar />} />
           </Routes>
         </div>
       </div>
