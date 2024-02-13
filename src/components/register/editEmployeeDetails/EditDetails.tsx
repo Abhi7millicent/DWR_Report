@@ -1,10 +1,9 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Typography,
-  TextField,
   Grid,
   Button,
   Select,
@@ -14,6 +13,8 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
+import InputField from "../../InputField/InputField";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 
 interface EmployeeData {
   firstName: string;
@@ -37,8 +38,17 @@ const EditDetails: React.FC = () => {
     loginId: "",
     password: "",
   });
+  console.log(employeeData.firstName, "employeeData");
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+    clearErrors,
+  } = useForm<typeof employeeData>();
 
   const { id } = useParams();
+  console.log(errors, "errors");
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -62,13 +72,13 @@ const EditDetails: React.FC = () => {
     fetchEmployeeData();
   }, [id]);
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setEmployeeData((prevData) => ({
-      ...prevData,
-      [name as string]: value as string,
-    }));
-  };
+  // const handleChange = (e: any) => {
+  //   const { name, value } = e.target;
+  //   setEmployeeData((prevData) => ({
+  //     ...prevData,
+  //     [name as string]: value as string,
+  //   }));
+  // };
 
   // const handleSelectChange = (
   //   event: SelectChangeEvent<{ name?: string; value: unknown }>
@@ -80,9 +90,7 @@ const EditDetails: React.FC = () => {
   //   }));
   // };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit: SubmitHandler<typeof employeeData> = async () => {
     const requestData = {
       firstName: employeeData.firstName,
       middleName: employeeData.middleName,
@@ -93,6 +101,8 @@ const EditDetails: React.FC = () => {
       loginId: employeeData.loginId,
       password: employeeData.password,
     };
+
+    console.log(requestData, "requestData");
 
     try {
       const response = await fetch(
@@ -118,90 +128,192 @@ const EditDetails: React.FC = () => {
 
   return (
     <div>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="edit-details-content"
-          id="edit-details-header"
-        >
-          <Typography>Edit Employee Details</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
-              <TextField
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="edit-details-content"
+            id="edit-details-header"
+          >
+            <Typography>Edit Employee Details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                {/* <TextField
                 label="First Name"
                 fullWidth
                 value={employeeData.firstName}
                 onChange={handleChange}
                 name="firstName"
                 required
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Middle Name"
-                fullWidth
-                value={employeeData.middleName}
-                onChange={handleChange}
-                name="middleName"
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Last Name"
-                fullWidth
-                value={employeeData.lastName}
-                onChange={handleChange}
-                name="lastName"
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Email"
-                fullWidth
-                type="email"
-                value={employeeData.email}
-                onChange={handleChange}
-                name="email"
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth>
-                <InputLabel id="role">Role*</InputLabel>
-                <Select
-                  labelId="role"
-                  id="demo-simple-select"
-                  value={employeeData.role}
-                  label="Role*"
-                  onChange={handleChange}
-                >
-                  <MenuItem value="admin">Admin</MenuItem>
-                  <MenuItem value="softwareEngineer">
-                    Software Engineer
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
+              /> */}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="First Name*"
+                      placeholder="First Name*"
+                      name="firstName"
+                      aria-invalid={errors.firstName ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("firstName");
+                      }}
+                    />
+                  )}
+                  name="firstName"
+                />
+                {errors.firstName?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
+              </Grid>
 
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Reporting"
-                fullWidth
-                value={employeeData.reporting}
-                onChange={handleChange}
-                name="reporting"
-              />
+              <Grid item xs={12} sm={4}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Middle Name*"
+                      placeholder="Middle Name*"
+                      name="middleName"
+                      aria-invalid={errors.middleName ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("middleName");
+                      }}
+                    />
+                  )}
+                  name="middleName"
+                />
+                {errors.middleName?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Last Name*"
+                      placeholder="Last Name*"
+                      name="lastName"
+                      aria-invalid={errors.lastName ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("lastName");
+                      }}
+                    />
+                  )}
+                  name="lastName"
+                />
+                {errors.middleName?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="email"
+                      label="Email*"
+                      placeholder="Email*"
+                      name="email"
+                      aria-invalid={errors.email ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("email");
+                      }}
+                    />
+                  )}
+                  name="email"
+                />
+                {errors.email?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <FormControl fullWidth>
+                  <InputLabel id="role">Role*</InputLabel>
+                  <Controller
+                    name="role"
+                    control={control}
+                    defaultValue=""
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        labelId="role"
+                        id="demo-simple-select"
+                        label="Role*"
+                        onChange={(e) => field.onChange(e.target.value)}
+                      >
+                        <MenuItem value="admin">Admin</MenuItem>
+                        <MenuItem value="softwareEngineer">
+                          Software Engineer
+                        </MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+                {errors.role && errors.role.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
+              </Grid>
+
+              <Grid item xs={12} sm={4}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Reporting*"
+                      placeholder="Reporting*"
+                      name="reporting"
+                      aria-invalid={errors.reporting ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("reporting");
+                      }}
+                    />
+                  )}
+                  name="reporting"
+                />
+                {errors.reporting?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
-        </AccordionDetails>
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Update
-        </Button>
-      </Accordion>
+          </AccordionDetails>
+          <Button variant="contained" color="primary" type="submit">
+            Update
+          </Button>
+        </Accordion>
+      </form>
     </div>
   );
 };

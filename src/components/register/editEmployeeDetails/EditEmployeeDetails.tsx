@@ -6,7 +6,7 @@ import ViewAddressDetails from "./ViewAddressDetails";
 import ViewDocuments from "./ViewDocumments";
 import ViewEducationDetails from "./ViewEducationDetails";
 import PersonalData from "./PersonalData";
-
+import "../../../App.css";
 const EditEmployeeDetails = () => {
   return (
     <div>
@@ -14,30 +14,30 @@ const EditEmployeeDetails = () => {
         <div className="px-5 mt-4">
           <TabList style={{ display: "flex", gap: "1rem" }}>
             <Tab
-              style={{
-                padding: "4px",
-                paddingLeft: "5px",
-                paddingRight: "5px",
-              }}
+            // style={{
+            //   padding: "4px",
+            //   paddingLeft: "5px",
+            //   paddingRight: "5px",
+            // }}
             >
               Details
             </Tab>
 
             <Tab
-              style={{
-                padding: "4px",
-                paddingLeft: "5px",
-                paddingRight: "5px",
-              }}
+            // style={{
+            //   padding: "4px",
+            //   paddingLeft: "5px",
+            //   paddingRight: "5px",
+            // }}
             >
               Educational Details
             </Tab>
             <Tab
-              style={{
-                padding: "4px",
-                paddingLeft: "5px",
-                paddingRight: "5px",
-              }}
+            // style={{
+            //   padding: "4px",
+            //   paddingLeft: "5px",
+            //   paddingRight: "5px",
+            // }}
             >
               Documents
             </Tab>

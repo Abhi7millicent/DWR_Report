@@ -18,6 +18,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     // Validate inputs
     if (!userId) {
       setUserIdError("UserId is required.");
@@ -45,12 +46,14 @@ const Login: React.FC = () => {
         } else if (response.data.role === "softwareEngineer") {
           navigate("/employee");
         }
-        setLoading(true);
+        setLoading(false);
       } else {
         console.log("Invalid credentials");
       }
     } catch (error: any) {
       console.error("Error:", error.message);
+    } finally {
+      setLoading(false); // Reset loading state in both success and error cases
     }
   };
 
@@ -130,8 +133,11 @@ const Login: React.FC = () => {
           </div>
           <button
             type="submit"
+            // style={{ backgroundColor: `${loading ? "red" : "blue"}` }}
             disabled={loading}
-            className="w-full text-white py-2 rounded-md btn-background-color btn-background-color:hover transition-all input-border"
+            className={`w-full text-white py-2 rounded-md ${
+              loading ? "btn-disable-background-color" : "btn-background-color"
+            } btn-background-color:hover transition-all input-border`}
           >
             Login
           </button>
