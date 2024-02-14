@@ -155,7 +155,7 @@ const EditDetails: React.FC = () => {
                   }}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value}
+                      value={value || employeeData.firstName}
                       type="text"
                       label="First Name*"
                       placeholder="First Name*"
@@ -182,7 +182,7 @@ const EditDetails: React.FC = () => {
                   }}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value}
+                      value={value || employeeData.middleName}
                       type="text"
                       label="Middle Name*"
                       placeholder="Middle Name*"
@@ -208,7 +208,7 @@ const EditDetails: React.FC = () => {
                   }}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value}
+                      value={value || employeeData.lastName}
                       type="text"
                       label="Last Name*"
                       placeholder="Last Name*"
@@ -234,7 +234,7 @@ const EditDetails: React.FC = () => {
                   }}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value}
+                      value={value || employeeData.email}
                       type="email"
                       label="Email*"
                       placeholder="Email*"
@@ -258,7 +258,7 @@ const EditDetails: React.FC = () => {
                   <Controller
                     name="role"
                     control={control}
-                    defaultValue=""
+                    defaultValue={employeeData.role}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
@@ -267,6 +267,7 @@ const EditDetails: React.FC = () => {
                         id="demo-simple-select"
                         label="Role*"
                         onChange={(e) => field.onChange(e.target.value)}
+                        value={employeeData.role}
                       >
                         <MenuItem value="admin">Admin</MenuItem>
                         <MenuItem value="softwareEngineer">
@@ -289,7 +290,7 @@ const EditDetails: React.FC = () => {
                   }}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value}
+                      value={value || employeeData.reporting}
                       type="text"
                       label="Reporting*"
                       placeholder="Reporting*"

@@ -78,7 +78,7 @@ const AttendanceCalendar: React.FC = () => {
   const saturdayClass = "bg-blue-400";
   const currentDateClass = "bg-yellow-300";
   const presentClass = "bg-green-400";
-  const absentClass = "bg-red-400";
+  const absentClass = "bg-red-600";
   const halfDayClass = "bg-purple-400";
 
   const is2ndOr4thSaturday = (day: number) => {

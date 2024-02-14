@@ -36,8 +36,6 @@ function getItem(
     onClick, // Include onClick handler
   } as MenuItem;
 }
-const employeeRole = GetSessionItem("role");
-const employeeId = GetSessionItem("id");
 
 const SideBarLayout: React.FC<{ sidebarItems: any[] }> = ({ sidebarItems }) => {
   const [selectedKey, setSelectedKey] = useState("");
@@ -82,10 +80,11 @@ const App: React.FC = () => {
   // State to store employee role
   const [employeeRole, setEmployeeRole] = useState<string | null>(null);
   const navigate = useNavigate();
-
+  const employeeId = GetSessionItem("id");
   useEffect(() => {
     // Fetch employee role asynchronously
     const role = GetSessionItem("role");
+
     if (role) {
       setEmployeeRole(role);
     }

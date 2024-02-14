@@ -13,13 +13,13 @@ interface AttendanceItem {
 
 interface AttendanceState {
     loading: boolean;
-  data: AttendanceItem[]; // Define your data type here
+  data: AttendanceItem | null; // Define your data type here
   error: string | null;
 }
 
 const initialState: AttendanceState = {
     loading: false,
-    data: [],
+    data: null,
     error: null,
 };
 
@@ -31,7 +31,7 @@ const attendanceSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    fetchDataSuccess(state, action: PayloadAction<any[]>) {
+    fetchDataSuccess(state, action: PayloadAction<any>) {
       state.loading = false;
       state.data = action.payload;
     },

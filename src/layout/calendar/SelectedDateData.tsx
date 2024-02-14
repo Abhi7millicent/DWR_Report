@@ -22,23 +22,28 @@ interface EmployeeIdData {
 interface SelectedDateDataProps {
   startTime: string;
   endTime: string;
+  selectedDate: string;
 }
 
 const SelectedDateData: React.FC<SelectedDateDataProps> = ({
   startTime,
   endTime,
+  selectedDate,
 }) => {
   const { id } = useParams<{ id?: string }>(); // Make id optional
   const [empIdForUpload, setEmpIdForUpload] = useState<EmployeeIdData | null>(
     null
   );
   const { data } = useSelector((state: RootState) => state.attendance);
-  const [attendanceData, setAttendanceData] = useState<Data[] | null>(null); // Corrected type to match your data structure
+  const [attendanceData, setAttendanceData] = useState<Data | null>(); // Corrected type to match your data structure
+  const [status, setStatus] = useState("");
+  const [date, setDate] = useState("");
+  const [todaysDate, setTodaysDate] = useState("");
 
   useEffect(() => {
     console.log("attendanceData1:", data);
     if (data) {
-      console.log("attendanceData2:", data);
+      // console.log("attendanceData2:", data);
       setAttendanceData(data);
     }
   }, [data]);
@@ -47,11 +52,23 @@ const SelectedDateData: React.FC<SelectedDateDataProps> = ({
     if (id) {
       setEmpIdForUpload({ id });
     }
+    const currentDate1 = new Date();
+    const year1 = currentDate1.getFullYear();
+    const month1 = String(currentDate1.getMonth() + 1).padStart(2, "0");
+    const day1 = String(currentDate1.getDate()).padStart(2, "0");
+    const formattedDate1 = `${year1}-${month1}-${day1}`;
+    setTodaysDate(formattedDate1);
   }, [id]);
 
   useEffect(() => {
-    console.log("attendanceData3:", attendanceData);
+    // console.log("attendanceData:", attendanceData);
+    if (attendanceData && attendanceData?.statusflag) {
+      setStatus(attendanceData.statusflag);
+      setDate(attendanceData.date);
+      // console.log("statusflag:", attendanceData.statusflag);
+    }
   }, [attendanceData]);
+
   return (
     <div className="mt-4">
       {startTime && (
@@ -59,11 +76,16 @@ const SelectedDateData: React.FC<SelectedDateDataProps> = ({
           <p className="bold">Start Time: {startTime}</p>
         </div>
       )}
-      {/* {startTime && ( */}
-      <div className="mt-4">
-        <UploadDWR data={empIdForUpload} />
-      </div>
-      {/* )} */}
+      {(status === "Absent" && date === selectedDate && (
+        <div className="mt-4">
+          <UploadDWR data={empIdForUpload} />
+        </div>
+      )) ||
+        (selectedDate === todaysDate && (
+          <div className="mt-4">
+            <UploadDWR data={empIdForUpload} />
+          </div>
+        ))}
       {endTime && (
         <div>
           <p className="bold">End Time: {endTime}</p>

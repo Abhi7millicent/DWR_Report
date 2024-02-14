@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router";
 import Employee from "./components/employee/Employee";
 import EmployeeRecord from "./components/employee/EmployeeRecord";
 import EmployeeRecordFullData from "./components/employee/EmployeeRecordFullData";
-import Register from "./components/register/Register";
+// import Register from "./components/register/Register";
 import Navbar from "./layout/navbar/Navbar";
 import { Layout } from "antd";
 import SideBarLayout from "./layout/sideBar/SideBarLayout";
@@ -37,7 +37,7 @@ const Navigate = () => {
               path="/employee_record_data/:id/:name"
               element={<EmployeeRecordFullData />}
             />
-            <Route path="/register" element={<Register />} />
+            {/* <Route path="/register" element={<Register />} /> */}
             <Route path="/viewLeave" element={<ViewAppliedLeave />} />
             <Route path="/request" element={<Request />} />
             <Route path="/project" element={<ProjectView />} />

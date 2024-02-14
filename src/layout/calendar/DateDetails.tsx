@@ -255,7 +255,11 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
                 <Tab>Apply Leave</Tab>
               </TabList>
               <TabPanel>
-                <SelectedDateData startTime={startTime} endTime={endTime} />
+                <SelectedDateData
+                  startTime={startTime}
+                  endTime={endTime}
+                  selectedDate={selectedDate}
+                />
               </TabPanel>
               <TabPanel>
                 <CommonTable tableHead={tableHead} tableBody={tableBody} />
