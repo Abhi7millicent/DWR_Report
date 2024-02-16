@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -14,7 +14,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
 import InputField from "../../InputField/InputField";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 interface EmployeeData {
   firstName: string;
@@ -28,24 +28,35 @@ interface EmployeeData {
 }
 
 const EditDetails: React.FC = () => {
-  const [employeeData, setEmployeeData] = useState<EmployeeData>({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    email: "",
-    role: "",
-    reporting: "",
-    loginId: "",
-    password: "",
-  });
-  console.log(employeeData.firstName, "employeeData");
+  // const [employeeData, setEmployeeData] = useState<EmployeeData>({
+  //   firstName: "",
+  //   middleName: "",
+  //   lastName: "",
+  //   email: "",
+  //   role: "",
+  //   reporting: "",
+  //   loginId: "",
+  //   password: "",
+  // });
 
   const {
     formState: { errors },
     handleSubmit,
     control,
     clearErrors,
-  } = useForm<typeof employeeData>();
+    setValue,
+    register,
+  } = useForm({
+    defaultValues: {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      email: "",
+      reporting: "",
+      role: "",
+      loginId: "",
+    },
+  });
 
   const { id } = useParams();
   console.log(errors, "errors");
@@ -60,7 +71,13 @@ const EditDetails: React.FC = () => {
         if (response.ok) {
           const data: EmployeeData = await response.json();
           console.log("data", data);
-          setEmployeeData(data);
+          // setEmployeeData(data);
+          setValue("firstName", data.firstName);
+          setValue("middleName", data.middleName);
+          setValue("lastName", data.lastName);
+          setValue("email", data.email);
+          setValue("reporting", data.reporting);
+          setValue("role", data.role);
         } else {
           console.error("Failed to fetch employee data");
         }
@@ -90,16 +107,16 @@ const EditDetails: React.FC = () => {
   //   }));
   // };
 
-  const onSubmit: SubmitHandler<typeof employeeData> = async () => {
+  const onSubmit = async (data: any) => {
+    console.log(data, "data");
+
     const requestData = {
-      firstName: employeeData.firstName,
-      middleName: employeeData.middleName,
-      lastName: employeeData.lastName,
-      email: employeeData.email,
-      role: employeeData.role,
-      reporting: employeeData.reporting,
-      loginId: employeeData.loginId,
-      password: employeeData.password,
+      firstName: data.firstName,
+      middleName: data.middleName,
+      lastName: data.lastName,
+      email: data.email,
+      role: data.role,
+      reporting: data.reporting,
     };
 
     console.log(requestData, "requestData");
@@ -153,9 +170,10 @@ const EditDetails: React.FC = () => {
                   rules={{
                     required: true,
                   }}
+                  {...register("firstName")}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value || employeeData.firstName}
+                      value={value}
                       type="text"
                       label="First Name*"
                       placeholder="First Name*"
@@ -167,7 +185,6 @@ const EditDetails: React.FC = () => {
                       }}
                     />
                   )}
-                  name="firstName"
                 />
                 {errors.firstName?.type === "required" && (
                   <p className="alert">This field is required</p>
@@ -180,9 +197,10 @@ const EditDetails: React.FC = () => {
                   rules={{
                     required: true,
                   }}
+                  {...register("middleName")}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value || employeeData.middleName}
+                      value={value}
                       type="text"
                       label="Middle Name*"
                       placeholder="Middle Name*"
@@ -194,7 +212,6 @@ const EditDetails: React.FC = () => {
                       }}
                     />
                   )}
-                  name="middleName"
                 />
                 {errors.middleName?.type === "required" && (
                   <p className="alert">This field is required</p>
@@ -206,9 +223,10 @@ const EditDetails: React.FC = () => {
                   rules={{
                     required: true,
                   }}
+                  {...register("lastName")}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value || employeeData.lastName}
+                      value={value}
                       type="text"
                       label="Last Name*"
                       placeholder="Last Name*"
@@ -220,7 +238,6 @@ const EditDetails: React.FC = () => {
                       }}
                     />
                   )}
-                  name="lastName"
                 />
                 {errors.middleName?.type === "required" && (
                   <p className="alert">This field is required</p>
@@ -232,9 +249,10 @@ const EditDetails: React.FC = () => {
                   rules={{
                     required: true,
                   }}
+                  {...register("email")}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value || employeeData.email}
+                      value={value}
                       type="email"
                       label="Email*"
                       placeholder="Email*"
@@ -246,7 +264,6 @@ const EditDetails: React.FC = () => {
                       }}
                     />
                   )}
-                  name="email"
                 />
                 {errors.email?.type === "required" && (
                   <p className="alert">This field is required</p>
@@ -254,11 +271,19 @@ const EditDetails: React.FC = () => {
               </Grid>
               <Grid item xs={12} sm={4}>
                 <FormControl fullWidth>
-                  <InputLabel id="role">Role*</InputLabel>
+                  <InputLabel
+                    id="role"
+                    sx={{
+                      "&.MuiInputLabel-root": {
+                        color: "var(--primary-color) !important",
+                      },
+                    }}
+                  >
+                    Role*
+                  </InputLabel>
                   <Controller
-                    name="role"
                     control={control}
-                    defaultValue={employeeData.role}
+                    {...register("role")}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
@@ -267,7 +292,18 @@ const EditDetails: React.FC = () => {
                         id="demo-simple-select"
                         label="Role*"
                         onChange={(e) => field.onChange(e.target.value)}
-                        value={employeeData.role}
+                        value={field.value}
+                        sx={{
+                          ".MuiOutlinedInput-notchedOutline": {
+                            borderColor: "var(--primary-color) !important",
+                          },
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "var(--primary-color) !important",
+                          },
+                          "&:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "var(--primary-color) !important",
+                          },
+                        }}
                       >
                         <MenuItem value="admin">Admin</MenuItem>
                         <MenuItem value="softwareEngineer">
@@ -288,9 +324,10 @@ const EditDetails: React.FC = () => {
                   rules={{
                     required: true,
                   }}
+                  {...register("reporting")}
                   render={({ field: { onChange, value } }) => (
                     <InputField
-                      value={value || employeeData.reporting}
+                      value={value}
                       type="text"
                       label="Reporting*"
                       placeholder="Reporting*"
@@ -302,7 +339,6 @@ const EditDetails: React.FC = () => {
                       }}
                     />
                   )}
-                  name="reporting"
                 />
                 {errors.reporting?.type === "required" && (
                   <p className="alert">This field is required</p>

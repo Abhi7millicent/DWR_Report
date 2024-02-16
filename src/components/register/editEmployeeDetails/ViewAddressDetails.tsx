@@ -4,12 +4,13 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  TextField,
   Grid,
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
+import InputField from "../../InputField/InputField";
+import { Controller, useForm } from "react-hook-form";
 
 interface AddressDetails {
   addressLine1: string;
@@ -44,6 +45,24 @@ const ViewAddressDetails: React.FC = () => {
     country: "",
     contactno1: "",
     contactno2: "",
+  });
+
+  const {
+    formState: { errors },
+    control,
+    clearErrors,
+    register,
+  } = useForm({
+    defaultValues: {
+      addressLine1: "",
+      addressLine2: "",
+      pinCode: "",
+      city: "",
+      state: "",
+      country: "",
+      contactno1: "",
+      contactno2: "",
+    },
   });
 
   const fetchLocationPermanentAddressDetails = (pinCode: string) => {
@@ -195,68 +214,218 @@ const ViewAddressDetails: React.FC = () => {
           <AccordionDetails>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   label="Address Line 1"
                   fullWidth
                   value={permanentAddress.addressLine1}
                   onChange={handleInputChange("addressLine1")}
+                /> */}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("addressLine1")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Address Line 1"
+                      placeholder="addressLine1"
+                      name="addressLine1"
+                      aria-invalid={errors.addressLine1 ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("addressLine1");
+                      }}
+                    />
+                  )}
                 />
+                {errors.addressLine1?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  label="Address Line 2"
-                  fullWidth
-                  value={permanentAddress.addressLine2}
-                  onChange={handleInputChange("addressLine2")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("addressLine2")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Address Line 2"
+                      placeholder="addressLine2"
+                      name="addressLine2"
+                      aria-invalid={errors.addressLine2 ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("addressLine2");
+                      }}
+                    />
+                  )}
                 />
+                {errors.addressLine2?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="Pin Code"
-                  fullWidth
-                  value={permanentAddress.pinCode}
-                  onChange={handleInputChange("pinCode")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("pinCode")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Pin code"
+                      placeholder="Pin code"
+                      name="pinCode"
+                      aria-invalid={errors.pinCode ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("pinCode");
+                      }}
+                    />
+                  )}
                 />
+                {errors.pinCode?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="City"
-                  fullWidth
-                  value={permanentAddress.city}
-                  onChange={handleInputChange("city")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("city")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="City"
+                      placeholder="City"
+                      name="city"
+                      aria-invalid={errors.city ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("city");
+                      }}
+                    />
+                  )}
                 />
+                {errors.city?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="State"
-                  fullWidth
-                  value={permanentAddress.state}
-                  onChange={handleInputChange("state")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("state")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="State"
+                      placeholder="State"
+                      name="state"
+                      aria-invalid={errors.state ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("state");
+                      }}
+                    />
+                  )}
                 />
+                {errors.city?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="Country"
-                  fullWidth
-                  value={permanentAddress.country}
-                  onChange={handleInputChange("country")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("country")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Country"
+                      placeholder="Country"
+                      name="country"
+                      aria-invalid={errors.country ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("country");
+                      }}
+                    />
+                  )}
                 />
+                {errors.country?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="Contact 1"
-                  fullWidth
-                  value={permanentAddress.contactno1}
-                  onChange={handleInputChange("contactno1")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("contactno1")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="number"
+                      label="Contact 1"
+                      placeholder="Contact 1"
+                      name="contactno1"
+                      aria-invalid={errors.contactno1 ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("contactno1");
+                      }}
+                    />
+                  )}
                 />
+                {errors.contactno1?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="Contact 2"
-                  fullWidth
-                  value={permanentAddress.contactno2}
-                  onChange={handleInputChange("contactno2")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("contactno2")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="number"
+                      label="Contact 2"
+                      placeholder="Contact 2"
+                      name="contactno2"
+                      aria-invalid={errors.contactno2 ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("contactno2");
+                      }}
+                    />
+                  )}
                 />
+                {errors.contactno2?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
             </Grid>
           </AccordionDetails>
@@ -282,68 +451,218 @@ const ViewAddressDetails: React.FC = () => {
           <AccordionDetails>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   label="Address Line 1"
                   fullWidth
-                  value={temporaryAddress.addressLine1}
-                  onChange={handleInputtemporaryChange("addressLine1")}
+                  value={permanentAddress.addressLine1}
+                  onChange={handleInputChange("addressLine1")}
+                /> */}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("addressLine1")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Address Line 1"
+                      placeholder="addressLine1"
+                      name="addressLine1"
+                      aria-invalid={errors.addressLine1 ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("addressLine1");
+                      }}
+                    />
+                  )}
                 />
+                {errors.addressLine1?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  label="Address Line 2"
-                  fullWidth
-                  value={temporaryAddress.addressLine2}
-                  onChange={handleInputtemporaryChange("addressLine2")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("addressLine2")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Address Line 2"
+                      placeholder="addressLine2"
+                      name="addressLine2"
+                      aria-invalid={errors.addressLine2 ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("addressLine2");
+                      }}
+                    />
+                  )}
                 />
+                {errors.addressLine2?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="Pin Code"
-                  fullWidth
-                  value={temporaryAddress.pinCode}
-                  onChange={handleInputtemporaryChange("pinCode")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("pinCode")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Pin code"
+                      placeholder="Pin code"
+                      name="pinCode"
+                      aria-invalid={errors.pinCode ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("pinCode");
+                      }}
+                    />
+                  )}
                 />
+                {errors.pinCode?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="City"
-                  fullWidth
-                  value={temporaryAddress.city}
-                  onChange={handleInputtemporaryChange("city")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("city")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="City"
+                      placeholder="City"
+                      name="city"
+                      aria-invalid={errors.city ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("city");
+                      }}
+                    />
+                  )}
                 />
+                {errors.city?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="State"
-                  fullWidth
-                  value={temporaryAddress.state}
-                  onChange={handleInputtemporaryChange("state")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("state")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="State"
+                      placeholder="State"
+                      name="state"
+                      aria-invalid={errors.state ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("state");
+                      }}
+                    />
+                  )}
                 />
+                {errors.city?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="Country"
-                  fullWidth
-                  value={temporaryAddress.country}
-                  onChange={handleInputtemporaryChange("country")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("country")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="text"
+                      label="Country"
+                      placeholder="Country"
+                      name="country"
+                      aria-invalid={errors.country ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("country");
+                      }}
+                    />
+                  )}
                 />
+                {errors.country?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="Contact 1"
-                  fullWidth
-                  value={temporaryAddress.contactno1}
-                  onChange={handleInputtemporaryChange("contactno1")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("contactno1")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="number"
+                      label="Contact 1"
+                      placeholder="Contact 1"
+                      name="contactno1"
+                      aria-invalid={errors.contactno1 ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("contactno1");
+                      }}
+                    />
+                  )}
                 />
+                {errors.contactno1?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  label="Contact 2"
-                  fullWidth
-                  value={temporaryAddress.contactno2}
-                  onChange={handleInputtemporaryChange("contactno2")}
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("contactno2")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="number"
+                      label="Contact 2"
+                      placeholder="Contact 2"
+                      name="contactno2"
+                      aria-invalid={errors.contactno2 ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("contactno2");
+                      }}
+                    />
+                  )}
                 />
+                {errors.contactno2?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
               </Grid>
             </Grid>
           </AccordionDetails>

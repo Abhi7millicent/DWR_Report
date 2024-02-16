@@ -4,12 +4,13 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  TextField,
   Grid,
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
+import { Controller, useForm } from "react-hook-form";
+import InputField from "../../InputField/InputField";
 
 interface PersonalDataDetails {
   bloodGroup: string;
@@ -28,7 +29,20 @@ const PersonalData: React.FC = () => {
     emergencyContact2: "",
     relation2: "",
   });
-
+  const {
+    formState: { errors },
+    control,
+    clearErrors,
+    register,
+  } = useForm({
+    defaultValues: {
+      bloodGroup: "",
+      emergencyContact1: "",
+      relation1: "",
+      emergencyContact2: "",
+      relation2: "",
+    },
+  });
   //   const apiEndpoint = `http://localhost:8080/api/DWR/personalData/update/${id}`;
   const apiEndpoint = `http://localhost:8080/api/DWR/employeePersonalDetails/update/${id}`;
 
@@ -76,47 +90,134 @@ const PersonalData: React.FC = () => {
         <AccordionDetails>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField
-                label="Blood Group"
-                fullWidth
-                value={formData.bloodGroup}
-                onChange={handleInputChange("bloodGroup")}
-                required
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("bloodGroup")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="text"
+                    label="Blood Group"
+                    placeholder="Blood Group"
+                    name="bloodGroup"
+                    aria-invalid={errors.bloodGroup ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("bloodGroup");
+                    }}
+                  />
+                )}
               />
+              {errors.bloodGroup?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="Emergency Contact No. 1"
-                fullWidth
-                value={formData.emergencyContact1}
-                onChange={handleInputChange("emergencyContact1")}
-                required
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("emergencyContact1")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="Emergency Contact No. 1"
+                    placeholder="Emergency Contact No. 1"
+                    name="emergencyContact1"
+                    aria-invalid={errors.emergencyContact1 ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("emergencyContact1");
+                    }}
+                  />
+                )}
               />
+              {errors.emergencyContact1?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="Relation to Contact No. 1"
-                fullWidth
-                value={formData.relation1}
-                onChange={handleInputChange("relation1")}
-                required
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("relation1")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="Relation to Contact No. 1"
+                    placeholder="Relation to Contact No. 1"
+                    name="relation1"
+                    aria-invalid={errors.relation1 ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("relation1");
+                    }}
+                  />
+                )}
               />
+              {errors.relation1?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="Emergency Contact No. 2"
-                fullWidth
-                value={formData.emergencyContact2}
-                onChange={handleInputChange("emergencyContact2")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("emergencyContact2")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="Emergency Contact No. 2"
+                    placeholder="Emergency Contact No. 2"
+                    name="emergencyContact2"
+                    aria-invalid={errors.emergencyContact2 ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("emergencyContact2");
+                    }}
+                  />
+                )}
               />
+              {errors.emergencyContact2?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="Relation to Contact No. 2"
-                fullWidth
-                value={formData.relation2}
-                onChange={handleInputChange("relation2")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("relation2")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="Relation to Contact No. 2"
+                    placeholder="Relation to Contact No. 2"
+                    name="relation2"
+                    aria-invalid={errors.relation2 ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("relation2");
+                    }}
+                  />
+                )}
               />
+              {errors.relation2?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
           </Grid>
         </AccordionDetails>

@@ -4,12 +4,13 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  TextField,
   Grid,
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
+import { Controller, useForm } from "react-hook-form";
+import InputField from "../../InputField/InputField";
 
 interface SalaryDetails {
   bankAccountName: string;
@@ -34,7 +35,23 @@ const SalaryDetails: React.FC = () => {
     annualSalary: "",
     monthlySalary: "",
   });
-
+  const {
+    formState: { errors },
+    control,
+    clearErrors,
+    register,
+  } = useForm({
+    defaultValues: {
+      bankAccountName: "",
+      ifscCode: "",
+      accountNo: "",
+      uan: "",
+      epfoNo: "",
+      panNo: "",
+      annualSalary: "",
+      monthlySalary: "",
+    },
+  });
   const apiEndpoint = `http://localhost:8080/api/DWR/employeeSalary/update/${id}`;
 
   useEffect(() => {
@@ -89,68 +106,212 @@ const SalaryDetails: React.FC = () => {
         <AccordionDetails>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                label="Bank Account Name"
-                fullWidth
-                value={formData.bankAccountName}
-                onChange={handleInputChange("bankAccountName")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("bankAccountName")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="text"
+                    label="Bank Account Name"
+                    placeholder="Bank Account Name"
+                    name="bankAccountName"
+                    aria-invalid={errors.bankAccountName ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("bankAccountName");
+                    }}
+                  />
+                )}
               />
+              {errors.bankAccountName?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                label="IFSC Code"
-                fullWidth
-                value={formData.ifscCode}
-                onChange={handleInputChange("ifscCode")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("ifscCode")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="IFSC Code"
+                    placeholder="IFSC Code"
+                    name="ifscCode"
+                    aria-invalid={errors.ifscCode ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("ifscCode");
+                    }}
+                  />
+                )}
               />
+              {errors.ifscCode?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="Account Number"
-                fullWidth
-                value={formData.accountNo}
-                onChange={handleInputChange("accountNo")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("accountNo")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="Account Number"
+                    placeholder="Account Number"
+                    name="accountNo"
+                    aria-invalid={errors.accountNo ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("accountNo");
+                    }}
+                  />
+                )}
               />
+              {errors.accountNo?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="UAN Number"
-                fullWidth
-                value={formData.uan}
-                onChange={handleInputChange("uan")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("uan")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="UAN Number"
+                    placeholder="UAN Number"
+                    name="uan"
+                    aria-invalid={errors.uan ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("uan");
+                    }}
+                  />
+                )}
               />
+              {errors.uan?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="EPFO Number"
-                fullWidth
-                value={formData.epfoNo}
-                onChange={handleInputChange("epfoNo")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("epfoNo")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="EPFO Number"
+                    placeholder="EPFO Number"
+                    name="epfoNo"
+                    aria-invalid={errors.epfoNo ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("epfoNo");
+                    }}
+                  />
+                )}
               />
+              {errors.epfoNo?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="PAN Number"
-                fullWidth
-                value={formData.panNo}
-                onChange={handleInputChange("panNo")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("panNo")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="PAN Number"
+                    placeholder="PAN Number"
+                    name="panNo"
+                    aria-invalid={errors.panNo ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("panNo");
+                    }}
+                  />
+                )}
               />
+              {errors.panNo?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="Annual Salary"
-                fullWidth
-                value={formData.annualSalary}
-                onChange={handleInputChange("annualSalary")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("annualSalary")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="Annual Salary"
+                    placeholder="Annual Salary"
+                    name="annualSalary"
+                    aria-invalid={errors.annualSalary ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("annualSalary");
+                    }}
+                  />
+                )}
               />
+              {errors.annualSalary?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                label="Monthly Salary"
-                fullWidth
-                value={formData.monthlySalary}
-                onChange={handleInputChange("monthlySalary")}
+              <Controller
+                control={control}
+                rules={{
+                  required: false,
+                }}
+                {...register("monthlySalary")}
+                render={({ field: { onChange, value } }) => (
+                  <InputField
+                    value={value}
+                    type="number"
+                    label="Monthly Salary"
+                    placeholder="Monthly Salary"
+                    name="monthlySalary"
+                    aria-invalid={errors.monthlySalary ? "true" : "false"}
+                    onChange={(e) => {
+                      onChange(e);
+                      clearErrors("monthlySalary");
+                    }}
+                  />
+                )}
               />
+              {errors.monthlySalary?.type === "required" && (
+                <p className="alert">This field is required</p>
+              )}
             </Grid>
           </Grid>
         </AccordionDetails>
