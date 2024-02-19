@@ -22,11 +22,13 @@ const Login: React.FC = () => {
     // Validate inputs
     if (!userId) {
       setUserIdError("UserId is required.");
+      setLoading(false);
       return;
     }
 
     if (!password) {
       setPasswordError("Password is required.");
+      setLoading(false);
       return;
     }
     try {
@@ -59,19 +61,19 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center flex-col justify-center h-screen gap-4">
-      <motion.span
+    <div className="flex items-center flex-col justify-center h-screen gap-4 overflow-x-hidden">
+      <motion.div
         animate={{ opacity: 1, scale: 1 }}
         initial={{ opacity: 0, scale: 0 }}
         transition={{ duration: 0.6, repeatType: "loop" }}
       >
-        <img src={loginBackground} width="150" alt="images" />
-      </motion.span>
-      <motion.span
+        <img className="w-40" src={loginBackground} alt="images" />
+      </motion.div>
+      <motion.div
         animate={{ opacity: 1, y: 0 }}
         initial={{ y: 300, opacity: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="bg-white p-8 shadow-md w-96 rounded-md"
+        className="bg-white p-8 shadow-md  rounded-md d-flex flex-col  sm:w-90 lg:w-1/3 "
       >
         <h2 className="text-2xl font-bold mb-4 text-center text-color">
           Login
@@ -106,29 +108,29 @@ const Login: React.FC = () => {
               >
                 Password
               </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                className={`w-full px-3 text-sm py-2 rounded-md input-border ${
-                  passwordError ? "border-red-500" : ""
-                }`}
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError("");
-                }}
-              />
-              {passwordError && (
-                <p className="text-red-500 text-xs mt-1">{passwordError}</p>
-              )}
-              <div
-                className={`relative left-72  ${
-                  passwordError ? "bottom-12" : "bottom-7"
-                }   transform  cursor-pointer`}
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                <Icon icons={showPassword ? [faEyeSlash] : [faEye]} />
+              <div className="relative mb-5">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  className={`w-full px-3 text-sm py-2 rounded-md input-border ${
+                    passwordError ? "border-red-500" : ""
+                  }`}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
+                />
+                {passwordError && (
+                  <p className="text-red-500 text-xs mt-1">{passwordError}</p>
+                )}
+                <div
+                  className={`absolute  right-3 top-2  transform  cursor-pointer`}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <Icon icons={showPassword ? [faEyeSlash] : [faEye]} />
+                </div>
               </div>
             </div>
           </div>
@@ -143,7 +145,7 @@ const Login: React.FC = () => {
             Login
           </button>
         </form>
-      </motion.span>
+      </motion.div>
     </div>
   );
 };
