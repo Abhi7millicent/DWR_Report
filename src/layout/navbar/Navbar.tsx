@@ -1,4 +1,5 @@
 import React from "react";
+import { GetSessionItem } from "../../utils/SessionStorage";
 // import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 // import ProfileDropDown from "../profileDropDown/ProfileDropDown";
 import loginBackground from "../../assets/logo-color.png";
@@ -18,6 +19,7 @@ const Navbar: React.FC = () => {
 
         {/* Navigation links */}
         <div className="flex gap-4">
+          <b>Welcome : {GetSessionItem("name")}</b>
           {/* <div
             onClick={haldleProfile}
             className="text-white hover:text-gray-300 cursor-pointer"

@@ -22,11 +22,13 @@ const Login: React.FC = () => {
     // Validate inputs
     if (!userId) {
       setUserIdError("UserId is required.");
+      setLoading(false);
       return;
     }
 
     if (!password) {
       setPasswordError("Password is required.");
+      setLoading(false);
       return;
     }
     try {
@@ -42,6 +44,7 @@ const Login: React.FC = () => {
         SetSessionItem("token", response.data.token);
         SetSessionItem("role", response.data.role);
         SetSessionItem("id", response.data.id);
+        SetSessionItem("name", response.data.name);
         if (response.data.role === "admin") {
           navigate("/employee");
         } else if (response.data.role === "softwareEngineer") {

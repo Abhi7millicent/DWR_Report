@@ -76,6 +76,23 @@ const Employee: React.FC = () => {
     setEmpIdForUpload({ id: Id }); // Corrected the way of setting empId
   };
 
+  const addLeave = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/DWR/updateBalancedLeave"
+      );
+
+      // Assuming the response is JSON
+      const responseData = response.data;
+
+      // Show response in alert
+      alert(JSON.stringify(responseData));
+    } catch (error) {
+      // Handle error
+      console.error("Error:", error);
+      alert("An error occurred. Please try again later.");
+    }
+  };
   const closeModal = () => {
     setIsModalOpen(false);
     setEmpId(null);
@@ -143,13 +160,21 @@ const Employee: React.FC = () => {
         <div className="bg-white p-8 shadow-md rounded-md w-full mb-4 ">
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4 px-4">Employee List</h2>
-            <a onClick={openModal} className="px-4">
-              {/* <ControlPointRoundedIcon className="text-color" /> */}
-              {/* <button className="btn-background-color text-white py-2 rounded-md p-3"> */}
-              <button className="btn btn-background-color:hover">
-                Add Employee
+            <div>
+              <button
+                className="btn btn-background-color:hover"
+                onClick={addLeave}
+              >
+                Add Leave
               </button>
-            </a>
+              <a onClick={openModal} className="px-4">
+                {/* <ControlPointRoundedIcon className="text-color" /> */}
+                {/* <button className="btn-background-color text-white py-2 rounded-md p-3"> */}
+                <button className="btn btn-background-color:hover">
+                  Add Employee
+                </button>
+              </a>
+            </div>
           </div>
           <div className="p-4 ">
             <div>

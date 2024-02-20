@@ -122,17 +122,17 @@ const App: React.FC = () => {
           getItem("Project", "project", <DesktopOutlined />),
           getItem("Notification", "sub1", <MailOutlined />, [
             getItem("Attendance Request", "request"),
+            getItem("Mail", "sub2", null, [
+              getItem("Offer Letter", "offerLetter"),
+              getItem("Option 12", "12"),
+            ]),
             getItem("Option 6", "6"),
             getItem("Option 7", "7"),
             getItem("Option 8", "8"),
           ]),
-          getItem("Navigation Two", "sub2", <AppstoreOutlined />, [
+          getItem("Navigation Two", "sub3", <AppstoreOutlined />, [
             getItem("Option 9", "9"),
             getItem("Option 10", "10"),
-            getItem("Submenu", "sub3", null, [
-              getItem("Option 11", "11"),
-              getItem("Option 12", "12"),
-            ]),
           ]),
           getItem("Setting", "sub4", <SettingsSuggestIcon fontSize="large" />, [
             getItem("Profile", "profile", <AccountCircleIcon />),
