@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useParams } from "react-router";
 import { useDropzone } from "react-dropzone"; // Import useDropzone
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -6,8 +6,15 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 type TQueryParam = {
   id: any;
 };
-
-const Documents = () => {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
+const Documents: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  const modalClasses = isOpen
+    ? "fixed inset-0 flex items-center justify-center "
+    : "hidden";
   const [selectedType, setSelectedType] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const { id } = useParams<TQueryParam>();
@@ -72,11 +79,12 @@ const Documents = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className={`${modalClasses} z-10`}>
       <div className="flex items-center justify-center">
+        {children}
         <div className="bg-white p-8 shadow-md rounded-md w-full">
           <h2 className="text-2xl font-semibold mb-4">Add Documents</h2>
-          <div>
+          <div className="flex flex-col">
             <div className="flex w-full gap-4">
               <div className="mb-4 w-1/4">
                 <label className="block text-sm font-medium text-gray-600">
@@ -119,13 +127,31 @@ const Documents = () => {
                   className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                 ></textarea>
               </div>
-              <div className="w-1/4 px-10 py-10">
+            </div>
+            {/* <div className="w-1/4 px-10 py-10">
                 <button
                   onClick={handleSave}
                   disabled={
                     !selectedType || droppedFiles.length === 0 || !description
                   }
                   className="bg-blue-500 text-white py-2 px-4 rounded-md"
+                >
+                  Add
+                </button>
+              </div> */}
+            <div className="flex justify-between ">
+              <div>
+                <button onClick={onClose} className="btn-close">
+                  Close
+                </button>
+              </div>
+              <div>
+                <button
+                  onClick={handleSave}
+                  disabled={
+                    !selectedType || droppedFiles.length === 0 || !description
+                  }
+                  className="btn"
                 >
                   Add
                 </button>

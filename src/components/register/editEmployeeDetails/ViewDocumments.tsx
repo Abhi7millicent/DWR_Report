@@ -81,19 +81,18 @@ const ViewDocuments = () => {
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4">Documents</h2>
             <a onClick={openModal}>
-              <ControlPointRoundedIcon
-                fontSize="large"
-                className="text-green-600"
-              />
+              <button className="btn btn-background-color:hover">
+                Add Document
+              </button>
             </a>
           </div>
           <div className="mt-4">
             <CommonTable tableHead={tableHead} tableBody={tableBody} />
           </div>
           <div className="w-fit">
-            <CommonModal isOpen={isModalOpen} onClose={closeModal}>
-              <Documents />
-            </CommonModal>
+            {/* <CommonModal isOpen={isModalOpen} onClose={closeModal}> */}
+            <Documents isOpen={isModalOpen} onClose={closeModal} />
+            {/* </CommonModal> */}
           </div>
         </div>
       </div>

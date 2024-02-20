@@ -34,11 +34,13 @@ const CommonMaterialTable: React.FC<CommonMaterialTableProps> = ({
     muiTableHeadCellProps: {
       sx: {
         minWidth: "max-content !important",
+        fontFamily: "var(--font-family) !important",
       },
     },
     muiTableBodyCellProps: {
       sx: {
         textAlign: "center",
+        fontFamily: "var(--font-family) !important",
       },
     },
     enableDensityToggle: false,

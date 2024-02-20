@@ -29,18 +29,21 @@ const InputField: React.FC<InputValue> = ({
       fullWidth
       sx={{
         "& .MuiInputLabel-root": {
-          color: "#226d6d8c",
+          color: "var(--primary-color) !important",
+          fontFamily: "var(--font-family) !important",
         },
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
-            borderColor: "#226d6d8c",
-            color: "#226d6d8c",
+            borderColor: "var(--primary-color) !important",
+            color: "var(--primary-color) !important",
+            fontFamily: "var(--font-family) !important",
           },
           "&:hover fieldset": {
-            borderColor: "#226d6d8c",
+            borderColor: "var(--primary-color) !important",
           },
           "&.Mui-focused fieldset": {
-            borderColor: "#226d6d8c",
+            borderColor: "var(--primary-color) !important",
+            fontFamily: "var(--font-family) !important",
           },
         },
       }}

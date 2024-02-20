@@ -1,8 +1,20 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { useParams } from "react-router";
-
-const EducationDetails = () => {
+import toast, { Toaster } from "react-hot-toast";
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
+const EducationDetails: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+}) => {
+  const modalClasses = isOpen
+    ? "fixed inset-0 flex items-center justify-center "
+    : "hidden";
   const { id } = useParams();
   const [education, setEducation] = useState({
     employeeId: id,
@@ -30,7 +42,9 @@ const EducationDetails = () => {
         education
       );
       console.error("Api response:", response.data);
-      alert("Educational Details Inserted");
+      // alert("Educational Details Inserted");
+      toast.success("Educational Details updated!");
+      onClose();
 
       // Optionally, you can handle the response or perform other actions after successful submission
     } catch (error) {
@@ -39,8 +53,10 @@ const EducationDetails = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className={`${modalClasses} z-10`}>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="flex items-center justify-center">
+        {children}
         <div className="bg-white p-8 shadow-md rounded-md w-full">
           <h2 className="text-2xl font-semibold mb-4">Add Education Details</h2>
           <form onSubmit={handleSubmit}>
@@ -157,12 +173,25 @@ const EducationDetails = () => {
               </div>
             </div>
 
-            <button
+            {/* <button
               type="submit"
               className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
             >
               Save
-            </button>
+            </button> */}
+
+            <div className="flex justify-between">
+              <div>
+                <button onClick={onClose} className="btn-close">
+                  Close
+                </button>
+              </div>
+              <div>
+                <button type="submit" className="btn">
+                  Save
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
