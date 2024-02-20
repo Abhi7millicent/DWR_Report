@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -88,22 +88,22 @@ const ViewAddressDetails: React.FC = () => {
     },
   });
 
-  const fetchLocationPermanentAddressDetails = (permanentPinCode: string) => {
-    fetch(`https://api.postalpincode.in/pincode/${permanentPinCode}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const { District, State, Country } = data[0].PostOffice[0];
-        setValue((prevAddress) => ({
-          ...prevAddress,
-          city: District, // Update to match your state key
-          state: State, // Update to match your state key
-          country: Country, // Update to match your state key
-        }));
-      })
-      .catch((error) =>
-        console.error("Error fetching location details:", error)
-      );
-  };
+  // const fetchLocationPermanentAddressDetails = (permanentPinCode: string) => {
+  //   fetch(`https://api.postalpincode.in/pincode/${permanentPinCode}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const { District, State, Country } = data[0].PostOffice[0];
+  //       setValue((prevAddress) => ({
+  //         ...prevAddress,
+  //         city: District, // Update to match your state key
+  //         state: State, // Update to match your state key
+  //         country: Country, // Update to match your state key
+  //       }));
+  //     })
+  //     .catch((error) =>
+  //       console.error("Error fetching location details:", error)
+  //     );
+  // };
 
   // const fetchLocationTemporaryAddressDetails = (pinCode: string) => {
   //   fetch(`https://api.postalpincode.in/pincode/${pinCode}`)
@@ -423,7 +423,7 @@ const ViewAddressDetails: React.FC = () => {
                         onChange={(e) => {
                           onChange(e);
                           clearErrors("permanentPinCode");
-                          fetchLocationPermanentAddressDetails();
+                          // fetchLocationPermanentAddressDetails();
                         }}
                       />
                     )}
