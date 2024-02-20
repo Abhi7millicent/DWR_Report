@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -15,7 +15,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
 import InputField from "../../InputField/InputField";
 import { useForm, Controller } from "react-hook-form";
-
+import toast, { Toaster } from "react-hot-toast";
 interface EmployeeData {
   firstName: string;
   middleName: string;
@@ -57,9 +57,8 @@ const EditDetails: React.FC = () => {
       loginId: "",
     },
   });
-
+  const [disabled, setDisabled] = useState(false);
   const { id } = useParams();
-  console.log(errors, "errors");
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -89,27 +88,9 @@ const EditDetails: React.FC = () => {
     fetchEmployeeData();
   }, [id]);
 
-  // const handleChange = (e: any) => {
-  //   const { name, value } = e.target;
-  //   setEmployeeData((prevData) => ({
-  //     ...prevData,
-  //     [name as string]: value as string,
-  //   }));
-  // };
-
-  // const handleSelectChange = (
-  //   event: SelectChangeEvent<{ name?: string; value: unknown }>
-  // ) => {
-  //   const { name, value } = event.target;
-  //   setEmployeeData((prevData) => ({
-  //     ...prevData,
-  //     [name as string]: { name, value },
-  //   }));
-  // };
-
   const onSubmit = async (data: any) => {
     console.log(data, "data");
-
+    setDisabled(true);
     const requestData = {
       firstName: data.firstName,
       middleName: data.middleName,
@@ -134,9 +115,25 @@ const EditDetails: React.FC = () => {
       );
 
       if (response.ok) {
-        alert("Employee details updated successfully!");
+        // alert("Employee details updated successfully!");
+        toast.success("Employee details updated successfully!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+        setDisabled(false);
       } else {
-        alert("Failed to update employee details. Please try again.");
+        toast.error("Failed to update employee details. Please try again.", {
+          style: {
+            fontFamily: "var( --font-family)",
+          },
+        });
+        setDisabled(false);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -146,6 +143,7 @@ const EditDetails: React.FC = () => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <Toaster reverseOrder={false} />
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -346,7 +344,12 @@ const EditDetails: React.FC = () => {
               </Grid>
             </Grid>
           </AccordionDetails>
-          <Button variant="contained" color="primary" type="submit">
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={disabled}
+          >
             Update
           </Button>
         </Accordion>

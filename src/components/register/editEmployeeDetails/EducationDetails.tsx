@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { ReactNode, useState } from "react";
 import { useParams } from "react-router";
+import toast, { Toaster } from "react-hot-toast";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -41,7 +42,8 @@ const EducationDetails: React.FC<ModalProps> = ({
         education
       );
       console.error("Api response:", response.data);
-      alert("Educational Details Inserted");
+      // alert("Educational Details Inserted");
+      toast.success("Educational Details updated!");
       onClose();
 
       // Optionally, you can handle the response or perform other actions after successful submission
@@ -52,6 +54,7 @@ const EducationDetails: React.FC<ModalProps> = ({
 
   return (
     <div className={`${modalClasses} z-10`}>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="flex items-center justify-center">
         {children}
         <div className="bg-white p-8 shadow-md rounded-md w-full">

@@ -3,9 +3,7 @@ import { MRT_ColumnDef } from "material-react-table";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ControlPointRoundedIcon from "@mui/icons-material/ControlPointRounded";
 import CommonTable from "../../../layout/commonTable/CommonTable";
-import CommonModal from "../../../layout/commonModal/CommonModal";
 import EducationDetails from "./EducationDetails";
 import axios from "axios";
 
