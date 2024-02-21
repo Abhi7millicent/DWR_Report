@@ -12,10 +12,6 @@ import { useParams } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import InputField from "../../InputField/InputField";
 import toast, { Toaster } from "react-hot-toast";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 interface PersonalDataDetails {
   bloodGroup: string;
   emergencyContact1: string;

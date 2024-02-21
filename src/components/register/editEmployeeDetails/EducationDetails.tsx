@@ -1,18 +1,13 @@
 import axios from "axios";
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import toast from "react-hot-toast";
 import { Button } from "@mui/material";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: ReactNode;
 }
-const EducationDetails: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  children,
-}) => {
+const EducationDetails: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const modalClasses = isOpen
     ? "fixed inset-0 flex items-center justify-center "
     : "hidden";
@@ -73,7 +68,6 @@ const EducationDetails: React.FC<ModalProps> = ({
   return (
     <div className={`${modalClasses} z-10`}>
       <div className="flex items-center justify-center">
-        {children}
         <div className="bg-white p-8 shadow-md rounded-md w-full">
           <h2 className="text-2xl font-semibold mb-4">Add Education Details</h2>
           <form onSubmit={handleSubmit}>

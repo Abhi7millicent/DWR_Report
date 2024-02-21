@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { useDropzone } from "react-dropzone"; // Import useDropzone
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -11,9 +11,8 @@ type TQueryParam = {
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: ReactNode;
 }
-const Documents: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Documents: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const modalClasses = isOpen
     ? "fixed inset-0 flex items-center justify-center "
     : "hidden";
@@ -104,7 +103,6 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     <div className={`${modalClasses} z-10`}>
       <form onSubmit={handleSubmit}>
         <div className="flex items-center justify-center">
-          {children}
           <div className="bg-white p-8 shadow-md rounded-md w-full">
             <h2 className="text-2xl font-semibold mb-4">Add Documents</h2>
 
