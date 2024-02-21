@@ -14,6 +14,30 @@ import mailIcon from "../../assets/mail.png";
 import contactIcon from "../../assets/address.png";
 import { Button, TextField, TextareaAutosize } from "@mui/material";
 import { pdf } from "@react-pdf/renderer"; // Import pdf function from react-pdf
+import InputField from "../../components/InputField/InputField";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import axios from "axios";
+
+interface OfferLetterData {
+  id?: number;
+  companyName?: string;
+  companyWebsite?: string;
+  paragraph1?: string;
+  paragraph2?: string;
+  paragraph3?: string;
+  paragraph4?: string;
+  paragraph5?: string;
+  gmail1?: string;
+  gmail2?: string | null;
+  contact1?: string;
+  contact2?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  addressLine3?: string;
+}
 
 interface OfferLetterProps {
   content: string;
@@ -21,6 +45,17 @@ interface OfferLetterProps {
   name: string;
   date: string;
 }
+// const {
+//   formState: { errors },
+//   control,
+//   clearErrors,
+//   register,
+// } = useForm<OfferLetterProps>({
+//   defaultValues: {
+//     content: "",
+//     name: "",
+//   },
+// });
 
 export const Header: React.FC = () => {
   return (
@@ -117,6 +152,9 @@ const OfferLetterPDF: React.FC<OfferLetterProps> = ({
 const OfferLetter: React.FC = () => {
   const [content, setContent] = useState("");
   const [name, setName] = useState("");
+  const [position, setPosition] = useState("");
+  const [salary, setSalary] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [signature, setSignature] = useState<File | null>(null);
   const [date, setDate] = useState("");
   const [mail, setMail] = useState("");
@@ -126,6 +164,49 @@ const OfferLetter: React.FC = () => {
   const subject = "Offer Letter";
 
   const currentDate = new Date();
+
+  const [offerLetterData, setOfferLetterData] = useState<OfferLetterData>({
+    companyName: "",
+    companyWebsite: "",
+    paragraph1: "",
+    paragraph2: "",
+    paragraph3: "",
+    paragraph4: "",
+    paragraph5: "",
+    gmail1: "",
+    gmail2: null,
+    contact1: "",
+    contact2: "",
+    addressLine1: "",
+    addressLine2: "",
+    addressLine3: "",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get<OfferLetterData>(
+          "http://localhost:8080/api/DWR/offerlettertemplate/data"
+        );
+        setOfferLetterData(response.data);
+      } catch (error) {
+        console.error("Error fetching offer letter data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const genrateContent = async () => {
+    setContent(`I am pleased to extend to you an offer of employment as a ${position} at Millicent Technologies.
+${offerLetterData.paragraph1} \n
+Position: ${position} \n
+Start Date: ${startDate} \n
+Salary: ${salary} per annum \n
+${offerLetterData.paragraph2}\n
+${offerLetterData.paragraph3} ${startDate} ${offerLetterData.paragraph4} \n
+${offerLetterData.paragraph5}`);
+  };
 
   useEffect(() => {
     const day = ("0" + currentDate.getDate()).slice(-2);
@@ -226,13 +307,71 @@ const OfferLetter: React.FC = () => {
         <h2 className="text-2xl font-semibold mb-4">Offer Letter</h2>
         <div>
           <div className="flex gap-4 w-full">
-            <div>
+            {/* <div>
               <TextField
                 label="Candidate Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
+            </div> */}
+            <div>
+              <InputField
+                value={name}
+                type="text"
+                label="Candidate Name"
+                placeholder="Candidate Name"
+                name="candidate Name"
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
+            <div>
+              <InputField
+                value={position}
+                type="text"
+                label="Position"
+                placeholder="Position"
+                name="position"
+                onChange={(e) => setPosition(e.target.value)}
+              />
+            </div>
+            <div>
+              <InputField
+                value={salary}
+                type="text"
+                label="Salary"
+                placeholder="Salary"
+                name="salary"
+                onChange={(e) => setSalary(e.target.value)}
+              />
+            </div>
+            <div>
+              <InputField
+                value={startDate}
+                type="date"
+                label=""
+                placeholder="MM/DD/YYYY"
+                name="startDate"
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            <div>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker
+                      label="Start Date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e)}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider> */}
+            </div>
+            <div className="mt-2">
+              <Button variant="contained" onClick={genrateContent}>
+                Genrate
+              </Button>
+            </div>
+          </div>
+          <div className="mt-4">
             <div className="w-full">
               <label>Offer Letter Content:</label>
               <div className="border-b border-gray-400 w-full rounded-md">
@@ -391,7 +530,7 @@ export const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    opacity: 0.4, // Adjust the opacity as needed
+    opacity: 0.1, // Adjust the opacity as needed
     justifyContent: "center",
     alignItems: "center",
   },
