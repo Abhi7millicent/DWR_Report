@@ -5,9 +5,9 @@ import { useParams } from "react-router";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CommonTable from "../../../layout/commonTable/CommonTable";
-import ControlPointRoundedIcon from "@mui/icons-material/ControlPointRounded";
-import CommonModal from "../../../layout/commonModal/CommonModal";
 import Documents from "./Documents";
+import { Toaster } from "react-hot-toast";
+import { Button } from "@mui/material";
 
 interface DocumentData {
   id: number;
@@ -43,7 +43,7 @@ const ViewDocuments = () => {
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [
-    { accessorKey: "0", header: "Sr.No" },
+    { accessorKey: "0", header: "Sr.No", size: 20 },
     { accessorKey: "1", header: "Document Type" },
     { accessorKey: "2", header: "Description" },
     { accessorKey: "3", header: "Download" },
@@ -54,6 +54,7 @@ const ViewDocuments = () => {
     index + 1,
     documentData.documentType,
     documentData.description,
+
     <a
       key={`download-${index}`}
       href={`https://example.com/download/${documentData.id}`}
@@ -81,9 +82,9 @@ const ViewDocuments = () => {
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4">Documents</h2>
             <a onClick={openModal}>
-              <button className="btn btn-background-color:hover">
+              <Button variant="contained" color="primary">
                 Add Document
-              </button>
+              </Button>
             </a>
           </div>
           <div className="mt-4">
@@ -91,6 +92,7 @@ const ViewDocuments = () => {
           </div>
           <div className="w-fit">
             {/* <CommonModal isOpen={isModalOpen} onClose={closeModal}> */}
+            <Toaster reverseOrder={false} />
             <Documents isOpen={isModalOpen} onClose={closeModal} />
             {/* </CommonModal> */}
           </div>

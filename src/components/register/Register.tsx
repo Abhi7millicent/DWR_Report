@@ -8,7 +8,9 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import HttpsIcon from "@mui/icons-material/Https";
 import SyncLockIcon from "@mui/icons-material/SyncLock";
-import { useNavigate } from "react-router";
+
+import { Button } from "@mui/material";
+import toast from "react-hot-toast";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -32,7 +34,7 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     password: "",
     confirmPassword: "",
   });
-  const navigate = useNavigate();
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -76,7 +78,18 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       if (response.ok) {
         // Registration successful
         // alert("Registration successful!");
-        navigate("/employee");
+        toast.success("Registration successful!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+        // navigate("/employee");
         onClose();
         setFormData({
           firstName: "",
@@ -92,7 +105,18 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         // Additional actions if needed (e.g., redirect to another page)
       } else {
         // Registration failed
-        alert("Registration failed. Please try again.");
+        // alert("Registration failed. Please try again.");
+        toast.error("Registration failed. Please try again.", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
       }
     } catch (error) {
       console.error("Error:", error);
@@ -343,6 +367,18 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               </div>
             </div>
             <div className="flex justify-between">
+              <Button
+                onClick={onClose}
+                variant="contained"
+                sx={{ backgroundColor: "#8a878f !important" }}
+              >
+                close
+              </Button>
+              <Button variant="contained" color="primary" type="submit">
+                Register
+              </Button>
+            </div>
+            {/* <div className="flex justify-between">
               <div>
                 <button onClick={onClose} className="btn-close">
                   Close
@@ -353,7 +389,7 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
                   Register
                 </button>
               </div>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>

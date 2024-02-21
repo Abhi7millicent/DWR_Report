@@ -9,8 +9,18 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router";
 import axios from "axios"; // Import Axios
+import toast from "react-hot-toast";
 
-const ApplyLeave: React.FC<{ balanced: number }> = ({ balanced }) => {
+interface ModalProps {
+  balanced: number;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const ApplyLeave: React.FC<ModalProps> = ({ balanced, isOpen, onClose }) => {
+  const modalClasses = isOpen
+    ? "fixed inset-0 flex items-center justify-center "
+    : "hidden";
   const [leaveType, setLeaveType] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
@@ -74,6 +84,18 @@ const ApplyLeave: React.FC<{ balanced: number }> = ({ balanced }) => {
         data
       );
       console.log("Leave application submitted successfully:", response.data);
+      toast.success("Leave application submitted successfully!", {
+        position: "top-center",
+        style: {
+          fontFamily: "var( --font-family)",
+          fontSize: "14px",
+        },
+        iconTheme: {
+          primary: "var(--primary-color)",
+          secondary: "#fff",
+        },
+      });
+      onClose();
       // Optionally, you can handle success here, like showing a success message to the user
     } catch (error) {
       console.error("Error submitting leave application:", error);
@@ -82,7 +104,7 @@ const ApplyLeave: React.FC<{ balanced: number }> = ({ balanced }) => {
   };
 
   return (
-    <div className="p-4">
+    <div className={`${modalClasses} z-10`}>
       <div className="flex items-center justify-center">
         <div className="bg-white p-8 shadow-md rounded-md w-50">
           <Container>
@@ -105,7 +127,6 @@ const ApplyLeave: React.FC<{ balanced: number }> = ({ balanced }) => {
                     <MenuItem value="personal">Personal Leave</MenuItem>
                   </TextField>
                 </Grid>
-
                 <Grid item xs={4}>
                   <TextField
                     label="Start Date"
@@ -138,10 +159,23 @@ const ApplyLeave: React.FC<{ balanced: number }> = ({ balanced }) => {
                     value={description}
                     onChange={handleDescriptionChange}
                     fullWidth
-                    margin="normal"
+                    // margin="normal"
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  p={2}
+                >
+                  <Button
+                    onClick={onClose}
+                    variant="contained"
+                    sx={{ backgroundColor: "#8a878f !important" }}
+                  >
+                    close
+                  </Button>
                   <Button type="submit" variant="contained" color="primary">
                     Apply
                   </Button>

@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { ReactNode, useState } from "react";
 import { useParams } from "react-router";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { Button } from "@mui/material";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -43,9 +44,26 @@ const EducationDetails: React.FC<ModalProps> = ({
       );
       console.error("Api response:", response.data);
       // alert("Educational Details Inserted");
-      toast.success("Educational Details updated!");
+      toast.success("Employee details updated successfully!", {
+        position: "top-center",
+        style: {
+          fontFamily: "var( --font-family)",
+          fontSize: "14px",
+        },
+        iconTheme: {
+          primary: "var(--primary-color)",
+          secondary: "#fff",
+        },
+      });
+      setEducation({
+        employeeId: "",
+        degree: "",
+        institute: "",
+        startDate: "",
+        endDate: "",
+        percentage: "",
+      });
       onClose();
-
       // Optionally, you can handle the response or perform other actions after successful submission
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -54,7 +72,6 @@ const EducationDetails: React.FC<ModalProps> = ({
 
   return (
     <div className={`${modalClasses} z-10`}>
-      <Toaster position="top-center" reverseOrder={false} />
       <div className="flex items-center justify-center">
         {children}
         <div className="bg-white p-8 shadow-md rounded-md w-full">
@@ -181,16 +198,16 @@ const EducationDetails: React.FC<ModalProps> = ({
             </button> */}
 
             <div className="flex justify-between">
-              <div>
-                <button onClick={onClose} className="btn-close">
-                  Close
-                </button>
-              </div>
-              <div>
-                <button type="submit" className="btn">
-                  Save
-                </button>
-              </div>
+              <Button
+                onClick={onClose}
+                variant="contained"
+                sx={{ backgroundColor: "#8a878f !important" }}
+              >
+                close
+              </Button>
+              <Button variant="contained" color="primary" type="submit">
+                Save
+              </Button>
             </div>
           </form>
         </div>

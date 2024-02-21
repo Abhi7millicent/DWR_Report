@@ -6,16 +6,16 @@ import {
   MailOutlined,
   PieChartOutlined,
   UserOutlined,
-  FileTextOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import "../../App.css";
 import { GetSessionItem } from "../../utils/SessionStorage";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
-import { clearSessionStorage } from "../../utils/SessionStorage";
+// import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+// import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+// import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+// import { clearSessionStorage } from "../../utils/SessionStorage";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -79,7 +79,6 @@ const SideBarLayout: React.FC<{ sidebarItems: any[] }> = ({ sidebarItems }) => {
 const App: React.FC = () => {
   // State to store employee role
   const [employeeRole, setEmployeeRole] = useState<string | null>(null);
-  const navigate = useNavigate();
   const employeeId = GetSessionItem("id");
   useEffect(() => {
     // Fetch employee role asynchronously
@@ -90,10 +89,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  function handleLogout() {
-    clearSessionStorage();
-    navigate("/");
-  }
   const sidebarItems: MenuItem[] =
     employeeRole === "softwareEngineer"
       ? [
@@ -103,17 +98,18 @@ const App: React.FC = () => {
             `attendance/${employeeId}`,
             <CalendarMonthIcon />
           ),
-          getItem("Setting", "sub3", <SettingsSuggestIcon fontSize="large" />, [
-            getItem("Profile", "profile", <AccountCircleIcon />),
-            getItem(
-              "Logout",
-              "logout",
-              <MeetingRoomIcon />,
-              undefined,
-              undefined,
-              handleLogout
-            ), // Add onClick handler for Logout
-          ]),
+          getItem("Apply Leave", "apply-leave", <HomeOutlined />),
+          // getItem("Setting", "sub3", <SettingsSuggestIcon fontSize="large" />, [
+          //   getItem("Profile", "profile", <AccountCircleIcon />),
+          //   getItem(
+          //     "Logout",
+          //     "logout",
+          //     <MeetingRoomIcon />,
+          //     undefined,
+          //     undefined,
+          //     handleLogout
+          //   ), // Add onClick handler for Logout
+          // ]),
         ]
       : employeeRole === "admin"
       ? [
@@ -134,17 +130,17 @@ const App: React.FC = () => {
             getItem("Option 9", "9"),
             getItem("Option 10", "10"),
           ]),
-          getItem("Setting", "sub4", <SettingsSuggestIcon fontSize="large" />, [
-            getItem("Profile", "profile", <AccountCircleIcon />),
-            getItem(
-              "Logout",
-              "logout",
-              <MeetingRoomIcon />,
-              undefined,
-              undefined,
-              handleLogout
-            ), // Add onClick handler for Logout
-          ]),
+          // getItem("Setting", "sub4", <SettingsSuggestIcon fontSize="large" />, [
+          //   getItem("Profile", "profile", <AccountCircleIcon />),
+          //   getItem(
+          //     "Logout",
+          //     "logout",
+          //     <MeetingRoomIcon />,
+          //     undefined,
+          //     undefined,
+          //     handleLogout
+          // ), // Add onClick handler for Logout
+          // ]),
         ]
       : [];
   return (

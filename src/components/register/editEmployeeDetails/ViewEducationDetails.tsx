@@ -6,6 +6,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CommonTable from "../../../layout/commonTable/CommonTable";
 import EducationDetails from "./EducationDetails";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { Button } from "@mui/material";
 
 interface EducationalData {
   id: number;
@@ -42,7 +44,18 @@ const ViewEducationDetails = () => {
       await axios.put(
         `http://localhost:8080/api/DWR/educationalDetails/delete/${eduid}`
       );
-      alert("Deleted sucessfully");
+      // alert("Deleted sucessfully");
+      toast.success("Education deleted sucessfully", {
+        position: "top-center",
+        style: {
+          fontFamily: "var( --font-family)",
+          fontSize: "14px",
+        },
+        iconTheme: {
+          primary: "var(--primary-color)",
+          secondary: "#fff",
+        },
+      });
       console.log("Deleted educational detail with ID:", eduid);
       fetchData(); // Refresh the data after deletion
     } catch (error) {
@@ -51,13 +64,13 @@ const ViewEducationDetails = () => {
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [
-    { accessorKey: "0", header: "Sr.No" },
-    { accessorKey: "1", header: "Degree" },
-    { accessorKey: "2", header: "Institute" },
+    { accessorKey: "0", header: "Sr.No", size: 15 },
+    { accessorKey: "1", header: "Degree", size: 30 },
+    { accessorKey: "2", header: "Institute", size: 30 },
     { accessorKey: "3", header: "Start Date" },
-    { accessorKey: "4", header: "End Date" },
-    { accessorKey: "5", header: "Percentage" },
-    { accessorKey: "6", header: "Delete" },
+    { accessorKey: "4", header: "End Date", size: 30 },
+    { accessorKey: "5", header: "Percentage", size: 30 },
+    { accessorKey: "6", header: "Delete", size: 30 },
   ];
 
   const tableBody = data.map((educationalData, index) => [
@@ -71,7 +84,7 @@ const ViewEducationDetails = () => {
       key={`delete-${index}`}
       onClick={() => handleDeleteClick(educationalData.id)}
     >
-      <DeleteIcon fontSize="small" className="text-red-600" />
+      <DeleteIcon fontSize="small" className="text-red-600 cursor-pointer" />
     </a>,
   ]);
   const openModal = () => {
@@ -88,9 +101,9 @@ const ViewEducationDetails = () => {
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4">Educational Details</h2>
             <a onClick={openModal}>
-              <button className="btn btn-background-color:hover">
+              <Button variant="contained" color="primary">
                 Add Education
-              </button>
+              </Button>
             </a>
           </div>
           <div className="mt-4">
@@ -98,6 +111,7 @@ const ViewEducationDetails = () => {
           </div>
           <div className="w-fit">
             {/* <CommonModal isOpen={isModalOpen} onClose={closeModal}> */}
+            <Toaster position="top-center" reverseOrder={false} />
             <EducationDetails isOpen={isModalOpen} onClose={closeModal} />
             {/* </CommonModal> */}
           </div>

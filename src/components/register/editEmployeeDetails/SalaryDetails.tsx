@@ -129,6 +129,7 @@ const SalaryDetails: React.FC = () => {
           position: "top-center",
           style: {
             fontFamily: "var(--font-family)",
+            fontSize: "14px",
           },
           iconTheme: {
             primary: "var(--primary-color)",
@@ -139,6 +140,7 @@ const SalaryDetails: React.FC = () => {
         toast.error("Failed to update Salary details. Please try again.", {
           style: {
             fontFamily: "var(--font-family)",
+            fontSize: "14px",
           },
         });
       }
@@ -371,9 +373,11 @@ const SalaryDetails: React.FC = () => {
               </Grid>
             </Grid>
           </AccordionDetails>
-          <Button variant="contained" color="primary" type="submit">
-            Save Salary Details
-          </Button>
+          <div className="flex justify-end mr-4">
+            <Button variant="contained" color="primary" type="submit">
+              Save Salary Details
+            </Button>
+          </div>
         </form>
       </Accordion>
     </div>
