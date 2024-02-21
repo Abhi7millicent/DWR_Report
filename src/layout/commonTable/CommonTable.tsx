@@ -32,14 +32,18 @@ const CommonMaterialTable: React.FC<CommonMaterialTableProps> = ({
       },
     },
     muiTableHeadCellProps: {
+      align: "center",
       sx: {
         minWidth: "max-content !important",
         fontFamily: "var(--font-family) !important",
+        textAlign: "center !important",
       },
     },
     muiTableBodyCellProps: {
       sx: {
-        textAlign: "center",
+        // display: "flex",
+        width: "10px !important",
+        textAlign: "center !important",
         fontFamily: "var(--font-family) !important",
       },
     },

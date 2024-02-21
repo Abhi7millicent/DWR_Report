@@ -1,10 +1,11 @@
 import { MRT_ColumnDef } from "material-react-table";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import CommonTable from "../../layout/commonTable/CommonTable";
-import ControlPointRoundedIcon from "@mui/icons-material/ControlPointRounded";
-import CommonModal from "../../layout/commonModal/CommonModal";
+
 import ApplyLeave from "./ApplyLeave";
 import { useParams } from "react-router";
+import { Button } from "@mui/material";
+import { Toaster } from "react-hot-toast";
 
 interface appliedleaveData {
   id: number;
@@ -57,7 +58,7 @@ const ViewAppliedLeave = () => {
   }, [id]); // Fetch data whenever id changes
 
   const tableHead: MRT_ColumnDef<any>[] = [
-    { accessorKey: "0", header: "Sr.No" },
+    { accessorKey: "0", header: "Sr.No", size: 30 },
     { accessorKey: "1", header: "Leave Type" },
     { accessorKey: "2", header: "Description" },
     { accessorKey: "3", header: "Start Date" },
@@ -91,11 +92,23 @@ const ViewAppliedLeave = () => {
         <div className="bg-white p-8 shadow-md rounded-md w-full">
           <div className="flex justify-between">
             <h2 className="text-1xl font-semibold mb-4">Apply Leave</h2>
-            <a onClick={openModal}>
-              <ControlPointRoundedIcon
+            <a>
+              {/* <ControlPointRoundedIcon
                 fontSize="large"
                 className="text-green-600"
-              />
+              /> */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={openModal}
+                // sx={{
+                //   "&.MuiButton-root": {
+                //     margin: "0px !important",
+                //   },
+                // }}
+              >
+                Add Leave
+              </Button>
             </a>
           </div>
           <div>
@@ -105,9 +118,14 @@ const ViewAppliedLeave = () => {
             <CommonTable tableHead={tableHead} tableBody={tableBody} />
           </div>
           <div className="w-fit">
-            <CommonModal isOpen={isModalOpen} onClose={closeModal}>
-              <ApplyLeave balanced={balancedLeave} />
-            </CommonModal>
+            <Toaster reverseOrder={false} />
+            {/* <CommonModal isOpen={isModalOpen} onClose={closeModal}> */}
+            <ApplyLeave
+              balanced={balancedLeave}
+              isOpen={isModalOpen}
+              onClose={closeModal}
+            />
+            {/* </CommonModal> */}
           </div>
         </div>
       </div>

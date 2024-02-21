@@ -210,6 +210,7 @@ const ViewAddressDetails: React.FC = () => {
           position: "top-center",
           style: {
             fontFamily: "var( --font-family)",
+            fontSize: "14px",
           },
           iconTheme: {
             primary: "var(--primary-color)",
@@ -221,6 +222,7 @@ const ViewAddressDetails: React.FC = () => {
         toast.error("Failed to update Address details. Please try again.", {
           style: {
             fontFamily: "var( --font-family)",
+            fontSize: "14px",
           },
         });
         // setDisabled(false);
@@ -284,6 +286,7 @@ const ViewAddressDetails: React.FC = () => {
           position: "top-center",
           style: {
             fontFamily: "var( --font-family)",
+            fontSize: "14px",
           },
           iconTheme: {
             primary: "var(--primary-color)",
@@ -295,6 +298,7 @@ const ViewAddressDetails: React.FC = () => {
         toast.error("Failed to update Address details. Please try again.", {
           style: {
             fontFamily: "var( --font-family)",
+            fontSize: "14px",
           },
         });
         // setDisabled(false);
@@ -570,9 +574,11 @@ const ViewAddressDetails: React.FC = () => {
                 </Grid>
               </Grid>
             </AccordionDetails>
-            <Button variant="contained" color="primary" type="submit">
-              Save Permanent Address
-            </Button>
+            <div className="flex justify-end mr-4">
+              <Button variant="contained" color="primary" type="submit">
+                Save Permanent Address
+              </Button>
+            </div>
           </Accordion>
         </form>
       </div>
@@ -810,9 +816,11 @@ const ViewAddressDetails: React.FC = () => {
                 </Grid>
               </Grid>
             </AccordionDetails>
-            <Button variant="contained" color="primary" type="submit">
-              Save Temporary Address
-            </Button>
+            <div className="flex justify-end mr-4">
+              <Button variant="contained" color="primary" type="submit">
+                Save Temporary Address
+              </Button>
+            </div>
           </Accordion>
         </form>
         {/* Temporary Address Accordion */}

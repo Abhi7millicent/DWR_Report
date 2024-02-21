@@ -12,7 +12,6 @@ import { useParams } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import InputField from "../../InputField/InputField";
 import toast, { Toaster } from "react-hot-toast";
-
 interface PersonalDataDetails {
   bloodGroup: string;
   emergencyContact1: string;
@@ -107,6 +106,7 @@ const PersonalData: React.FC = () => {
           position: "top-center",
           style: {
             fontFamily: "var(--font-family)",
+            fontSize: "14px",
           },
           iconTheme: {
             primary: "var(--primary-color)",
@@ -117,6 +117,7 @@ const PersonalData: React.FC = () => {
         toast.error("Failed to update Personal  details. Please try again.", {
           style: {
             fontFamily: "var(--font-family)",
+            fontSize: "14px",
           },
         });
       }
@@ -270,9 +271,11 @@ const PersonalData: React.FC = () => {
               </Grid>
             </Grid>
           </AccordionDetails>
-          <Button variant="contained" color="primary" type="submit">
-            Save Personal Data
-          </Button>
+          <div className="flex justify-end mr-4">
+            <Button variant="contained" color="primary" type="submit">
+              Save Personal Data
+            </Button>
+          </div>
         </form>
       </Accordion>
     </div>

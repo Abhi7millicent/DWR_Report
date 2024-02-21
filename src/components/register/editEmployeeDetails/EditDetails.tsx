@@ -120,6 +120,7 @@ const EditDetails: React.FC = () => {
           position: "top-center",
           style: {
             fontFamily: "var( --font-family)",
+            fontSize: "14px",
           },
           iconTheme: {
             primary: "var(--primary-color)",
@@ -344,14 +345,16 @@ const EditDetails: React.FC = () => {
               </Grid>
             </Grid>
           </AccordionDetails>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            disabled={disabled}
-          >
-            Update
-          </Button>
+          <div className="flex justify-end mr-4">
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              disabled={disabled}
+            >
+              Update
+            </Button>
+          </div>
         </Accordion>
       </form>
     </div>

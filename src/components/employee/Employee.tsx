@@ -13,6 +13,8 @@ import UploadDWR from "../../layout/upload/UploadDWR";
 // import Register  from "../register/Register";
 import "../../App.css";
 import Register from "../register/Register";
+import { Button } from "@mui/material";
+import toast, { Toaster } from "react-hot-toast";
 interface empData {
   id: number;
   firstName: string;
@@ -82,15 +84,33 @@ const Employee: React.FC = () => {
         "http://localhost:8080/api/DWR/updateBalancedLeave"
       );
 
-      // Assuming the response is JSON
-      const responseData = response.data;
-
       // Show response in alert
-      alert(JSON.stringify(responseData));
+      toast.success(response.data, {
+        position: "top-center",
+        style: {
+          fontFamily: "var( --font-family)",
+          fontSize: "14px",
+        },
+        iconTheme: {
+          primary: "var(--primary-color)",
+          secondary: "#fff",
+        },
+      });
+      // alert(JSON.stringify(responseData));
     } catch (error) {
       // Handle error
       console.error("Error:", error);
-      alert("An error occurred. Please try again later.");
+      // alert("An error occurred. Please try again later.");
+      toast.success("An error occurred. Please try again later.", {
+        position: "top-center",
+        style: {
+          fontFamily: "var( --font-family)",
+        },
+        iconTheme: {
+          primary: "var(--primary-color)",
+          secondary: "#fff",
+        },
+      });
     }
   };
   const closeModal = () => {
@@ -161,18 +181,32 @@ const Employee: React.FC = () => {
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4 px-4">Employee List</h2>
             <div>
-              <button
-                className="btn btn-background-color:hover"
+              <Button
+                variant="contained"
+                color="primary"
                 onClick={addLeave}
+                sx={{
+                  "&.MuiButton-root": {
+                    margin: "0px !important",
+                  },
+                }}
               >
                 Add Leave
-              </button>
+              </Button>
               <a onClick={openModal} className="px-4">
                 {/* <ControlPointRoundedIcon className="text-color" /> */}
                 {/* <button className="btn-background-color text-white py-2 rounded-md p-3"> */}
-                <button className="btn btn-background-color:hover">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    "&.MuiButton-root": {
+                      margin: "0px !important",
+                    },
+                  }}
+                >
                   Add Employee
-                </button>
+                </Button>
               </a>
             </div>
           </div>
@@ -182,6 +216,7 @@ const Employee: React.FC = () => {
             </div>
           </div>
           <div className="w-fit">
+            <Toaster reverseOrder={false} />
             {!empIdForUpload && (
               <Register isOpen={isModalOpen} onClose={closeModal}>
                 {empId && <Calendar data={empId} />}

@@ -1,7 +1,9 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { useDropzone } from "react-dropzone"; // Import useDropzone
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { Button } from "@mui/material";
+import toast from "react-hot-toast";
 
 type TQueryParam = {
   id: any;
@@ -9,9 +11,8 @@ type TQueryParam = {
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: ReactNode;
 }
-const Documents: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Documents: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const modalClasses = isOpen
     ? "fixed inset-0 flex items-center justify-center "
     : "hidden";
@@ -43,7 +44,7 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     },
   });
 
-  const handleSave = async (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!selectedType || droppedFiles.length === 0 || !description) {
       return;
@@ -65,11 +66,31 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       ).then((r) => r.json());
 
       if (response) {
-        alert("Document saved successfully!");
         console.log("Document saved successfully!");
+        toast.success("Document saved successfully!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
         // Optionally, you can reset the form fields or fetch updated data
+        setSelectedType("");
+        setDescription("");
+        setDroppedFiles([]);
+        onClose();
       } else {
         console.error("Failed to save document.");
+        toast.error("Failed to save document.", {
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+        });
         // Handle error or display a message to the user
       }
     } catch (error) {
@@ -80,86 +101,78 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div className={`${modalClasses} z-10`}>
-      <div className="flex items-center justify-center">
-        {children}
-        <div className="bg-white p-8 shadow-md rounded-md w-full">
-          <h2 className="text-2xl font-semibold mb-4">Add Documents</h2>
-          <div className="flex flex-col">
-            <div className="flex w-full gap-4">
-              <div className="mb-4 w-1/4">
-                <label className="block text-sm font-medium text-gray-600">
-                  Document Type
-                </label>
-                <select
-                  onChange={handleTypeChange}
-                  value={selectedType}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                >
-                  <option value="">Select Type</option>
-                  <option value="resume">Resume</option>
-                  <option value="coverLetter">Cover Letter</option>
-                  <option value="certificate">Certificate</option>
-                </select>
-              </div>
-              <div className="mb-4 w-1/4" {...getRootProps()}>
-                <label className="block text-sm font-medium text-gray-600">
-                  Upload File
-                </label>
-                <div className="mt-1 p-2 border border-gray-300 rounded-md w-full">
-                  <input {...getInputProps()} />
-                  {droppedFiles.length > 0 ? (
-                    <p>{droppedFiles.map((file) => file.name).join(", ")}</p>
-                  ) : (
-                    <p className="text-gray-400">
-                      Drag 'n' drop some files here, or click to select files
-                      <UploadFileIcon />
-                    </p>
-                  )}
+      <form onSubmit={handleSubmit}>
+        <div className="flex items-center justify-center">
+          <div className="bg-white p-8 shadow-md rounded-md w-full">
+            <h2 className="text-2xl font-semibold mb-4">Add Documents</h2>
+
+            <div className="flex flex-col">
+              <div className="flex w-full gap-4">
+                <div className="mb-4 w-1/4">
+                  <label className="block text-sm font-medium text-gray-600">
+                    Document Type
+                  </label>
+                  <select
+                    onChange={handleTypeChange}
+                    value={selectedType}
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  >
+                    <option value="">Select Type</option>
+                    <option value="resume">Resume</option>
+                    <option value="coverLetter">Cover Letter</option>
+                    <option value="certificate">Certificate</option>
+                  </select>
+                </div>
+                <div className="mb-4 w-/4" {...getRootProps()}>
+                  <label className="block text-sm font-medium text-gray-600">
+                    Upload File
+                  </label>
+                  <div className="mt-1 p-2 border border-gray-300 rounded-md w-full">
+                    <input {...getInputProps()} />
+                    {droppedFiles.length > 0 ? (
+                      <p>{droppedFiles.map((file) => file.name).join(", ")}</p>
+                    ) : (
+                      <p className="text-gray-400">
+                        Drag 'n' drop some files here, or click to select files
+                        <UploadFileIcon />
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="mb-4 w-1/4">
+                  <label className="block text-sm font-medium text-gray-600">
+                    Description
+                  </label>
+                  <textarea
+                    onChange={handleDescriptionChange}
+                    value={description}
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  ></textarea>
                 </div>
               </div>
-              <div className="mb-4 w-1/4">
-                <label className="block text-sm font-medium text-gray-600">
-                  Description
-                </label>
-                <textarea
-                  onChange={handleDescriptionChange}
-                  value={description}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                ></textarea>
-              </div>
-            </div>
-            {/* <div className="w-1/4 px-10 py-10">
-                <button
-                  onClick={handleSave}
+              <div className="flex justify-between ">
+                <Button
+                  onClick={onClose}
+                  variant="contained"
+                  sx={{ backgroundColor: "#8a878f !important" }}
+                >
+                  close
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
                   disabled={
                     !selectedType || droppedFiles.length === 0 || !description
                   }
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md"
                 >
-                  Add
-                </button>
-              </div> */}
-            <div className="flex justify-between ">
-              <div>
-                <button onClick={onClose} className="btn-close">
-                  Close
-                </button>
-              </div>
-              <div>
-                <button
-                  onClick={handleSave}
-                  disabled={
-                    !selectedType || droppedFiles.length === 0 || !description
-                  }
-                  className="btn"
-                >
-                  Add
-                </button>
+                  Save
+                </Button>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

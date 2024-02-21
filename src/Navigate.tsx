@@ -39,7 +39,7 @@ const Navigate = () => {
               element={<EmployeeRecordFullData />}
             />
             {/* <Route path="/register" element={<Register />} /> */}
-            <Route path="/viewLeave" element={<ViewAppliedLeave />} />
+            <Route path="/apply-leave" element={<ViewAppliedLeave />} />
             <Route path="/offerLetter" element={<OfferLetter />} />
             <Route path="/request" element={<Request />} />
             <Route path="/project" element={<ProjectView />} />

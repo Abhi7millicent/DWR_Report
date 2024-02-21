@@ -252,7 +252,7 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
               >
                 <Tab>Selected Date Data</Tab>
                 <Tab>Employee Records Table</Tab>
-                <Tab>Apply Leave</Tab>
+                {/* <Tab>Apply Leave</Tab> */}
               </TabList>
               <TabPanel>
                 <SelectedDateData
@@ -264,9 +264,7 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
               <TabPanel>
                 <CommonTable tableHead={tableHead} tableBody={tableBody} />
               </TabPanel>
-              <TabPanel>
-                <ViewAppliedLeave />
-              </TabPanel>
+              <TabPanel>{/* <ViewAppliedLeave /> */}</TabPanel>
             </Tabs>
           </div>
         </div>
