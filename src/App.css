@@ -249,3 +249,7 @@ body {
 .MuiMenuItem-root {
   height: 25px !important;
 }
+
+.react-tabs__tab--selected:focus-visible {
+  outline: none;
+}
