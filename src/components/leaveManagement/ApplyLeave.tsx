@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -10,6 +10,7 @@ import {
 import { useParams } from "react-router";
 import axios from "axios"; // Import Axios
 import toast from "react-hot-toast";
+import { GetSessionItem } from "../../utils/SessionStorage";
 
 interface ModalProps {
   balanced: number;
@@ -26,7 +27,14 @@ const ApplyLeave: React.FC<ModalProps> = ({ balanced, isOpen, onClose }) => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   // const [numberOfDays, setNumberOfDays] = useState<number>(0);
-  const { id } = useParams();
+
+  const { idp } = useParams();
+
+  let id = GetSessionItem("id");
+
+  if (id === idp) {
+    id = idp;
+  }
 
   const handleLeaveTypeChange = (
     event: React.ChangeEvent<HTMLInputElement>

@@ -15,12 +15,12 @@ import contactIcon from "../../assets/address.png";
 import { Button, TextField, TextareaAutosize } from "@mui/material";
 import { pdf } from "@react-pdf/renderer"; // Import pdf function from react-pdf
 import InputField from "../../components/InputField/InputField";
+
+import axios from "axios";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import axios from "axios";
-
 interface OfferLetterData {
   id?: number;
   companyName?: string;
@@ -151,6 +151,7 @@ const OfferLetterPDF: React.FC<OfferLetterProps> = ({
 
 const OfferLetter: React.FC = () => {
   const [content, setContent] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [salary, setSalary] = useState("");
@@ -300,6 +301,11 @@ ${offerLetterData.paragraph5}`);
       console.error("Offer letter is null");
     }
   };
+  // const handleDateChange = (date: any) => {
+  //   setSelectedDate(date);
+  //   // Do whatever you want with the selected date here
+  // };
+  // console.log(selectedDate?.$d, "selectedDate");
 
   return (
     <div className="flex items-center mt-3 justify-center">
@@ -314,6 +320,17 @@ ${offerLetterData.paragraph5}`);
                 onChange={(e) => setName(e.target.value)}
               />
             </div> */}
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker
+                  label="Basic date picker"
+                  value={selectedDate}
+                  renderInput={(params: any) => <TextField {...params} />}
+                  onChange={handleDateChange}
+                />
+              </DemoContainer>
+            </LocalizationProvider> */}
+
             <div>
               <InputField
                 value={name}

@@ -31,6 +31,10 @@ const Navbar: React.FC = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleProfile = () => {
+    setAnchorEl(null);
+    navigate(`/editEmployee/${GetSessionItem("id")}`);
+  };
   const handleLogout = () => {
     clearSessionStorage();
     navigate("/");
@@ -100,7 +104,7 @@ const Navbar: React.FC = () => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleProfile}>
                   <Space direction="vertical" size={16}>
                     <Space wrap size={16}>
                       <Avatar size="small" icon={<UserOutlined />} /> Profile

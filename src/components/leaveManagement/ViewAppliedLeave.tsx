@@ -6,6 +6,7 @@ import ApplyLeave from "./ApplyLeave";
 import { useParams } from "react-router";
 import { Button } from "@mui/material";
 import { Toaster } from "react-hot-toast";
+import { GetSessionItem } from "../../utils/SessionStorage";
 
 interface appliedleaveData {
   id: number;
@@ -21,8 +22,13 @@ const ViewAppliedLeave = () => {
   const [data, setData] = useState<appliedleaveData[]>([]);
   const [balancedLeave, setBalancedLeave] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { id } = useParams();
+  const { idp } = useParams();
 
+  let id = GetSessionItem("id");
+
+  if (id === idp) {
+    id = idp;
+  }
   const fetchBalancedLeave = async () => {
     try {
       const response = await fetch(
