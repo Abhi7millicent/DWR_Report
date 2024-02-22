@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 
 interface AddTaskProps {
@@ -10,6 +11,7 @@ interface AddTaskProps {
     startDate: string;
     targetDate: string;
   };
+  onClose: () => void;
 }
 
 const AddTask = (props: AddTaskProps) => {
@@ -83,6 +85,7 @@ const AddTask = (props: AddTaskProps) => {
       if (response.ok) {
         // Registration successful
         alert("Project Added successful!");
+        props.onClose();
         // Additional actions if needed (e.g., redirect to another page)
       } else {
         // Registration failed
@@ -189,12 +192,18 @@ const AddTask = (props: AddTaskProps) => {
             </div>
           </div>
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 right-0"
-        >
-          ADD
-        </button>
+        <div className="flex justify-between">
+          <Button
+            onClick={props.onClose}
+            variant="contained"
+            sx={{ backgroundColor: "#8a878f !important" }}
+          >
+            close
+          </Button>
+          <Button variant="contained" color="primary" type="submit">
+            Add task
+          </Button>
+        </div>
       </form>
     </div>
   );

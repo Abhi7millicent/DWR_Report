@@ -253,3 +253,7 @@ body {
 .react-tabs__tab--selected:focus-visible {
   outline: none;
 }
+
+textarea:focus {
+  outline: none;
+}

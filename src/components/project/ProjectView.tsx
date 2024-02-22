@@ -10,6 +10,7 @@ import CommonModal from "../../layout/commonModal/CommonModal";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import AddTask from "./AddTask";
+import { Button } from "@mui/material";
 
 interface ProjectData {
   id: number;
@@ -159,10 +160,13 @@ const ProjectView = () => {
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4">Projects</h2>
             <a onClick={openModal}>
-              <ControlPointRoundedIcon
+              <Button variant="contained" color="primary">
+                Add Project
+              </Button>
+              {/* <ControlPointRoundedIcon
                 fontSize="large"
                 className="text-green-600"
-              />
+              /> */}
             </a>
           </div>
           <div className="mt-4">
@@ -171,9 +175,9 @@ const ProjectView = () => {
         </div>
       </div>
       <div className="w-fit">
-        <CommonModal isOpen={isModalOpen} onClose={closeModal}>
-          {modalView === "" && <AddProject />}
-          {modalView !== "" && <AddTask data={data} />}
+        <CommonModal isOpen={isModalOpen}>
+          {modalView === "" && <AddProject onClose={closeModal} />}
+          {modalView !== "" && <AddTask data={data} onClose={closeModal} />}
         </CommonModal>
       </div>
     </div>

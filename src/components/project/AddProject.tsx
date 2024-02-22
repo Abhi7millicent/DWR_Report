@@ -1,6 +1,9 @@
+import { Button } from "@mui/material";
 import { useState } from "react";
-
-const AddProject = () => {
+interface ModalProps {
+  onClose: () => void;
+}
+const AddProject: React.FC<ModalProps> = ({ onClose }: ModalProps) => {
   const [formData, setFormData] = useState({
     type: "Project",
     name: "",
@@ -58,6 +61,7 @@ const AddProject = () => {
       if (response.ok) {
         // Registration successful
         alert("Project Added successful!");
+        onClose();
         // Additional actions if needed (e.g., redirect to another page)
       } else {
         // Registration failed
@@ -161,12 +165,24 @@ const AddProject = () => {
             </div>
           </div>
         </div>
-        <button
+        <div className="flex justify-between">
+          <Button
+            onClick={onClose}
+            variant="contained"
+            sx={{ backgroundColor: "#8a878f !important" }}
+          >
+            close
+          </Button>
+          <Button variant="contained" color="primary" type="submit">
+            Add project
+          </Button>
+        </div>
+        {/* <button
           type="submit"
           className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 right-0"
         >
           ADD
-        </button>
+        </button> */}
       </form>
     </div>
   );

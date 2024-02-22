@@ -156,14 +156,6 @@ const EditDetails: React.FC = () => {
           <AccordionDetails>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>
-                {/* <TextField
-                label="First Name"
-                fullWidth
-                value={employeeData.firstName}
-                onChange={handleChange}
-                name="firstName"
-                required
-              /> */}
                 <Controller
                   control={control}
                   rules={{

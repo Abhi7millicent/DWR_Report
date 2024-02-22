@@ -6,41 +6,18 @@ import ViewAddressDetails from "./ViewAddressDetails";
 import ViewDocuments from "./ViewDocumments";
 import ViewEducationDetails from "./ViewEducationDetails";
 import PersonalData from "./PersonalData";
-import "../../../App.css";
+
+import EmpolyeeLetter from "./EmpolyeeLetter";
 const EditEmployeeDetails = () => {
   return (
     <div>
       <Tabs>
         <div className="px-5 mt-4">
           <TabList style={{ display: "flex", gap: "1rem" }}>
-            <Tab
-            // style={{
-            //   padding: "4px",
-            //   paddingLeft: "5px",
-            //   paddingRight: "5px",
-            // }}
-            >
-              Details
-            </Tab>
-
-            <Tab
-            // style={{
-            //   padding: "4px",
-            //   paddingLeft: "5px",
-            //   paddingRight: "5px",
-            // }}
-            >
-              Educational Details
-            </Tab>
-            <Tab
-            // style={{
-            //   padding: "4px",
-            //   paddingLeft: "5px",
-            //   paddingRight: "5px",
-            // }}
-            >
-              Documents
-            </Tab>
+            <Tab>Details</Tab>
+            <Tab>Educational Details</Tab>
+            <Tab>Documents</Tab>
+            <Tab>Letter</Tab>
           </TabList>
         </div>
 
@@ -64,6 +41,11 @@ const EditEmployeeDetails = () => {
         <TabPanel>
           <h2>
             <ViewDocuments />
+          </h2>
+        </TabPanel>
+        <TabPanel>
+          <h2>
+            <EmpolyeeLetter />
           </h2>
         </TabPanel>
       </Tabs>
