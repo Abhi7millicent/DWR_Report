@@ -16,16 +16,22 @@ import { useParams } from "react-router";
 import InputField from "../../InputField/InputField";
 import { useForm, Controller } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-interface EmployeeData {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  reporting: string;
-  loginId: string;
-  password: string;
-}
+import { useDispatch } from "react-redux";
+import {
+  fetchDataStart,
+  fetchEmployeeDataSuccess,
+  fetchDataFailure,
+} from "../../../features/appointmentLetterSlice";
+// interface EmployeeData {
+//   firstName: string;
+//   middleName: string;
+//   lastName: string;
+//   email: string;
+//   role: string;
+//   reporting: string;
+//   loginId: string;
+//   password: string;
+// }
 
 const EditDetails: React.FC = () => {
   // const [employeeData, setEmployeeData] = useState<EmployeeData>({
@@ -59,28 +65,36 @@ const EditDetails: React.FC = () => {
   });
   const [disabled, setDisabled] = useState(false);
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
+      dispatch(fetchDataStart());
       try {
         const response = await fetch(
           `http://localhost:8080/api/DWR/employee/${id}`
         );
 
         if (response.ok) {
-          const data: EmployeeData = await response.json();
+          const data = await response.json();
           console.log("data", data);
-          // setEmployeeData(data);
+          const { firstName, lastName, email, role } = data;
           setValue("firstName", data.firstName);
           setValue("middleName", data.middleName);
           setValue("lastName", data.lastName);
           setValue("email", data.email);
           setValue("reporting", data.reporting);
           setValue("role", data.role);
+          dispatch(
+            fetchEmployeeDataSuccess({ firstName, lastName, email, role })
+          );
         } else {
-          console.error("Failed to fetch employee data");
+          const error = await response.json(); // Assuming error response contains JSON
+          dispatch(fetchDataFailure(error.message));
+          console.error("Failed to fetch employee data:", error.message);
         }
-      } catch (error) {
+      } catch (error: any) {
+        dispatch(fetchDataFailure(error.message));
         console.error("Error:", error);
       }
     };
