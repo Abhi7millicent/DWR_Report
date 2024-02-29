@@ -14,6 +14,10 @@ import Request from "./components/notification/Request";
 // import ApplyLeave from "./components/leaveManagement/ApplyLeave";
 import ViewAppliedLeave from "./components/leaveManagement/ViewAppliedLeave";
 import OfferLetter from "./layout/offerLetter/OfferLetter";
+import CustomOfferLetter from "./components/customization/CustomOfferLetter";
+import CustomAppointmentLetter from "./components/customization/CustomAppointmentLetter";
+import LeadTable from "./components/Lead/LeadTable";
+import TaskHandlingTable from "./components/TaskHandling/TaskHandlingTable";
 
 const Navigate = () => {
   return (
@@ -49,6 +53,16 @@ const Navigate = () => {
               element={<AttendanceCalendar />}
             />
             <Route path="/attendance/:id" element={<AttendanceCalendar />} />
+            <Route
+              path="/custom-appointment-letter"
+              element={<CustomAppointmentLetter />}
+            />
+            <Route
+              path="/custom-offer-letter"
+              element={<CustomOfferLetter />}
+            />
+            <Route path="/lead" element={<LeadTable />} />
+            <Route path="/task-handling" element={<TaskHandlingTable />} />
           </Routes>
         </div>
       </div>

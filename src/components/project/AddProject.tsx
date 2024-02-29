@@ -1,5 +1,7 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
+import toast from "react-hot-toast";
+
 interface ModalProps {
   onClose: () => void;
 }
@@ -60,12 +62,26 @@ const AddProject: React.FC<ModalProps> = ({ onClose }: ModalProps) => {
 
       if (response.ok) {
         // Registration successful
-        alert("Project Added successful!");
+        // alert("Project Added successful!");
+        toast.success("Project Added successful!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
         onClose();
         // Additional actions if needed (e.g., redirect to another page)
       } else {
         // Registration failed
-        alert("Project failed. Please try again.");
+        // alert("Project failed. Please try again.");
+        toast.error("Project failed. Please try again!", {
+          position: "top-center",
+        });
       }
     } catch (error) {
       console.error("Error:", error);

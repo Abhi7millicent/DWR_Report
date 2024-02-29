@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import DateDetails from "./DateDetails";
 import { useParams } from "react-router";
-
+import Tooltip from "@mui/material/Tooltip";
+import { IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 const AttendanceCalendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   // const [todaysDate, setTodaysDate] = useState<Date>(new Date());
@@ -180,8 +182,9 @@ const AttendanceCalendar: React.FC = () => {
             ]
               .join(" ")
               .trim();
+            console.log(status, "status");
 
-            return (
+            return status === "Present" || undefined ? (
               <div
                 key={day}
                 className={dayClassNames}
@@ -189,13 +192,25 @@ const AttendanceCalendar: React.FC = () => {
               >
                 {day}
               </div>
+            ) : (
+              <Tooltip key={day} title={`${status}`} arrow>
+                <div
+                  key={day}
+                  className={dayClassNames}
+                  onClick={() => handleDayClick(day)}
+                >
+                  {day}
+                </div>
+              </Tooltip>
             );
           })}
         </div>
       </div>
+
       <div className="mt-4 w-full">
         <DateDetails currentDate={selectedDate} />
       </div>
+      {/* </Tooltip> */}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface AddTaskProps {
   data: {
@@ -84,7 +85,18 @@ const AddTask = (props: AddTaskProps) => {
 
       if (response.ok) {
         // Registration successful
-        alert("Project Added successful!");
+        // alert("Project Added successful!");
+        toast.success("Task Added successful!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
         props.onClose();
         // Additional actions if needed (e.g., redirect to another page)
       } else {

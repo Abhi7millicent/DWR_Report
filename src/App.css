@@ -257,3 +257,16 @@ body {
 textarea:focus {
   outline: none;
 }
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 100px;
+
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  border-radius: 100px;
+  overflow: visible;
+}

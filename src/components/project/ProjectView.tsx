@@ -11,6 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import AddTask from "./AddTask";
 import { Button } from "@mui/material";
+import { Toaster } from "react-hot-toast";
 
 interface ProjectData {
   id: number;
@@ -74,6 +75,7 @@ const ProjectView = () => {
       {
         accessorKey: "type",
         header: "Level",
+        size: 40,
         Cell: ({ row }) => (
           <span
             style={{
@@ -96,11 +98,12 @@ const ProjectView = () => {
       },
       { accessorKey: "name", header: "Name" },
       { accessorKey: "description", header: "Description" },
-      { accessorKey: "startDate", header: "Start Date" },
-      { accessorKey: "targetDate", header: "Target Date" },
+      { accessorKey: "startDate", header: "Start Date", size: 40 },
+      { accessorKey: "targetDate", header: "Target Date", size: 40 },
       {
         accessorKey: "addIcon",
         header: "Add",
+        size: 40,
         Cell: ({ row }) => (
           <a onClick={() => handleAddClick(row.original)}>
             <ControlPointRoundedIcon
@@ -113,6 +116,7 @@ const ProjectView = () => {
       {
         accessorKey: "editIcon",
         header: "Edit",
+        size: 40,
         Cell: ({ row }) => (
           <a onClick={() => handleEditClick(row.original)}>
             <BorderColorIcon fontSize="small" className="text-blue-600" />
@@ -175,6 +179,7 @@ const ProjectView = () => {
         </div>
       </div>
       <div className="w-fit">
+        <Toaster reverseOrder={false} />
         <CommonModal isOpen={isModalOpen}>
           {modalView === "" && <AddProject onClose={closeModal} />}
           {modalView !== "" && <AddTask data={data} onClose={closeModal} />}

@@ -7,6 +7,7 @@ import {
   PieChartOutlined,
   UserOutlined,
   HomeOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
@@ -115,6 +116,8 @@ const App: React.FC = () => {
       ? [
           getItem("Dashboard", "dashboard", <PieChartOutlined />),
           getItem("Employee", "employee", <UserOutlined />),
+          getItem("Lead", "lead", <UsergroupAddOutlined />),
+          getItem("Task Handling", "task-handling", <UsergroupAddOutlined />),
           getItem("Project", "project", <DesktopOutlined />),
           getItem("Notification", "sub1", <MailOutlined />, [
             getItem("Attendance Request", "request"),
