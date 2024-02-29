@@ -12,6 +12,12 @@ import { useParams } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import InputField from "../../InputField/InputField";
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import {
+  fetchDataStart,
+  fetchSalaryDataSuccess,
+  fetchDataFailure,
+} from "../../../features/appointmentLetterSlice";
 
 interface SalaryDetails {
   bankAccountName: string;
@@ -47,9 +53,12 @@ const SalaryDetails: React.FC = () => {
   });
   const apiEndpoint = `http://localhost:8080/api/DWR/employeeSalary/update/${id}`;
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     // Fetch data from the API and set it to form fields
     const fetchSalaryDetails = async () => {
+      dispatch(fetchDataStart());
       try {
         const response = await fetch(
           `http://localhost:8080/api/DWR/employeeSalary/${id}`
@@ -57,6 +66,7 @@ const SalaryDetails: React.FC = () => {
         if (response.ok) {
           const data: SalaryDetails = await response.json();
           console.log(data, "data");
+          const { annualSalary, monthlySalary } = data;
           setValue("bankAccountName", data.bankAccountName);
           setValue("ifscCode", data.ifscCode);
           setValue("accountNo", data.accountNo);
@@ -65,11 +75,15 @@ const SalaryDetails: React.FC = () => {
           setValue("panNo", data.panNo);
           setValue("annualSalary", data.annualSalary);
           setValue("monthlySalary", data.monthlySalary);
+          dispatch(fetchSalaryDataSuccess({ annualSalary, monthlySalary }));
         } else {
-          console.error("Failed to fetch address data");
+          const error = await response.json(); // Assuming error response contains JSON
+          dispatch(fetchDataFailure(error.message));
+          console.error("Failed to fetch salary data:", error.message);
           // setPermanentAddress(data); // Assuming the API returns the data in the same shape as SalaryDetails
         }
-      } catch (error) {
+      } catch (error: any) {
+        dispatch(fetchDataFailure(error.message));
         console.error("Error fetching data:", error);
       }
     };

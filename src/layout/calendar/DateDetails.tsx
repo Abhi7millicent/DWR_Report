@@ -5,7 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router";
 import SelectedDateData from "./SelectedDateData";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import ViewAppliedLeave from "../../components/leaveManagement/ViewAppliedLeave";
+// import ViewAppliedLeave from "../../components/leaveManagement/ViewAppliedLeave";
 // import BorderColor from "@mui/icons-material/BorderColor";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../App/store";

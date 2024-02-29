@@ -17,10 +17,10 @@ import { pdf } from "@react-pdf/renderer"; // Import pdf function from react-pdf
 import InputField from "../../components/InputField/InputField";
 
 import axios from "axios";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 interface OfferLetterData {
   id?: number;
   companyName?: string;
@@ -151,7 +151,7 @@ const OfferLetterPDF: React.FC<OfferLetterProps> = ({
 
 const OfferLetter: React.FC = () => {
   const [content, setContent] = useState("");
-  const [selectedDate, setSelectedDate] = useState(null);
+  // const [selectedDate, setSelectedDate] = useState(null);
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [salary, setSalary] = useState("");
@@ -200,13 +200,13 @@ const OfferLetter: React.FC = () => {
 
   const genrateContent = async () => {
     setContent(`I am pleased to extend to you an offer of employment as a ${position} at Millicent Technologies.
-${offerLetterData.paragraph1} \n
-Position: ${position} \n
-Start Date: ${startDate} \n
-Salary: ${salary} per annum \n
-${offerLetterData.paragraph2}\n
-${offerLetterData.paragraph3} ${startDate} ${offerLetterData.paragraph4} \n
-${offerLetterData.paragraph5}`);
+    ${offerLetterData.paragraph1} \n
+    Position: ${position} \n
+    Start Date: ${startDate} \n
+    Salary: ${salary} per annum \n
+    ${offerLetterData.paragraph2}\n
+    ${offerLetterData.paragraph3} ${startDate} ${offerLetterData.paragraph4} \n
+    ${offerLetterData.paragraph5}`);
   };
 
   useEffect(() => {
@@ -236,7 +236,7 @@ ${offerLetterData.paragraph5}`);
         signature={signature}
       />
     );
-
+    console.log("offerLetterPDF:", offerLetterPDF);
     const pdfBlob = pdf(offerLetterPDF).toBlob(); // Convert PDF to Blob
 
     pdfBlob.then((blob) => {

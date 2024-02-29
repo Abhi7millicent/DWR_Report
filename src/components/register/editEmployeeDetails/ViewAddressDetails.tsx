@@ -12,6 +12,12 @@ import { useParams } from "react-router";
 import InputField from "../../InputField/InputField";
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import {
+  fetchDataStart,
+  fetchAddressDataSuccess,
+  fetchDataFailure,
+} from "../../../features/appointmentLetterSlice";
 
 interface PermanentAddressDetails {
   addressLine1: string;
@@ -88,6 +94,7 @@ const ViewAddressDetails: React.FC = () => {
     },
   });
 
+  const dispatch = useDispatch();
   // const fetchLocationPermanentAddressDetails = (permanentPinCode: string) => {
   //   fetch(`https://api.postalpincode.in/pincode/${permanentPinCode}`)
   //     .then((response) => response.json())
@@ -125,6 +132,7 @@ const ViewAddressDetails: React.FC = () => {
   useEffect(() => {
     // Fetch data from the API and set it to form fields
     const fetchPermanentAddressDetails = async () => {
+      dispatch(fetchDataStart());
       try {
         const response = await fetch(
           `http://localhost:8080/api/DWR/addressDetails/${"Permanent"}/${id}`
@@ -132,6 +140,8 @@ const ViewAddressDetails: React.FC = () => {
         if (response.ok) {
           const data: PermanentAddressDetails = await response.json();
           console.log(data, "data");
+          const { addressLine1, addressLine2, pinCode, city, state, country } =
+            data;
           setValue("permanentAddressLine1", data?.addressLine1);
           setValue("permanentAddressLine2", data.addressLine2);
           setValue("permanentPinCode", data.pinCode);
@@ -140,11 +150,23 @@ const ViewAddressDetails: React.FC = () => {
           setValue("permanentCountry", data.country);
           setValue("permanentContactno1", data.contactno1);
           setValue("permanentContactno2", data.contactno2);
+          dispatch(
+            fetchAddressDataSuccess({
+              addressLine1,
+              addressLine2,
+              pinCode,
+              city,
+              state,
+              country,
+            })
+          );
         } else {
-          console.error("Failed to fetch address data");
-          // setPermanentAddress(data); // Assuming the API returns the data in the same shape as SalaryDetails
+          const error = await response.json(); // Assuming error response contains JSON
+          dispatch(fetchDataFailure(error.message));
+          console.error("Failed to fetch address data:", error.message);
         }
-      } catch (error) {
+      } catch (error: any) {
+        dispatch(fetchDataFailure(error.message));
         console.error("Error fetching data:", error);
       }
     };
