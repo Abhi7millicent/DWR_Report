@@ -18,10 +18,9 @@ import {
   Image,
   StyleSheet,
 } from "@react-pdf/renderer";
-import { pdf } from "@react-pdf/renderer";
+
 import loginBackground from "../../../assets/logo-color.png";
 import axios from "axios";
-import { PDFDocument } from "pdf-lib";
 
 interface IAppointmentLetter {
   letter: string;

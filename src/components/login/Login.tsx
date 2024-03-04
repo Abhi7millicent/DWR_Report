@@ -8,13 +8,18 @@ import { motion } from "framer-motion";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import Icon from "../fontAwesomeIcon/Icon";
+import { usePostLogin } from "../../hook/queries/useLoginQueries";
+
 const Login: React.FC = () => {
   const [userId, setUserId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userIdError, setUserIdError] = useState("");
+
   const [passwordError, setPasswordError] = useState("");
+
+  const { mutateAsync: PostLogin } = usePostLogin();
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,23 +36,27 @@ const Login: React.FC = () => {
       setLoading(false);
       return;
     }
+    const loginUser = {
+      // loginId: userId,
+      email: userId,
+      password: password,
+    };
     try {
-      const response = await axios.post("http://localhost:8080/api/DWR/login", {
-        loginId: userId,
-        password: password,
-      });
-      console.log("Login Credential:", response.data);
-      const status = response.data.status;
+      // console.log("Login Credential:", response.data);
+      const response = await PostLogin(loginUser);
+      console.log(response);
 
-      if (status === true) {
-        SetSessionItem("status", response.data.status.toString());
-        SetSessionItem("token", response.data.token);
-        SetSessionItem("role", response.data.role);
-        SetSessionItem("id", response.data.id);
-        SetSessionItem("name", response.data.name);
-        if (response.data.role === "admin") {
+      if (response.status === true) {
+        console.log("inside the if");
+
+        SetSessionItem("status", response.status.toString());
+        SetSessionItem("token", response.token);
+        SetSessionItem("role", response.role);
+        SetSessionItem("id", response.id);
+        SetSessionItem("name", response.name);
+        if (response.role === "admin") {
           navigate("/employee");
-        } else if (response.data.role === "softwareEngineer") {
+        } else if (response.role === "softwareEngineer") {
           navigate("/employee");
         }
         setLoading(false);

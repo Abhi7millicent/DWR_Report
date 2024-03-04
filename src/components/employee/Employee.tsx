@@ -15,8 +15,9 @@ import "../../App.css";
 import Register from "../register/Register";
 import { Button } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
+import { useGetEmployeeList } from "../../hook/queries/useEmployeeQueries";
 interface empData {
-  id: number;
+  _id: string;
   firstName: string;
   middleName: string;
   lastName: string;
@@ -40,6 +41,11 @@ const Employee: React.FC = () => {
 
   const [employeeData, setEmployeeData] = useState<empData[]>([]);
 
+  console.log(employeeData, "employeeData");
+
+  const { data: GetEmployeeListData } = useGetEmployeeList();
+  console.log(GetEmployeeListData, "GetEmployeeListData");
+
   // const handleDataFromChild = async (data: string) => {
   //   console.log("Data received from child:", data);
 
@@ -53,22 +59,11 @@ const Employee: React.FC = () => {
   //   }
   // };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get<empData[]>(
-        "http://localhost:8080/api/DWR/list"
-      );
-      setEmployeeData(response.data);
-    } catch (error) {
-      console.error("Error fetching employee data:", error);
-    }
-  };
-
   useEffect(() => {
     // Fetch data from the API
 
-    fetchData();
-  }, []); // Empty dependency array means the effect runs once when the component mounts
+    setEmployeeData(GetEmployeeListData?.employees);
+  }, [GetEmployeeListData]); // Empty dependency array means the effect runs once when the component mounts
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -117,7 +112,6 @@ const Employee: React.FC = () => {
     setIsModalOpen(false);
     setEmpId(null);
     setEmpIdForUpload(null);
-    fetchData();
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [
@@ -127,37 +121,37 @@ const Employee: React.FC = () => {
       size: 15,
       visibleInShowHideMenu: true,
     },
-    { accessorKey: "1", header: "Employee Id", size: 15 },
+    // { accessorKey: "1", header: "Employee Id", size: 15 },
     { accessorKey: "2", header: "Employee Name", size: 40 },
-    { accessorKey: "3", header: "Single View", size: 15 },
+    // { accessorKey: "3", header: "Single View", size: 15 },
     { accessorKey: "4", header: "Full View", size: 15 },
     { accessorKey: "5", header: "Calendar", size: 15 },
-    { accessorKey: "6", header: "Upload", size: 15 },
+    // { accessorKey: "6", header:   "Upload", size: 15 },
     // ... add the rest of your headers in a similar fashion
   ];
 
   // const tableHead = ["Sr.No", "Employee Name", "Record", "Calendar"];
-  const tableBody = employeeData.map((empData, index) => [
+  const tableBody = employeeData?.map((empData, index) => [
     index + 1,
-    empData.id,
-    <a key={index} href={`/editEmployee/${empData.id}`}>
+    empData._id,
+    <a key={index} href={`/editEmployee/${empData._id}`}>
       {empData.firstName} {empData.lastName}
     </a>,
     <a
       key={index}
-      href={`/employee_record/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
+      href={`/employee_record/${empData._id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
     >
       <ViewListSharpIcon />
     </a>,
     <a
       key={index}
-      href={`/employee_record_data/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
+      href={`/employee_record_data/${empData._id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
     >
       <WysiwygSharpIcon />
     </a>,
     <a
       key={index}
-      href={`/attendance/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
+      href={`/attendance/${empData._id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
     >
       <CalendarMonthIcon />
     </a>,
@@ -167,7 +161,7 @@ const Employee: React.FC = () => {
     <a>
       <button
         key={index}
-        onClick={() => openModalForUpload(empData.id.toString())}
+        onClick={() => openModalForUpload(empData._id.toString())}
       >
         <DriveFolderUploadIcon />
       </button>
