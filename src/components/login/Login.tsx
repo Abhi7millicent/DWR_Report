@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import Icon from "../fontAwesomeIcon/Icon";
-import { usePostLogin } from "../../hook/queries/useLoginQueries";
+import { usePostLogin } from "../../hook/querie/useLoginQueries";
 
 const Login: React.FC = () => {
   const [userId, setUserId] = useState<string>("");

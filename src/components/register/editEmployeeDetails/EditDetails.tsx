@@ -22,6 +22,7 @@ import {
   fetchEmployeeDataSuccess,
   fetchDataFailure,
 } from "../../../features/appointmentLetterSlice";
+import { useGetEmployeeById } from "../../../hook/querie/useEmployeeQueries";
 // interface EmployeeData {
 //   firstName: string;
 //   middleName: string;
@@ -67,40 +68,62 @@ const EditDetails: React.FC = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const employeeId = id ? id : "";
+
+  const {
+    data: getEmployeeData,
+    isLoading,
+    isError,
+  } = useGetEmployeeById({ id: employeeId });
+  console.log(getEmployeeData, "employeeData");
+
   useEffect(() => {
-    const fetchEmployeeData = async () => {
-      dispatch(fetchDataStart());
-      try {
-        const response = await fetch(
-          `http://localhost:8080/api/DWR/employee/${id}`
-        );
+    if (!isLoading && !isError && getEmployeeData) {
+      const { firstName, lastName, email, role } = getEmployeeData;
+      setValue("firstName", getEmployeeData.data.firstName);
+      setValue("middleName", getEmployeeData.data.middleName);
+      setValue("lastName", getEmployeeData.data.lastName);
+      setValue("email", getEmployeeData.data.email);
+      setValue("reporting", getEmployeeData.data.reporting); // You may need to set reporting if it's not part of getEmployeeData
+      setValue("role", getEmployeeData.data.role);
+      dispatch(fetchEmployeeDataSuccess({ firstName, lastName, email, role }));
+    }
+  }, [isLoading, isError, getEmployeeData]);
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log("data", data);
-          const { firstName, lastName, email, role } = data;
-          setValue("firstName", data.firstName);
-          setValue("middleName", data.middleName);
-          setValue("lastName", data.lastName);
-          setValue("email", data.email);
-          setValue("reporting", data.reporting);
-          setValue("role", data.role);
-          dispatch(
-            fetchEmployeeDataSuccess({ firstName, lastName, email, role })
-          );
-        } else {
-          const error = await response.json(); // Assuming error response contains JSON
-          dispatch(fetchDataFailure(error.message));
-          console.error("Failed to fetch employee data:", error.message);
-        }
-      } catch (error: any) {
-        dispatch(fetchDataFailure(error.message));
-        console.error("Error:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchEmployeeData = async () => {
+  //     dispatch(fetchDataStart());
+  //     try {
+  //       const response = await fetch(
+  //         `http://localhost:8080/api/DWR/employee/${id}`
+  //       );
 
-    fetchEmployeeData();
-  }, [id]);
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         console.log("data", data);
+  //         const { firstName, lastName, email, role } = data;
+  //         setValue("firstName", data.firstName);
+  //         setValue("middleName", data.middleName);
+  //         setValue("lastName", data.lastName);
+  //         setValue("email", data.email);
+  //         setValue("reporting", data.reporting);
+  //         setValue("role", data.role);
+  //         dispatch(
+  //           fetchEmployeeDataSuccess({ firstName, lastName, email, role })
+  //         );
+  //       } else {
+  //         const error = await response.json(); // Assuming error response contains JSON
+  //         dispatch(fetchDataFailure(error.message));
+  //         console.error("Failed to fetch employee data:", error.message);
+  //       }
+  //     } catch (error: any) {
+  //       dispatch(fetchDataFailure(error.message));
+  //       console.error("Error:", error);
+  //     }
+  //   };
+
+  //   fetchEmployeeData();
+  // }, [id]);
 
   const onSubmit = async (data: any) => {
     console.log(data, "data");

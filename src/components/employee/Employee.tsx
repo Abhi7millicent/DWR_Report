@@ -15,7 +15,7 @@ import "../../App.css";
 import Register from "../register/Register";
 import { Button } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
-import { useGetEmployeeList } from "../../hook/queries/useEmployeeQueries";
+import { useGetEmployeeList } from "../../hook/querie/useEmployeeQueries";
 interface empData {
   _id: string;
   firstName: string;
