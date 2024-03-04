@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Endpoint } from "./API/EndPoint";
+import { parseTemplate } from "url-template";
 
 interface Employee {
   id: string;
@@ -29,7 +30,7 @@ export const GetEmployeeList = async () => {
 
 export const GetEmployeeById = async (data: Employee) => {
   const id = data.id;
-  const url = `${Endpoint.Employee.Get_ById}/${id}`;
+  const url = parseTemplate(Endpoint.Employee.Get_ById).expand({ id });
   try {
     const response = await axios.get(url);
     return response.data;
@@ -47,7 +48,7 @@ export const UpdateEmployeeById = async (
   const id = data.id;
   const url = `${Endpoint.Employee.Put_ById}/${id}`;
   try {
-    const response = await axios.get(url);
+    const response = await axios.put(url, empdata);
     return response.data;
   } catch (error) {
     // Handle errors
