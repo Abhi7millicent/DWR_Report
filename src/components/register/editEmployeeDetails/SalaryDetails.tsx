@@ -18,8 +18,12 @@ import {
   fetchSalaryDataSuccess,
   fetchDataFailure,
 } from "../../../features/appointmentLetterSlice";
+import {
+  useGetEmployeeSalaryDeatilsById,
+  usePutEmployeeSalaryDeatilsById,
+} from "../../../hook/querie/useEmployeeSalaryDeatils";
 
-interface SalaryDetails {
+interface ISalaryDetails {
   bankAccountName: string;
   ifscCode: string;
   accountNo: string;
@@ -31,7 +35,6 @@ interface SalaryDetails {
 }
 
 const SalaryDetails: React.FC = () => {
-  const { id } = useParams();
   const {
     formState: { errors },
     control,
@@ -39,7 +42,7 @@ const SalaryDetails: React.FC = () => {
     register,
     setValue,
     handleSubmit,
-  } = useForm({
+  } = useForm<ISalaryDetails>({
     defaultValues: {
       bankAccountName: "",
       ifscCode: "",
@@ -51,44 +54,39 @@ const SalaryDetails: React.FC = () => {
       monthlySalary: "",
     },
   });
-  const apiEndpoint = `http://localhost:8080/api/DWR/employeeSalary/update/${id}`;
+  // const apiEndpoint = `http://localhost:8080/api/DWR/employeeSalary/update/${id}`;
 
+  const { id } = useParams();
+  const { data: GetEmployeeSalaryDeatilsByIdData } =
+    useGetEmployeeSalaryDeatilsById(String(id));
+
+  const { mutateAsync: PutEmployeeSalaryDeatilsById } =
+    usePutEmployeeSalaryDeatilsById();
   const dispatch = useDispatch();
-
   useEffect(() => {
     // Fetch data from the API and set it to form fields
-    const fetchSalaryDetails = async () => {
-      dispatch(fetchDataStart());
-      try {
-        const response = await fetch(
-          `http://localhost:8080/api/DWR/employeeSalary/${id}`
-        );
-        if (response.ok) {
-          const data: SalaryDetails = await response.json();
-          console.log(data, "data");
-          const { annualSalary, monthlySalary } = data;
-          setValue("bankAccountName", data.bankAccountName);
-          setValue("ifscCode", data.ifscCode);
-          setValue("accountNo", data.accountNo);
-          setValue("uan", data.uan);
-          setValue("epfoNo", data.epfoNo);
-          setValue("panNo", data.panNo);
-          setValue("annualSalary", data.annualSalary);
-          setValue("monthlySalary", data.monthlySalary);
-          dispatch(fetchSalaryDataSuccess({ annualSalary, monthlySalary }));
-        } else {
-          const error = await response.json(); // Assuming error response contains JSON
-          dispatch(fetchDataFailure(error.message));
-          console.error("Failed to fetch salary data:", error.message);
-          // setPermanentAddress(data); // Assuming the API returns the data in the same shape as SalaryDetails
-        }
-      } catch (error: any) {
-        dispatch(fetchDataFailure(error.message));
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchSalaryDetails();
-  }, [id]);
+    const getSalaryData = GetEmployeeSalaryDeatilsByIdData?.data;
+
+    if (getSalaryData) {
+      setValue("bankAccountName", getSalaryData.bankAccountName || "");
+      setValue("ifscCode", getSalaryData.ifscCode || "");
+      setValue("accountNo", getSalaryData.accountNo || "");
+      setValue("uan", getSalaryData.uanNo || "");
+      setValue("epfoNo", getSalaryData.epfoNo || "");
+      setValue("panNo", getSalaryData.panNo || "");
+      setValue("annualSalary", getSalaryData.annualSalary || "");
+      setValue("monthlySalary", getSalaryData.monthlySalary || "");
+
+      // Dispatch action with salary data
+      dispatch(
+        fetchSalaryDataSuccess({
+          annualSalary: getSalaryData.annualSalary,
+          monthlySalary: getSalaryData.monthlySalary,
+        })
+      );
+    }
+  }, [GetEmployeeSalaryDeatilsByIdData]);
+
   // useEffect(() => {
   //   // Fetch data from the API and set it to form fields
   //   fetch(`http://localhost:8080/api/DWR/employeeSalary/${id}`)
@@ -117,7 +115,7 @@ const SalaryDetails: React.FC = () => {
   //     }
   //   };
 
-  const onSubmit = async (data: any) => {
+  const handleSalaryDetails = async (data: any) => {
     const salaryDetailsData = {
       bankAccountName: data.bankAccountName,
       ifscCode: data.ifscCode,
@@ -130,15 +128,12 @@ const SalaryDetails: React.FC = () => {
     };
 
     try {
-      const response = await fetch(apiEndpoint, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(salaryDetailsData),
+      const response = await PutEmployeeSalaryDeatilsById({
+        id: String(id),
+        salaryData: salaryDetailsData,
       });
 
-      if (response.ok) {
+      if (response) {
         toast.success("Salary updated successfully!", {
           position: "top-center",
           style: {
@@ -173,7 +168,7 @@ const SalaryDetails: React.FC = () => {
         >
           <Typography>Salary Details</Typography>
         </AccordionSummary>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleSalaryDetails)}>
           <Toaster reverseOrder={false} />{" "}
           <AccordionDetails>
             <Grid container spacing={2}>

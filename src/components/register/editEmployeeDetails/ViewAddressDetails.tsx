@@ -18,31 +18,31 @@ import {
   fetchAddressDataSuccess,
   fetchDataFailure,
 } from "../../../features/appointmentLetterSlice";
+import { useGetEmployeeAdressById } from "../../../hook/querie/useEmployeeAddress";
 
-interface PermanentAddressDetails {
-  addressLine1: string;
-  addressLine2: string;
-  pinCode: string;
-  city: string;
-  state: string;
-  country: string;
-  contactno1: string;
-  contactno2: string;
-}
-interface TemporaryAddressDetails {
-  addressLine1: string;
-  addressLine2: string;
-  pinCode: string;
-  city: string;
-  state: string;
-  country: string;
-  contactno1: string;
-  contactno2: string;
-}
+// interface PermanentAddressDetails {
+//   addressLine1: string;
+//   addressLine2: string;
+//   pinCode: string;
+//   city: string;
+//   state: string;
+//   country: string;
+//   contactno1: string;
+//   contactno2: string;
+// }
+// interface TemporaryAddressDetails {
+//   addressLine1: string;
+//   addressLine2: string;
+//   pinCode: string;
+//   city: string;
+//   state: string;
+//   country: string;
+//   contactno1: string;
+//   contactno2: string;
+// }
 
 const ViewAddressDetails: React.FC = () => {
   const { id } = useParams();
-  console.log(id, "idddd");
 
   // State for permanent address
   // const [permanentAddress, setPermanentAddress] = useState<AddressDetails>({
@@ -65,6 +65,14 @@ const ViewAddressDetails: React.FC = () => {
   //   contactno1: "",
   //   contactno2: "",
   // });
+  const { data: GetEmployeeAdressByIdTemporaryData } = useGetEmployeeAdressById(
+    String(id),
+    "Temporary"
+  );
+  const { data: GetEmployeeAdressByIdPermanentData } = useGetEmployeeAdressById(
+    String(id),
+    "Permanent"
+  );
 
   const {
     formState: { errors },
@@ -95,112 +103,72 @@ const ViewAddressDetails: React.FC = () => {
   });
 
   const dispatch = useDispatch();
-  // const fetchLocationPermanentAddressDetails = (permanentPinCode: string) => {
-  //   fetch(`https://api.postalpincode.in/pincode/${permanentPinCode}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       const { District, State, Country } = data[0].PostOffice[0];
-  //       setValue((prevAddress) => ({
-  //         ...prevAddress,
-  //         city: District, // Update to match your state key
-  //         state: State, // Update to match your state key
-  //         country: Country, // Update to match your state key
-  //       }));
-  //     })
-  //     .catch((error) =>
-  //       console.error("Error fetching location details:", error)
-  //     );
-  // };
 
-  // const fetchLocationTemporaryAddressDetails = (pinCode: string) => {
-  //   fetch(`https://api.postalpincode.in/pincode/${pinCode}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       const { District, State, Country } = data[0].PostOffice[0];
-  //       setTemporaryAddress((prevAddress) => ({
-  //         ...prevAddress,
-  //         city: District, // Update to match your state key
-  //         state: State, // Update to match your state key
-  //         country: Country, // Update to match your state key
-  //       }));
-  //     })
-  //     .catch((error) =>
-  //       console.error("Error fetching location details:", error)
-  //     );
-  // };
+  useEffect(() => {
+    const EmployeeAdressByIdPermanentData =
+      GetEmployeeAdressByIdPermanentData.data;
+
+    if (EmployeeAdressByIdPermanentData) {
+      setValue(
+        "permanentAddressLine1",
+        EmployeeAdressByIdPermanentData.addressLine1
+      );
+      setValue(
+        "permanentAddressLine2",
+        EmployeeAdressByIdPermanentData.addressLine2
+      );
+      setValue("permanentPinCode", EmployeeAdressByIdPermanentData.pinCode);
+      setValue("permanentCity", EmployeeAdressByIdPermanentData.city);
+      setValue("permanentState", EmployeeAdressByIdPermanentData.state);
+      setValue("permanentCountry", EmployeeAdressByIdPermanentData.country);
+      setValue(
+        "permanentContactno1",
+        EmployeeAdressByIdPermanentData.contactno1
+      );
+      setValue(
+        "permanentContactno2",
+        EmployeeAdressByIdPermanentData.contactno2
+      );
+      dispatch(
+        fetchAddressDataSuccess({
+          addressLine1: EmployeeAdressByIdPermanentData.addressLine1,
+          addressLine2: EmployeeAdressByIdPermanentData.addressLine1,
+          pinCode: EmployeeAdressByIdPermanentData.pinCode,
+          city: EmployeeAdressByIdPermanentData.city,
+          state: EmployeeAdressByIdPermanentData.state,
+          country: EmployeeAdressByIdPermanentData.country,
+        })
+      );
+    }
+  }, [GetEmployeeAdressByIdPermanentData]);
 
   useEffect(() => {
     // Fetch data from the API and set it to form fields
-    const fetchPermanentAddressDetails = async () => {
-      dispatch(fetchDataStart());
-      try {
-        const response = await fetch(
-          `http://localhost:8080/api/DWR/addressDetails/${"Permanent"}/${id}`
-        );
-        if (response.ok) {
-          const data: PermanentAddressDetails = await response.json();
-          console.log(data, "data");
-          const { addressLine1, addressLine2, pinCode, city, state, country } =
-            data;
-          setValue("permanentAddressLine1", data?.addressLine1);
-          setValue("permanentAddressLine2", data.addressLine2);
-          setValue("permanentPinCode", data.pinCode);
-          setValue("permanentCity", data.city);
-          setValue("permanentState", data.state);
-          setValue("permanentCountry", data.country);
-          setValue("permanentContactno1", data.contactno1);
-          setValue("permanentContactno2", data.contactno2);
-          dispatch(
-            fetchAddressDataSuccess({
-              addressLine1,
-              addressLine2,
-              pinCode,
-              city,
-              state,
-              country,
-            })
-          );
-        } else {
-          const error = await response.json(); // Assuming error response contains JSON
-          dispatch(fetchDataFailure(error.message));
-          console.error("Failed to fetch address data:", error.message);
-        }
-      } catch (error: any) {
-        dispatch(fetchDataFailure(error.message));
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchPermanentAddressDetails();
-  }, [id]);
-
-  useEffect(() => {
-    // Fetch data from the API and set it to form fields
-    const fetchTemporaryAddressDetails = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/api/DWR/addressDetails/${"Temporary"}/${id}`
-        );
-        if (response.ok) {
-          const data: TemporaryAddressDetails = await response.json();
-          console.log(data, "data");
-          setValue("temporaryAddressLine1", data.addressLine1);
-          setValue("temporaryAddressLine2", data.addressLine2);
-          setValue("temporaryPinCode", data.pinCode);
-          setValue("temporaryCity", data.city);
-          setValue("temporaryState", data.state);
-          setValue("temporaryCountry", data.country);
-          setValue("temporaryContactno1", data.contactno1);
-          setValue("temporaryContactno2", data.contactno2);
-        } else {
-          console.error("Failed to fetch address data");
-          // setPermanentAddress(data); // Assuming the API returns the data in the same shape as SalaryDetails
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchTemporaryAddressDetails();
-  }, [id]);
+    const EmployeeAdressByIdTemporaryData =
+      GetEmployeeAdressByIdTemporaryData.data;
+    if (EmployeeAdressByIdTemporaryData) {
+      setValue(
+        "temporaryAddressLine1",
+        EmployeeAdressByIdTemporaryData.addressLine1
+      );
+      setValue(
+        "temporaryAddressLine2",
+        EmployeeAdressByIdTemporaryData.addressLine2
+      );
+      setValue("temporaryPinCode", EmployeeAdressByIdTemporaryData.pinCode);
+      setValue("temporaryCity", EmployeeAdressByIdTemporaryData.city);
+      setValue("temporaryState", EmployeeAdressByIdTemporaryData.state);
+      setValue("temporaryCountry", EmployeeAdressByIdTemporaryData.country);
+      setValue(
+        "temporaryContactno1",
+        EmployeeAdressByIdTemporaryData.contactno1
+      );
+      setValue(
+        "temporaryContactno2",
+        EmployeeAdressByIdTemporaryData.contactno2
+      );
+    }
+  }, [GetEmployeeAdressByIdTemporaryData]);
 
   const onSubmitPermanent = async (data: any) => {
     const savePermanentData = {

@@ -70,7 +70,7 @@ const PersonalData: React.FC = () => {
         console.error("Error fetching data:", error);
       }
     };
-    fetchPersonalDetails();
+    // fetchPersonalDetails();
   }, [id]);
 
   // const handleInputChange =

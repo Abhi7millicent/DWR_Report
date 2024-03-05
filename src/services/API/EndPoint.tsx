@@ -8,5 +8,8 @@ export const Endpoint = {
     Get_list: `${API_URL}/employee/list`,
     Get_ById: `${API_URL}/employee/{id}`,
     Put_ById: `${API_URL}/employee`,
+    Put_SalaryDeatilsById: `${API_URL}/employee-salary/update/{id}`,
+    Get_SalaryDeatilsById: `${API_URL}/employee-salary/{id}`,
+    Get_employeeAdressById: `${API_URL}/employee-address/{addressType}/{id}`,
   },
 };
