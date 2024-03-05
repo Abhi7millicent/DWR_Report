@@ -7,6 +7,6 @@ export const Endpoint = {
   Employee: {
     Get_list: `${API_URL}/employee/list`,
     Get_ById: `${API_URL}/employee/{id}`,
-    Put_ById: `${API_URL}/employee`,
+    Put_ById: `${API_URL}/employee/{id}`,
   },
 };

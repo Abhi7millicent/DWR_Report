@@ -2,10 +2,6 @@ import axios from "axios";
 import { Endpoint } from "./API/EndPoint";
 import { parseTemplate } from "url-template";
 
-interface Employee {
-  id: string;
-}
-
 interface EmployeeData {
   firstName: string;
   middleName: string;
@@ -28,8 +24,7 @@ export const GetEmployeeList = async () => {
   }
 };
 
-export const GetEmployeeById = async (data: Employee) => {
-  const id = data.id;
+export const GetEmployeeById = async (id: string) => {
   const url = parseTemplate(Endpoint.Employee.Get_ById).expand({ id });
   try {
     const response = await axios.get(url);
@@ -41,18 +36,19 @@ export const GetEmployeeById = async (data: Employee) => {
   }
 };
 
-export const UpdateEmployeeById = async (
+export const PutEmployeeById = async (
   empdata: EmployeeData,
-  data: Employee
+  employee_id: string
 ) => {
-  const id = data.id;
-  const url = `${Endpoint.Employee.Put_ById}/${id}`;
+  const id = employee_id;
+  const url = parseTemplate(Endpoint.Employee.Put_ById).expand({ id });
+  console.log("url:", url);
   try {
-    const response = await axios.put(url, empdata);
+    const response = await axios.put<EmployeeData>(url, empdata);
     return response.data;
   } catch (error) {
     // Handle errors
-    console.error("Error in UpdateEmployeeById:", error);
+    console.error("Error in updateEmployeeById:", error);
     throw error; // Re-throw the error for the caller to handle
   }
 };
