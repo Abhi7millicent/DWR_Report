@@ -22,7 +22,10 @@ import {
   fetchEmployeeDataSuccess,
   fetchDataFailure,
 } from "../../../features/appointmentLetterSlice";
-import { useGetEmployeeById } from "../../../hook/querie/useEmployeeQueries";
+import {
+  useGetEmployeeById,
+  usePutEmployeeById,
+} from "../../../hook/querie/useEmployeeQueries";
 // interface EmployeeData {
 //   firstName: string;
 //   middleName: string;
@@ -66,16 +69,20 @@ const EditDetails: React.FC = () => {
   });
   const [disabled, setDisabled] = useState(false);
   const { id } = useParams();
+  // const params = useParams();
   const dispatch = useDispatch();
 
-  const employeeId = id ? id : "";
+  console.log("iddadasdas", typeof id);
+
+  // const employeeId = id ? id : "";
 
   const {
     data: getEmployeeData,
     isLoading,
     isError,
-  } = useGetEmployeeById({ id: employeeId });
-  console.log(getEmployeeData, "employeeData");
+  } = useGetEmployeeById(id !== undefined ? id : "");
+
+  const { mutateAsync: updateEmployee } = usePutEmployeeById();
 
   useEffect(() => {
     if (!isLoading && !isError && getEmployeeData) {
@@ -126,8 +133,13 @@ const EditDetails: React.FC = () => {
   // }, [id]);
 
   const onSubmit = async (data: any) => {
-    console.log(data, "data");
+    if (!id) {
+      console.error("Error: id is undefined");
+      return;
+    }
+
     setDisabled(true);
+
     const requestData = {
       firstName: data.firstName,
       middleName: data.middleName,
@@ -137,44 +149,29 @@ const EditDetails: React.FC = () => {
       reporting: data.reporting,
     };
 
-    console.log(requestData, "requestData");
-
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/DWR/employee/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
+      await updateEmployee({ id: id, empdata: requestData });
 
-      if (response.ok) {
-        // alert("Employee details updated successfully!");
-        toast.success("Employee details updated successfully!", {
-          position: "top-center",
-          style: {
-            fontFamily: "var( --font-family)",
-            fontSize: "14px",
-          },
-          iconTheme: {
-            primary: "var(--primary-color)",
-            secondary: "#fff",
-          },
-        });
-        setDisabled(false);
-      } else {
-        toast.error("Failed to update employee details. Please try again.", {
-          style: {
-            fontFamily: "var( --font-family)",
-          },
-        });
-        setDisabled(false);
-      }
+      toast.success("Employee details updated successfully!", {
+        position: "top-center",
+        style: {
+          fontFamily: "var(--font-family)",
+          fontSize: "14px",
+        },
+        iconTheme: {
+          primary: "var(--primary-color)",
+          secondary: "#fff",
+        },
+      });
+      setDisabled(false);
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Failed to update employee details. Please try again.", {
+        style: {
+          fontFamily: "var(--font-family)",
+        },
+      });
+      setDisabled(false);
     }
   };
 
