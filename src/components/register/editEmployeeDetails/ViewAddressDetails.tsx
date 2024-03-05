@@ -106,7 +106,7 @@ const ViewAddressDetails: React.FC = () => {
 
   useEffect(() => {
     const EmployeeAdressByIdPermanentData =
-      GetEmployeeAdressByIdPermanentData.data;
+      GetEmployeeAdressByIdPermanentData?.data;
 
     if (EmployeeAdressByIdPermanentData) {
       setValue(
@@ -145,7 +145,7 @@ const ViewAddressDetails: React.FC = () => {
   useEffect(() => {
     // Fetch data from the API and set it to form fields
     const EmployeeAdressByIdTemporaryData =
-      GetEmployeeAdressByIdTemporaryData.data;
+      GetEmployeeAdressByIdTemporaryData?.data;
     if (EmployeeAdressByIdTemporaryData) {
       setValue(
         "temporaryAddressLine1",
