@@ -3,11 +3,8 @@ import {
   GetEmployeeList,
   GetEmployeeById,
   PutEmployeeById,
+  PostEmployeeRegister,
 } from "../../services/Employee";
-
-interface Employee {
-  id: string;
-}
 
 interface EmployeeData {
   firstName: string;
@@ -44,4 +41,7 @@ export const usePutEmployeeById = () => {
       },
     }
   );
+};
+export const usePostEmployeeRegister = () => {
+  return useMutation(PostEmployeeRegister);
 };

@@ -1,44 +1,104 @@
-import axios from "axios";
-import { MRT_ColumnDef } from "material-react-table";
 import { useEffect, useState } from "react";
+import { MRT_ColumnDef } from "material-react-table";
 import { useParams } from "react-router";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CommonTable from "../../../layout/commonTable/CommonTable";
 import Documents from "./Documents";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@mui/material";
+import {
+  useGetDocumentList,
+  usePutDocument,
+} from "../../../hook/querie/useEmployeeDocument";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 interface DocumentData {
-  id: number;
+  _id: string;
   documentType: string;
   description: string;
   employeeId: string;
+  uploadFilePath: string;
 }
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "none",
+  boxShadow: 24,
+  p: 3,
+  borderRadius: 2,
+};
 
 const ViewDocuments = () => {
   const { id } = useParams();
   const [data, setData] = useState<DocumentData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteDocumentId, setDeleteDocumentId] = useState("");
+  const { mutateAsync: PutDocument } = usePutDocument();
+  const [open, setOpen] = useState(false);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get<DocumentData[]>(
-        `http://localhost:8080/api/DWR/document/list/${id}`
-      );
-      console.log("documentData:", response.data);
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching employee data:", error);
-    }
-  };
+  const { data: GetDocumentListData, refetch: GetDocumentListRefetch } =
+    useGetDocumentList(String(id));
 
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get<DocumentData[]>(
+  //       `http://localhost:8080/api/DWR/document/list/${id}`
+  //     );
+  //     console.log("documentData:", response.data);
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching employee data:", error);
+  //   }
+  // };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   useEffect(() => {
-    fetchData();
-  }, [id]);
+    setData(GetDocumentListData?.data);
+  }, [GetDocumentListData]);
 
-  const handleDeleteClick = (id: number) => {
-    console.log(id);
+  const handleDeleteClick = async () => {
+    const deleteDocument = {
+      deleteFlag: true,
+    };
+
+    try {
+      const response = await PutDocument({
+        id: deleteDocumentId,
+        data: deleteDocument,
+      });
+      if (response) {
+        // Registration successful
+        // alert("Registration successful!");
+        toast.success("Employee Document delete successful!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+        handleClose();
+        GetDocumentListRefetch();
+      } else {
+        // Registration failed
+        // alert("Registration failed. Please try again.");
+        toast.error("Delete  failed. Please try again.", {
+          position: "top-center",
+        });
+      }
+    } catch (error) {}
     // Add logic to delete the document with the given id
   };
 
@@ -50,22 +110,27 @@ const ViewDocuments = () => {
     { accessorKey: "4", header: "Delete" },
   ];
 
-  const tableBody = data.map((documentData, index) => [
+  const tableBody = data?.map((documentData, index) => [
     index + 1,
     documentData.documentType,
     documentData.description,
 
     <a
       key={`download-${index}`}
-      href={`https://example.com/download/${documentData.id}`}
+      href={`https://example.com/api/download/${documentData._id}`}
+      download
     >
       <CloudDownloadIcon />
     </a>,
-    <a
-      key={`delete-${index}`}
-      onClick={() => handleDeleteClick(documentData.id)}
-    >
-      <DeleteIcon fontSize="small" className="text-red-600" />
+    <a key={`delete-${index}`}>
+      <DeleteIcon
+        fontSize="small"
+        className="text-red-600 cursor-pointer"
+        onClick={() => {
+          handleOpen();
+          setDeleteDocumentId(documentData?._id);
+        }}
+      />
     </a>,
   ]);
   const openModal = () => {
@@ -73,7 +138,6 @@ const ViewDocuments = () => {
   };
   const closeModal = () => {
     setIsModalOpen(false);
-    fetchData();
   };
   return (
     <div className="p-4">
@@ -93,10 +157,54 @@ const ViewDocuments = () => {
           <div className="w-fit">
             {/* <CommonModal isOpen={isModalOpen} onClose={closeModal}> */}
             <Toaster reverseOrder={false} />
-            <Documents isOpen={isModalOpen} onClose={closeModal} />
+            <Documents
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              refechData={GetDocumentListRefetch}
+            />
             {/* </CommonModal> */}
           </div>
         </div>
+      </div>
+      <div>
+        {/* <Button onClick={handleOpen}>Open modal</Button> */}
+        <Modal
+          open={open}
+          // onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Document Delete
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2, ml: 2 }}>
+              Are you sure to delete the docmuent?
+            </Typography>
+            <div className="flex justify-between mt-7">
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#fff !important",
+                  color: "var( --primary-color) !important",
+                  border: "2px solid var( --primary-color) !important",
+                }}
+                onClick={handleClose}
+              >
+                close
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ mr: 5 }}
+                onClick={handleDeleteClick}
+              >
+                Confirm
+              </Button>
+            </div>
+          </Box>
+        </Modal>
       </div>
     </div>
   );

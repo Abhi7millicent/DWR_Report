@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone"; // Import useDropzone
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { Button } from "@mui/material";
 import toast from "react-hot-toast";
+import { usePostDocument } from "../../../hook/querie/useEmployeeDocument";
 
 type TQueryParam = {
   id: any;
@@ -11,15 +12,22 @@ type TQueryParam = {
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  refechData: () => void;
 }
-const Documents: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+const Documents: React.FC<ModalProps> = ({ isOpen, onClose, refechData }) => {
   const modalClasses = isOpen
     ? "fixed inset-0 flex items-center justify-center "
     : "hidden";
+
+  // State
   const [selectedType, setSelectedType] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const { id } = useParams<TQueryParam>();
   const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
+
+  // React Query
+  const { mutateAsync: PostDocument } = usePostDocument();
+
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(e.target.value);
   };
@@ -52,18 +60,13 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
     const formData = new FormData();
     formData.append("documentType", selectedType);
-    formData.append("file", droppedFiles[0]); // Assuming only one file is allowed
+    formData.append("uploadFilePath", droppedFiles[0]); // Assuming only one file is allowed
     formData.append("description", description);
     formData.append("employeeId", id);
+    console.log(formData, "fromdat");
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/api/DWR/document/save",
-        {
-          method: "POST",
-          body: formData,
-        }
-      ).then((r) => r.json());
+      const response = await PostDocument(formData);
 
       if (response) {
         console.log("Document saved successfully!");
@@ -82,6 +85,7 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         setSelectedType("");
         setDescription("");
         setDroppedFiles([]);
+        refechData();
         onClose();
       } else {
         console.error("Failed to save document.");
@@ -98,7 +102,12 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       // Handle error or display a message to the user
     }
   };
-
+  const handleClose = () => {
+    setSelectedType("");
+    setDescription("");
+    setDroppedFiles([]);
+    onClose();
+  };
   return (
     <div className={`${modalClasses} z-10`}>
       <form onSubmit={handleSubmit}>
@@ -118,9 +127,9 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                     className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                   >
                     <option value="">Select Type</option>
-                    <option value="resume">Resume</option>
-                    <option value="coverLetter">Cover Letter</option>
-                    <option value="certificate">Certificate</option>
+                    <option value="Resume">Resume</option>
+                    <option value="Cover Letter">Cover Letter</option>
+                    <option value="Crtificate">Certificate</option>
                   </select>
                 </div>
                 <div className="mb-4 w-/4" {...getRootProps()}>
@@ -152,9 +161,13 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose }) => {
               </div>
               <div className="flex justify-between ">
                 <Button
-                  onClick={onClose}
+                  onClick={handleClose}
                   variant="contained"
-                  sx={{ backgroundColor: "#8a878f !important" }}
+                  sx={{
+                    backgroundColor: "#fff !important",
+                    color: "var( --primary-color) !important",
+                    border: "2px solid var( --primary-color) !important",
+                  }}
                 >
                   close
                 </Button>
