@@ -8,8 +8,10 @@ export const Endpoint = {
     Get_list: `${API_URL}/employee/list`,
     Get_ById: `${API_URL}/employee/{id}`,
     Put_ById: `${API_URL}/employee/{id}`,
-    Put_SalaryDeatilsById: `${API_URL}/employee-salary/update/{id}`,
-    Get_SalaryDeatilsById: `${API_URL}/employee-salary/{id}`,
-    Get_employeeAdressById: `${API_URL}/employee-address/{addressType}/{id}`,
+    Put_SalaryDeatilsByEmployeeId: `${API_URL}/employee-salary/update/{id}`,
+    Get_SalaryDeatilsByEmployeeId: `${API_URL}/employee-salary/{id}`,
+    Get_AdressByEmployeeId: `${API_URL}/employee-address/{addressType}/{id}`,
+    Get_PesonalDetailByEmployeeId: `${API_URL}/personal-details/{id}`,
+    Put_PesonalDetailByEmployeeId: `${API_URL}/personal-details/update/{id}`,
   },
 };

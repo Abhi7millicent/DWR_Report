@@ -86,14 +86,20 @@ const EditDetails: React.FC = () => {
 
   useEffect(() => {
     if (!isLoading && !isError && getEmployeeData) {
-      const { firstName, lastName, email, role } = getEmployeeData;
       setValue("firstName", getEmployeeData.data.firstName);
       setValue("middleName", getEmployeeData.data.middleName);
       setValue("lastName", getEmployeeData.data.lastName);
       setValue("email", getEmployeeData.data.email);
       setValue("reporting", getEmployeeData.data.reporting); // You may need to set reporting if it's not part of getEmployeeData
       setValue("role", getEmployeeData.data.role);
-      dispatch(fetchEmployeeDataSuccess({ firstName, lastName, email, role }));
+      dispatch(
+        fetchEmployeeDataSuccess({
+          firstName: getEmployeeData.data.firstName,
+          lastName: getEmployeeData.data.lastName,
+          email: getEmployeeData.data.email,
+          role: getEmployeeData.data.role,
+        })
+      );
     }
   }, [isLoading, isError, getEmployeeData]);
 

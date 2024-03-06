@@ -41,6 +41,7 @@ const SalaryDetails: React.FC = () => {
     clearErrors,
     register,
     setValue,
+    watch,
     handleSubmit,
   } = useForm<ISalaryDetails>({
     defaultValues: {
@@ -115,6 +116,14 @@ const SalaryDetails: React.FC = () => {
   //     }
   //   };
 
+  const handleInputChange = () => {
+    console.log(watch("annualSalary"), "annualSalary");
+    const annualSalary = parseFloat(watch("annualSalary"));
+
+    const monthly = annualSalary / 12;
+    const monthlyString = monthly.toFixed(2);
+    setValue("monthlySalary", monthlyString);
+  };
   const handleSalaryDetails = async (data: any) => {
     const salaryDetailsData = {
       bankAccountName: data.bankAccountName,
@@ -345,6 +354,7 @@ const SalaryDetails: React.FC = () => {
                       aria-invalid={errors.annualSalary ? "true" : "false"}
                       onChange={(e) => {
                         onChange(e);
+                        handleInputChange();
                         clearErrors("annualSalary");
                       }}
                     />

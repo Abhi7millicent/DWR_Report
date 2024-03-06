@@ -12,16 +12,28 @@ import { useParams } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import InputField from "../../InputField/InputField";
 import toast, { Toaster } from "react-hot-toast";
-interface PersonalDataDetails {
-  bloodGroup: string;
-  emergencyContact1: string;
-  relation1: string;
-  emergencyContact2: string;
-  relation2: string;
-}
+
+import {
+  useGetEmployeePersonalDeatilsById,
+  usePutEmployeePersonalDeatilsById,
+} from "../../../hook/querie/useEmployeePersonalDetails";
+// interface PersonalDataDetails {
+//   dateOfBirth: string;
+//   bloodGroup: string;
+//   emergencyContact1: string;
+//   relation1: string;
+//   emergencyContact2: string;
+//   relation2: string;
+// }
 
 const PersonalData: React.FC = () => {
   const { id } = useParams();
+  const { data: GetPersonalDataDetails } = useGetEmployeePersonalDeatilsById(
+    String(id)
+  );
+
+  const { mutateAsync: PutEmployeePersonalDeatilsById } =
+    usePutEmployeePersonalDeatilsById();
   // const [formData, setFormData] = useState<PersonalDataDetails>({
   //   bloodGroup: "",
   //   emergencyContact1: "",
@@ -38,6 +50,7 @@ const PersonalData: React.FC = () => {
     handleSubmit,
   } = useForm({
     defaultValues: {
+      dateOfBirth: "",
       bloodGroup: "",
       emergencyContact1: "",
       relation1: "",
@@ -46,22 +59,19 @@ const PersonalData: React.FC = () => {
     },
   });
   //   const apiEndpoint = `http://localhost:8080/api/DWR/personalData/update/${id}`;
-  const apiEndpoint = `http://localhost:8080/api/DWR/employeePersonalDetails/update/${id}`;
+  // const apiEndpoint = `http://localhost:8080/api/DWR/employeePersonalDetails/update/${id}`;
   useEffect(() => {
     // Fetch data from the API and set it to form fields
     const fetchPersonalDetails = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8080/api/DWR/employeePersonalDetails/${id}`
-        );
-        if (response.ok) {
-          const data: PersonalDataDetails = await response.json();
-          console.log(data, "data");
-          setValue("bloodGroup", data.bloodGroup);
-          setValue("emergencyContact1", data.emergencyContact1);
-          setValue("relation1", data.relation1);
-          setValue("emergencyContact2", data.emergencyContact2);
-          setValue("relation2", data.relation2);
+        const response = GetPersonalDataDetails?.data;
+        if (response) {
+          setValue("dateOfBirth", response.dateOfBirth);
+          setValue("bloodGroup", response.bloodGroup);
+          setValue("emergencyContact1", response.emergencyContact1);
+          setValue("relation1", response.relation1);
+          setValue("emergencyContact2", response.emergencyContact2);
+          setValue("relation2", response.relation2);
         } else {
           console.error("Failed to fetch address data");
           // setPermanentAddress(data); // Assuming the API returns the data in the same shape as SalaryDetails
@@ -70,8 +80,8 @@ const PersonalData: React.FC = () => {
         console.error("Error fetching data:", error);
       }
     };
-    // fetchPersonalDetails();
-  }, [id]);
+    fetchPersonalDetails();
+  }, [GetPersonalDataDetails]);
 
   // const handleInputChange =
   //   (field: keyof PersonalDataDetails) =>
@@ -85,6 +95,7 @@ const PersonalData: React.FC = () => {
 
   const onSubmit = async (data: any) => {
     const personalDetailsData = {
+      dateOfBirth: data.dateOfBirth,
       bloodGroup: data.bloodGroup,
       emergencyContact1: data.emergencyContact1,
       relation1: data.relation1,
@@ -93,15 +104,12 @@ const PersonalData: React.FC = () => {
     };
 
     try {
-      const response = await fetch(apiEndpoint, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(personalDetailsData),
+      const response = await PutEmployeePersonalDeatilsById({
+        id: String(id),
+        personalData: personalDetailsData,
       });
 
-      if (response.ok) {
+      if (response) {
         toast.success("Personal detail updated successfully!", {
           position: "top-center",
           style: {
@@ -139,6 +147,32 @@ const PersonalData: React.FC = () => {
           <Toaster reverseOrder={false} />{" "}
           <AccordionDetails>
             <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: false,
+                  }}
+                  {...register("dateOfBirth")}
+                  render={({ field: { onChange, value } }) => (
+                    <InputField
+                      value={value}
+                      type="date"
+                      label="Date Of Birth"
+                      placeholder="Date Of Birth"
+                      name="dateOfBirth"
+                      aria-invalid={errors.bloodGroup ? "true" : "false"}
+                      onChange={(e) => {
+                        onChange(e);
+                        clearErrors("dateOfBirth");
+                      }}
+                    />
+                  )}
+                />
+                {errors.bloodGroup?.type === "required" && (
+                  <p className="alert">This field is required</p>
+                )}
+              </Grid>
               <Grid item xs={6}>
                 <Controller
                   control={control}
@@ -201,7 +235,7 @@ const PersonalData: React.FC = () => {
                   render={({ field: { onChange, value } }) => (
                     <InputField
                       value={value}
-                      type="number"
+                      type="text"
                       label="Relation to Contact No. 1"
                       placeholder="Relation to Contact No. 1"
                       name="relation1"
@@ -253,7 +287,7 @@ const PersonalData: React.FC = () => {
                   render={({ field: { onChange, value } }) => (
                     <InputField
                       value={value}
-                      type="number"
+                      type="text"
                       label="Relation to Contact No. 2"
                       placeholder="Relation to Contact No. 2"
                       name="relation2"

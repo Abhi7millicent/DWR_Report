@@ -1,20 +1,19 @@
 import { parseTemplate } from "url-template";
 import { Endpoint } from "./API/EndPoint";
 import axios from "axios";
-interface SalaryDetailsData {
-  bankAccountName: string;
-  ifscCode: string;
-  accountNo: string;
-  uan: string;
-  epfoNo: string;
-  panNo: string;
-  annualSalary: number; // Assuming annualSalary and monthlySalary are numbers
-  monthlySalary: number;
+
+interface PersonalDetailsData {
+  dateOfBirth: string;
+  bloodGroup: string;
+  emergencyContact1: string;
+  relation1: string;
+  emergencyContact2: string;
+  relation2: string;
 }
-// Get Employee Salary Deatils By Id
-export const GetEmployeeSalaryDeatilsById = async (id: string) => {
+
+export const GetEmployeePersonalDeatilsById = async (id: string) => {
   const url = parseTemplate(
-    Endpoint.Employee.Get_SalaryDeatilsByEmployeeId
+    Endpoint.Employee.Get_PesonalDetailByEmployeeId
   ).expand({
     id,
   });
@@ -27,13 +26,13 @@ export const GetEmployeeSalaryDeatilsById = async (id: string) => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
-// Put Employee Salary Deatils By Id
-export const PutEmployeeSalaryDeatilsById = async (
+
+export const PutEmployeePersonalDeatilsById = async (
   id: string,
-  salaryData: SalaryDetailsData
+  salaryData: PersonalDetailsData
 ) => {
   const url = parseTemplate(
-    Endpoint.Employee.Put_SalaryDeatilsByEmployeeId
+    Endpoint.Employee.Put_PesonalDetailByEmployeeId
   ).expand({
     id,
   });
