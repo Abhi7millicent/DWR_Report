@@ -11,13 +11,20 @@ import SyncLockIcon from "@mui/icons-material/SyncLock";
 
 import { Button } from "@mui/material";
 import toast from "react-hot-toast";
+import { usePostEmployeeRegister } from "../../hook/querie/useEmployeeQueries";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  refetchData: () => void;
 }
 
-const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Register: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  refetchData,
+}) => {
   const modalClasses = isOpen
     ? "fixed inset-0 flex items-center justify-center "
     : "hidden";
@@ -30,10 +37,11 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     email: "",
     role: "",
     reporting: "",
-    loginId: "",
     password: "",
     confirmPassword: "",
   });
+
+  const { mutateAsync: PostEmployeeRegister } = usePostEmployeeRegister();
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -48,7 +56,9 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
     // Validate password and conform password
     if (formData.password !== formData.confirmPassword) {
-      alert("Password and Confirm Password must match!");
+      toast.error("Password and Confirm Password must match!", {
+        position: "top-center",
+      });
       return;
     }
 
@@ -61,24 +71,18 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       email: formData.email,
       role: formData.role,
       reporting: formData.reporting,
-      loginId: formData.loginId,
       password: formData.password,
+      confirmPassword: formData.confirmPassword,
     };
 
     try {
       // Send POST request to the API
-      const response = await fetch("http://localhost:8080/api/DWR/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
+      const response = await PostEmployeeRegister(requestData);
 
-      if (response.ok) {
+      if (response) {
         // Registration successful
         // alert("Registration successful!");
-        toast.success("Registration successful!", {
+        toast.success("Employee Registration successful!", {
           position: "top-center",
           style: {
             fontFamily: "var( --font-family)",
@@ -89,6 +93,7 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             secondary: "#fff",
           },
         });
+        refetchData();
         // navigate("/employee");
         onClose();
         setFormData({
@@ -98,7 +103,6 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
           email: "",
           role: "",
           reporting: "",
-          loginId: "",
           password: "",
           confirmPassword: "",
         });
@@ -108,18 +112,12 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         // alert("Registration failed. Please try again.");
         toast.error("Registration failed. Please try again.", {
           position: "top-center",
-          style: {
-            fontFamily: "var( --font-family)",
-            fontSize: "14px",
-          },
-          iconTheme: {
-            primary: "var(--primary-color)",
-            secondary: "#fff",
-          },
         });
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: unknown) {
+      toast.error(error?.response?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 
@@ -131,6 +129,19 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const handleClose = () => {
+    setFormData({
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      email: "",
+      role: "",
+      reporting: "",
+      password: "",
+      confirmPassword: "",
+    });
+    onClose();
+  };
   return (
     <div className={`${modalClasses} z-10`}>
       <div className="flex items-center  mt-3 justify-center">
@@ -279,30 +290,7 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between mb-4">
-              <div className="w-1/3 p-4">
-                <div className="relative">
-                  <div className="absolute bottom-2 -left-5">
-                    <ContactEmergencyIcon />
-                  </div>
-                  <input
-                    type="text"
-                    id="loginId"
-                    name="loginId"
-                    value={formData.loginId}
-                    className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
-                    placeholder="UserId*"
-                    onChange={handleChange}
-                    required
-                  />
-                  <label
-                    htmlFor="loginId"
-                    className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                  >
-                    Login Id*
-                  </label>
-                </div>
-              </div>
+            <div className="flex  mb-4">
               <div className="w-1/3 p-4">
                 <div className="relative">
                   <div className="absolute bottom-2 -left-5">
@@ -368,9 +356,13 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             </div>
             <div className="flex justify-between">
               <Button
-                onClick={onClose}
+                onClick={handleClose}
                 variant="contained"
-                sx={{ backgroundColor: "#8a878f !important" }}
+                sx={{
+                  backgroundColor: "#fff !important",
+                  color: "var( --primary-color) !important",
+                  border: "2px solid var( --primary-color) !important",
+                }}
               >
                 close
               </Button>
@@ -378,18 +370,6 @@ const Register: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
                 Register
               </Button>
             </div>
-            {/* <div className="flex justify-between">
-              <div>
-                <button onClick={onClose} className="btn-close">
-                  Close
-                </button>
-              </div>
-              <div>
-                <button type="submit" className="btn">
-                  Register
-                </button>
-              </div>
-            </div> */}
           </form>
         </div>
       </div>

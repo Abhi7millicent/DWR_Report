@@ -1,13 +1,18 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import toast from "react-hot-toast";
 import { Button } from "@mui/material";
+import { usePostEmployeeEduction } from "../../../hook/querie/useEmployeeEduction";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  refetchData: () => void;
 }
-const EducationDetails: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+const EducationDetails: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  refetchData,
+}) => {
   const modalClasses = isOpen
     ? "fixed inset-0 flex items-center justify-center "
     : "hidden";
@@ -21,6 +26,7 @@ const EducationDetails: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     percentage: "",
   });
 
+  const { mutateAsync: PostEmployeeEduction } = usePostEmployeeEduction();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEducation({
       ...education,
@@ -33,23 +39,23 @@ const EducationDetails: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
     try {
       // Send data to the API using Axios
-      const response = await axios.post(
-        "http://localhost:8080/api/DWR/educationalDetails/save",
-        education
-      );
-      console.error("Api response:", response.data);
+      const response = await PostEmployeeEduction(education);
+
+      if (response) {
+        toast.success("Employee details updated successfully!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+      }
       // alert("Educational Details Inserted");
-      toast.success("Employee details updated successfully!", {
-        position: "top-center",
-        style: {
-          fontFamily: "var( --font-family)",
-          fontSize: "14px",
-        },
-        iconTheme: {
-          primary: "var(--primary-color)",
-          secondary: "#fff",
-        },
-      });
+      refetchData();
       setEducation({
         employeeId: "",
         degree: "",

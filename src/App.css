@@ -270,3 +270,15 @@ textarea:focus {
   border-radius: 100px;
   overflow: visible;
 }
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.MuiBox-root:focus-visible {
+  outline: none !important;
+  font-family: var(--font-family) !important;
+}

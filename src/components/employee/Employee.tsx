@@ -43,8 +43,8 @@ const Employee: React.FC = () => {
 
   console.log(employeeData, "employeeData");
 
-  const { data: GetEmployeeListData } = useGetEmployeeList();
-  console.log(GetEmployeeListData, "GetEmployeeListData");
+  const { data: GetEmployeeListData, refetch: GetEmployeeListDataRefetch } =
+    useGetEmployeeList();
 
   // const handleDataFromChild = async (data: string) => {
   //   console.log("Data received from child:", data);
@@ -123,7 +123,7 @@ const Employee: React.FC = () => {
     },
     // { accessorKey: "1", header: "Employee Id", size: 15 },
     { accessorKey: "2", header: "Employee Name", size: 40 },
-    // { accessorKey: "3", header: "Single View", size: 15 },
+    { accessorKey: "3", header: "Email", size: 15 },
     { accessorKey: "4", header: "Full View", size: 15 },
     { accessorKey: "5", header: "Calendar", size: 15 },
     // { accessorKey: "6", header:   "Upload", size: 15 },
@@ -134,9 +134,11 @@ const Employee: React.FC = () => {
   const tableBody = employeeData?.map((empData, index) => [
     index + 1,
     empData._id,
+
     <a key={index} href={`/editEmployee/${empData._id}`}>
       {empData.firstName} {empData.lastName}
     </a>,
+    empData.email,
     <a
       key={index}
       href={`/employee_record/${empData._id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
@@ -212,7 +214,11 @@ const Employee: React.FC = () => {
           <div className="w-fit">
             <Toaster reverseOrder={false} />
             {!empIdForUpload && (
-              <Register isOpen={isModalOpen} onClose={closeModal}>
+              <Register
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                refetchData={GetEmployeeListDataRefetch}
+              >
                 {empId && <Calendar data={empId} />}
                 {empIdForUpload && <UploadDWR data={empIdForUpload} />}
                 {/* {!empIdForUpload && (

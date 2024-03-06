@@ -30,7 +30,6 @@ export const usePutEmployeeSalaryDeatilsById = () => {
     }) => {
       const updateSalary = await PutEmployeeSalaryDeatilsById(id, salaryData);
       return updateSalary;
-    },
-    {}
+    }
   );
 };

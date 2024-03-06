@@ -11,5 +11,13 @@ export const Endpoint = {
     Put_SalaryDeatilsById: `${API_URL}/employee-salary/update/{id}`,
     Get_SalaryDeatilsById: `${API_URL}/employee-salary/{id}`,
     Get_employeeAdressById: `${API_URL}/employee-address/{addressType}/{id}`,
+    Put_EmployeeAdressById: `${API_URL}/employee-address/{addressType}/{id}`,
+    Post_Register: `${API_URL}/employee/add`,
+    Get_DocumentList: `${API_URL}/employee-document/list/{id}`,
+    Post_Document: `${API_URL}/employee-document/add`,
+    Put_Document: `${API_URL}/employee-document/{id}`,
+    Get_EductionList: `${API_URL}/educational-details/list/{id}`,
+    Post_Eduction: `${API_URL}/educational-details/save`,
+    Put_Eduction: `${API_URL}/educational-details/delete/{id}`,
   },
 };

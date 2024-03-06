@@ -10,6 +10,16 @@ interface EmployeeData {
   role: string;
   reporting: string;
 }
+interface EmployeeRegisterData {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  confirmPassword: string;
+  reporting: string;
+  password: string;
+}
 
 export const GetEmployeeList = async () => {
   const url = Endpoint.Employee.Get_list;
@@ -49,6 +59,17 @@ export const PutEmployeeById = async (
   } catch (error) {
     // Handle errors
     console.error("Error in updateEmployeeById:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};
+export const PostEmployeeRegister = async (data: EmployeeRegisterData) => {
+  const url = Endpoint.Employee.Post_Register;
+  try {
+    const response = await axios.post(url, data);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error in post Employee By Id:", error);
     throw error; // Re-throw the error for the caller to handle
   }
 };

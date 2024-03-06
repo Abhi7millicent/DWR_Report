@@ -13,66 +13,27 @@ import InputField from "../../InputField/InputField";
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { fetchAddressDataSuccess } from "../../../features/appointmentLetterSlice";
 import {
-  fetchDataStart,
-  fetchAddressDataSuccess,
-  fetchDataFailure,
-} from "../../../features/appointmentLetterSlice";
-import { useGetEmployeeAdressById } from "../../../hook/querie/useEmployeeAddress";
-
-// interface PermanentAddressDetails {
-//   addressLine1: string;
-//   addressLine2: string;
-//   pinCode: string;
-//   city: string;
-//   state: string;
-//   country: string;
-//   contactno1: string;
-//   contactno2: string;
-// }
-// interface TemporaryAddressDetails {
-//   addressLine1: string;
-//   addressLine2: string;
-//   pinCode: string;
-//   city: string;
-//   state: string;
-//   country: string;
-//   contactno1: string;
-//   contactno2: string;
-// }
+  useGetEmployeeAdressById,
+  usePutEmployeeAddressById,
+} from "../../../hook/querie/useEmployeeAddress";
 
 const ViewAddressDetails: React.FC = () => {
   const { id } = useParams();
 
-  // State for permanent address
-  // const [permanentAddress, setPermanentAddress] = useState<AddressDetails>({
-  //   addressLine1: "",
-  //   addressLine2: "",
-  //   pinCode: "",
-  //   city: "",
-  //   temporaryState: "",
-  //   country: "",
-  //   contactno1: "",
-  //   contactno2: "",
-  // });
-  // const [temporaryAddress, setTemporaryAddress] = useState<AddressDetails>({
-  //   addressLine1: "",
-  //   addressLine2: "",
-  //   pinCode: "",
-  //   city: "",
-  //   state: "",
-  //   country: "",
-  //   contactno1: "",
-  //   contactno2: "",
-  // });
   const { data: GetEmployeeAdressByIdTemporaryData } = useGetEmployeeAdressById(
-    String(id),
-    "Temporary"
+    "Temporary",
+    String(id)
   );
   const { data: GetEmployeeAdressByIdPermanentData } = useGetEmployeeAdressById(
-    String(id),
-    "Permanent"
+    "Permanent",
+    String(id)
   );
+  const { mutateAsync: PutEmployeeAddressTemporaryById } =
+    usePutEmployeeAddressById();
+  const { mutateAsync: PutEmployeeAddressPermanentById } =
+    usePutEmployeeAddressById();
 
   const {
     formState: { errors },
@@ -183,18 +144,13 @@ const ViewAddressDetails: React.FC = () => {
     };
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/DWR/addressDetails/update/${"Permanent"}/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(savePermanentData),
-        }
-      );
+      const response = await PutEmployeeAddressPermanentById({
+        data: savePermanentData,
+        addressType: "Permanent",
+        id: String(id),
+      });
 
-      if (response.ok) {
+      if (response) {
         // alert("Employee details updated successfully!");
         toast.success("Address updated successfully!", {
           position: "top-center",
@@ -220,29 +176,6 @@ const ViewAddressDetails: React.FC = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-    // fetch(
-    //   `http://localhost:8080/api/DWR/addressDetails/update/${"Permanent"}/${id}`,
-    //   {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       // Add any other headers as needed
-    //     },
-    //     body: JSON.stringify(permanentAddress),
-    //   }
-    // )
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("Network response was not ok");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log("Permanent address details saved:", data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error saving permanent address:", error);
-    //   });
   };
 
   const onSubmitTemporary = async (data: any) => {
@@ -259,18 +192,13 @@ const ViewAddressDetails: React.FC = () => {
     };
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/DWR/addressDetails/update/${"Temporary"}/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(saveTemporaryData),
-        }
-      );
+      const response = await PutEmployeeAddressTemporaryById({
+        data: saveTemporaryData,
+        addressType: "Temporary",
+        id: String(id),
+      });
 
-      if (response.ok) {
+      if (response) {
         // alert("Employee details updated successfully!");
         toast.success("Address updated successfully!", {
           position: "top-center",
@@ -296,28 +224,6 @@ const ViewAddressDetails: React.FC = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-    //   `http://localhost:8080/api/DWR/addressDetails/update/${"Temporary"}/${id}`,
-    //   {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       // Add any other headers as needed
-    //     },
-    //     body: JSON.stringify(temporaryAddress),
-    //   }
-    // )
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("Network response was not ok");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log("Permanent address details saved:", data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error saving permanent address:", error);
-    //   });
   };
 
   return (

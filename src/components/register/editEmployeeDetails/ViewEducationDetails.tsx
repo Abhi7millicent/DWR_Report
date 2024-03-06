@@ -5,12 +5,16 @@ import { useParams } from "react-router";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CommonTable from "../../../layout/commonTable/CommonTable";
 import EducationDetails from "./EducationDetails";
-import axios from "axios";
+
 import toast, { Toaster } from "react-hot-toast";
-import { Button } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
+import {
+  useGetEmployeeEductionList,
+  usePutEmployeeEduction,
+} from "../../../hook/querie/useEmployeeEduction";
 
 interface EducationalData {
-  id: number;
+  _id: string;
   degree: string;
   institute: string;
   startDate: string;
@@ -18,46 +22,77 @@ interface EducationalData {
   percentage: string;
 }
 
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "none",
+  boxShadow: 24,
+  p: 3,
+  borderRadius: 2,
+};
 const ViewEducationDetails = () => {
   const { id } = useParams();
   const [data, setData] = useState<EducationalData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get<EducationalData[]>(
-        `http://localhost:8080/api/DWR/educationalDetails/list/${id}`
-      );
-      console.log("documentData:", response.data);
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching employee data:", error);
-    }
-  };
+  const [deleteEductionId, setDeleteEductionId] = useState("");
+  const [open, setOpen] = useState(false);
+  const {
+    data: GetEmployeeEductionList,
+    refetch: GetEmployeeEductionListRefetch,
+  } = useGetEmployeeEductionList(String(id));
+  const { mutateAsync: PutEmployeeEduction } = usePutEmployeeEduction();
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get<EducationalData[]>(
+  //       `http://localhost:8080/api/DWR/educationalDetails/list/${id}`
+  //     );
+  //     console.log("documentData:", response.data);
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching employee data:", error);
+  //   }
+  // };
 
   useEffect(() => {
-    fetchData();
-  }, [id]);
+    setData(GetEmployeeEductionList?.data);
+  }, [GetEmployeeEductionList]);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleDeleteClick = async () => {
+    const deleteEduction = {
+      deleteFlag: true,
+    };
 
-  const handleDeleteClick = async (eduid: number) => {
     try {
-      await axios.put(
-        `http://localhost:8080/api/DWR/educationalDetails/delete/${eduid}`
-      );
-      // alert("Deleted sucessfully");
-      toast.success("Education deleted sucessfully", {
-        position: "top-center",
-        style: {
-          fontFamily: "var( --font-family)",
-          fontSize: "14px",
-        },
-        iconTheme: {
-          primary: "var(--primary-color)",
-          secondary: "#fff",
-        },
+      const response = await PutEmployeeEduction({
+        id: deleteEductionId,
+        data: deleteEduction,
       });
-      console.log("Deleted educational detail with ID:", eduid);
-      fetchData(); // Refresh the data after deletion
+      // alert("Deleted sucessfully");
+
+      if (response) {
+        toast.success("Education deleted sucessfully", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+        handleClose();
+        GetEmployeeEductionListRefetch();
+      } else {
+        toast.error("Delete  failed. Please try again.", {
+          position: "top-center",
+        });
+      }
     } catch (error) {
       console.error("Error deleting educational detail:", error);
     }
@@ -73,7 +108,7 @@ const ViewEducationDetails = () => {
     { accessorKey: "6", header: "Delete", size: 30 },
   ];
 
-  const tableBody = data.map((educationalData, index) => [
+  const tableBody = data?.map((educationalData, index) => [
     index + 1,
     educationalData.degree,
     educationalData.institute,
@@ -82,7 +117,10 @@ const ViewEducationDetails = () => {
     educationalData.percentage,
     <a
       key={`delete-${index}`}
-      onClick={() => handleDeleteClick(educationalData.id)}
+      onClick={() => {
+        handleOpen();
+        setDeleteEductionId(educationalData?._id);
+      }}
     >
       <DeleteIcon fontSize="small" className="text-red-600 cursor-pointer" />
     </a>,
@@ -92,7 +130,6 @@ const ViewEducationDetails = () => {
   };
   const closeModal = () => {
     setIsModalOpen(false);
-    fetchData();
   };
   return (
     <div className="p-4">
@@ -112,10 +149,54 @@ const ViewEducationDetails = () => {
           <div className="w-fit">
             {/* <CommonModal isOpen={isModalOpen} onClose={closeModal}> */}
             <Toaster position="top-center" reverseOrder={false} />
-            <EducationDetails isOpen={isModalOpen} onClose={closeModal} />
+            <EducationDetails
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              refetchData={GetEmployeeEductionListRefetch}
+            />
             {/* </CommonModal> */}
           </div>
         </div>
+      </div>
+      <div>
+        {/* <Button onClick={handleOpen}>Open modal</Button> */}
+        <Modal
+          open={open}
+          // onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Eduction Delete
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2, ml: 2 }}>
+              Are you sure to delete the eduction?
+            </Typography>
+            <div className="flex justify-between mt-7">
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#fff !important",
+                  color: "var( --primary-color) !important",
+                  border: "2px solid var( --primary-color) !important",
+                }}
+                onClick={handleClose}
+              >
+                close
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ mr: 5 }}
+                onClick={handleDeleteClick}
+              >
+                Confirm
+              </Button>
+            </div>
+          </Box>
+        </Modal>
       </div>
     </div>
   );

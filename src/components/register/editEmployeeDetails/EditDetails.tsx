@@ -72,8 +72,6 @@ const EditDetails: React.FC = () => {
   // const params = useParams();
   const dispatch = useDispatch();
 
-  console.log("iddadasdas", typeof id);
-
   // const employeeId = id ? id : "";
 
   const {
