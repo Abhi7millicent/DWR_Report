@@ -1,12 +1,10 @@
-import TextField from "@mui/material/TextField";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import { InputLabelProps } from "@mui/material/InputLabel";
 
-interface InputValue {
+interface InputValue extends Omit<TextFieldProps, "InputLabelProps"> {
   label: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type: string;
-  name: string;
-  placeholder: string;
+  InputLabelProps?: InputLabelProps; // Making InputLabelProps optional
 }
 
 const InputField: React.FC<InputValue> = ({
@@ -16,6 +14,7 @@ const InputField: React.FC<InputValue> = ({
   type,
   name,
   placeholder,
+  InputLabelProps,
 }) => {
   return (
     <TextField
@@ -27,6 +26,7 @@ const InputField: React.FC<InputValue> = ({
       name={name}
       placeholder={placeholder}
       fullWidth
+      InputLabelProps={type === "date" ? { shrink: true } : undefined} // Conditionally apply shrink
       sx={{
         "& .MuiInputLabel-root": {
           color: "var(--primary-color) !important",

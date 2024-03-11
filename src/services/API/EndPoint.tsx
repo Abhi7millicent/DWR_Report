@@ -23,4 +23,8 @@ export const Endpoint = {
     Put_Eduction: `${API_URL}/educational-details/delete/{id}`,
     Post_UpdateLetter: `${API_URL}/letter/{type}`,
   },
+  Leave: {
+    Post_ById: `${API_URL}/leave-management/add`,
+    Get_ById: `${API_URL}/leave-management/list/{id}`,
+  },
 };
