@@ -19,7 +19,6 @@ export const GetEmployeeAdressById = async (
   const url = parseTemplate(Endpoint.Employee.Get_AdressByEmployeeId).expand({
     id,
     addressType,
-    id,
   });
   try {
     const response = await axios.get(url);

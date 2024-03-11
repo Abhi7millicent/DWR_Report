@@ -21,5 +21,6 @@ export const Endpoint = {
     Get_EductionList: `${API_URL}/educational-details/list/{id}`,
     Post_Eduction: `${API_URL}/educational-details/save`,
     Put_Eduction: `${API_URL}/educational-details/delete/{id}`,
+    Post_UpdateLetter: `${API_URL}/letter/{type}`,
   },
 };

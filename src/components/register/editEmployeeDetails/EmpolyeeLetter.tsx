@@ -284,14 +284,14 @@ const EmployeeLetter: React.FC = () => {
   const downloadAppointmentLetter = () => {
     // Define the data object to be sent in the request body
     const requestData = {
-      date: date,
-      referanceNo: watch("referenceNo"),
-      name: name,
-      address1: address1,
-      address2: address2,
-      position: employeeData?.role,
-      annualy: employeeData?.annualSalary,
-      monthly: employeeData?.monthlySalary,
+      "{DATE}": date,
+      "{REFERENCENO}": watch("referenceNo"),
+      "{NAME}": name,
+      "{ADDRESS1}": address1,
+      "{ADDRESS2}": address2,
+      "{POSITION}": employeeData?.role,
+      "{ANNUALY}": employeeData?.annualSalary,
+      "{MONTHLY}": employeeData?.monthlySalary,
     };
 
     // Make a POST request using Axios and send data in the request body
