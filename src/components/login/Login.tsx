@@ -57,7 +57,7 @@ const Login: React.FC = () => {
         if (response.role === "admin") {
           navigate("/employee");
         } else if (response.role === "softwareEngineer") {
-          navigate("/employee");
+          navigate("/attendance/:id");
         }
         setLoading(false);
       } else {

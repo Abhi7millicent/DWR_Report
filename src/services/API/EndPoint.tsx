@@ -22,4 +22,8 @@ export const Endpoint = {
     Post_Eduction: `${API_URL}/educational-details/save`,
     Put_Eduction: `${API_URL}/educational-details/delete/{id}`,
   },
+  Leave: {
+    Post_ById: `${API_URL}/leave-management/add`,
+    Get_ById: `${API_URL}/leave-management/list/{id}`,
+  },
 };

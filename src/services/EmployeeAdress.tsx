@@ -17,7 +17,6 @@ export const GetEmployeeAdressById = async (
   id: string
 ) => {
   const url = parseTemplate(Endpoint.Employee.Get_AdressByEmployeeId).expand({
-    id,
     addressType,
     id,
   });

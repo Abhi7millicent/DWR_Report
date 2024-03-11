@@ -7,6 +7,9 @@ import { useParams } from "react-router";
 import { Button } from "@mui/material";
 import { Toaster } from "react-hot-toast";
 import { GetSessionItem } from "../../utils/SessionStorage";
+import { useGetLeaveMangement } from "../../hook/querie/useLeaveMangement";
+
+import "./applyLeave.css";
 
 interface appliedleaveData {
   id: number;
@@ -25,7 +28,8 @@ const ViewAppliedLeave = () => {
   const { idp } = useParams();
 
   let id = GetSessionItem("id");
-
+  const { data: GetLeaveMangementData, refetch: GetLeaveMangementDataRefetch } =
+    useGetLeaveMangement(String(id));
   if (id === idp) {
     id = idp;
   }
@@ -43,44 +47,32 @@ const ViewAppliedLeave = () => {
       console.error("Error fetching data:", error);
     }
   };
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/DWR/leavemanagement/list/${id}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const jsonData = await response.json();
-      setData(jsonData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   useEffect(() => {
     fetchBalancedLeave();
-    fetchData();
-  }, [id]); // Fetch data whenever id changes
+    setData(GetLeaveMangementData?.data);
+  }, [GetLeaveMangementData]); // Fetch data whenever id changes
 
   const tableHead: MRT_ColumnDef<any>[] = [
-    { accessorKey: "0", header: "Sr.No", size: 30 },
-    { accessorKey: "1", header: "Leave Type" },
+    { accessorKey: "0", header: "Sr.No", size: 10 },
+    { accessorKey: "1", header: "Leave Type", size: 20 },
     { accessorKey: "2", header: "Description" },
-    { accessorKey: "3", header: "Start Date" },
-    { accessorKey: "4", header: "End Date" },
-    { accessorKey: "5", header: "No.Days" },
+    { accessorKey: "3", header: "Start Date", size: 15 },
+    { accessorKey: "4", header: "End Date", size: 20 },
+    { accessorKey: "5", header: "No.Days", size: 20 },
     { accessorKey: "6", header: "Status" },
   ];
 
-  const tableBody = data.map((appliedLeaveData, index) => [
+  const tableBody = data?.map((appliedLeaveData, index) => [
     index + 1,
     appliedLeaveData.leaveType,
     appliedLeaveData.description,
     appliedLeaveData.startDate,
     appliedLeaveData.endDate,
     appliedLeaveData.noOfDays,
-    appliedLeaveData.status,
+    <span className={`status-${appliedLeaveData.status.toLowerCase()}`}>
+      {appliedLeaveData.status}
+    </span>,
   ]);
 
   const openModal = () => {
@@ -89,7 +81,6 @@ const ViewAppliedLeave = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    fetchData();
   };
 
   return (
@@ -98,24 +89,9 @@ const ViewAppliedLeave = () => {
         <div className="bg-white p-8 shadow-md rounded-md w-full">
           <div className="flex justify-between">
             <h2 className="text-1xl font-semibold mb-4">Apply Leave</h2>
-            <a>
-              {/* <ControlPointRoundedIcon
-                fontSize="large"
-                className="text-green-600"
-              /> */}
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={openModal}
-                // sx={{
-                //   "&.MuiButton-root": {
-                //     margin: "0px !important",
-                //   },
-                // }}
-              >
-                Add Leave
-              </Button>
-            </a>
+            <Button variant="contained" color="primary" onClick={openModal}>
+              Add Leave
+            </Button>
           </div>
           <div>
             <p>Balanced Leave: {balancedLeave}</p>
@@ -130,6 +106,7 @@ const ViewAppliedLeave = () => {
               balanced={balancedLeave}
               isOpen={isModalOpen}
               onClose={closeModal}
+              refetchData={GetLeaveMangementDataRefetch}
             />
             {/* </CommonModal> */}
           </div>
