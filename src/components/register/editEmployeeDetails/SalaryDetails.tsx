@@ -129,7 +129,7 @@ const SalaryDetails: React.FC = () => {
       bankAccountName: data.bankAccountName,
       ifscCode: data.ifscCode,
       accountNo: data.accountNo,
-      uan: data.uan,
+      uanNo: data.uan,
       epfoNo: data.epfoNo,
       panNo: data.panNo,
       annualSalary: data.annualSalary,
@@ -211,7 +211,7 @@ const SalaryDetails: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("ifscCode")}
                   render={({ field: { onChange, value } }) => (
@@ -237,7 +237,7 @@ const SalaryDetails: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("accountNo")}
                   render={({ field: { onChange, value } }) => (
@@ -263,7 +263,7 @@ const SalaryDetails: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("uan")}
                   render={({ field: { onChange, value } }) => (
@@ -289,7 +289,7 @@ const SalaryDetails: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("epfoNo")}
                   render={({ field: { onChange, value } }) => (
@@ -315,7 +315,7 @@ const SalaryDetails: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("panNo")}
                   render={({ field: { onChange, value } }) => (
@@ -341,7 +341,7 @@ const SalaryDetails: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("annualSalary")}
                   render={({ field: { onChange, value } }) => (
@@ -368,7 +368,7 @@ const SalaryDetails: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("monthlySalary")}
                   render={({ field: { onChange, value } }) => (

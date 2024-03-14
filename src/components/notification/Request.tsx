@@ -4,10 +4,16 @@ import CommonTable from "../../layout/commonTable/CommonTable";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import Tooltip from "@mui/material/Tooltip";
-import axios from "axios";
+
+import {
+  useGetAllRequestLeave,
+  usePostApproveLeave,
+  usePostRejectLeave,
+} from "../../hook/querie/useLeaveMangement";
+import toast, { Toaster } from "react-hot-toast";
 
 interface requestedData {
-  id: number;
+  _id: string;
   leaveType: string;
   description: string;
   startDate: string;
@@ -16,6 +22,10 @@ interface requestedData {
   status: string;
   balancedLeave: string;
   name: string;
+  employeeId: {
+    firstName: string;
+    lastName: string;
+  };
 }
 
 const Request = () => {
@@ -23,48 +33,60 @@ const Request = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetch("http://localhost:8080/api/DWR/leavemanagement/requestedLeave")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((responseData: requestedData[]) => {
-        setData(responseData);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError("Error fetching data");
-      });
-  }, [loading]);
+  //  React query
 
-  const approveLeave = (id: number) => {
+  const { data: GetAllRequestLeaveData, refetch: GetAllRequestLeaveRefetch } =
+    useGetAllRequestLeave();
+  const { mutateAsync: PostApproveLeave } = usePostApproveLeave();
+  const { mutateAsync: PostRejectLeave } = usePostRejectLeave();
+
+  useEffect(() => {
+    setData(GetAllRequestLeaveData?.data);
+  }, [GetAllRequestLeaveData]);
+
+  const approveLeave = async (id: string) => {
     const confirmed = window.confirm(
       "Are you sure you want to approve this leave?"
     );
+
     if (!confirmed) {
       return; // Do nothing if not confirmed
     }
 
     setLoading(true);
-    axios
-      .post(`http://localhost:8080/api/DWR/leavemanagement/approve/${id}`)
-      .then(() => {
-        console.log("Leave approved for ID:", id);
-        // Optionally, you can update the state or refetch the data here
-      })
-      .catch((error) => {
-        console.error("Error approving leave:", error);
-        setError("Error approving leave");
-      })
-      .finally(() => {
-        setLoading(false);
+
+    try {
+      const response = await PostApproveLeave(id);
+
+      if (response) {
+        toast.success("Leave approved successfully!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+        GetAllRequestLeaveRefetch();
+      }
+
+      console.log("Leave approved for ID:", id);
+      // Optionally, you can update the state or refetch the data here
+    } catch (error) {
+      console.error("Error approving leave:", error);
+      toast.error("Error approving leave!!", {
+        position: "top-center",
       });
+      // setError("Error approving leave");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const rejectLeave = (id: number) => {
+  const rejectLeave = async (id: string) => {
     const confirmed = window.confirm(
       "Are you sure you want to reject this leave?"
     );
@@ -72,19 +94,36 @@ const Request = () => {
       return; // Do nothing if not confirmed
     }
     setLoading(true);
-    axios
-      .post(`http://localhost:8080/api/DWR/leavemanagement/reject/${id}`)
-      .then(() => {
-        console.log("Leave rejected for ID:", id);
-        // Optionally, you can update the state or refetch the data here
-      })
-      .catch((error) => {
-        console.error("Error rejecting leave:", error);
-        setError("Error rejecting leave");
-      })
-      .finally(() => {
-        setLoading(false);
+
+    try {
+      const response = await PostRejectLeave(id);
+
+      if (response) {
+        toast.success("Leave rejected!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+
+        GetAllRequestLeaveRefetch();
+      }
+
+      // Optionally, you can update the state or refetch the data here
+    } catch (error) {
+      console.error("Error approving leave:", error);
+      toast.error("Error reject leave!!", {
+        position: "top-center",
       });
+      // setError("Error approving leave");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [
@@ -100,28 +139,30 @@ const Request = () => {
     { accessorKey: "9", header: "Actions" }, // Action column
   ];
 
-  const tableBody = data.map((appliedLeaveData, index) => [
+  const tableBody = data?.map((appliedLeaveData, index) => [
     index + 1,
-    appliedLeaveData.name,
-    appliedLeaveData.leaveType,
-    appliedLeaveData.description,
-    appliedLeaveData.startDate,
-    appliedLeaveData.endDate,
-    appliedLeaveData.noOfDays,
-    appliedLeaveData.balancedLeave,
+    `${appliedLeaveData.employeeId?.firstName ?? "-"} ${
+      appliedLeaveData.employeeId?.lastName ?? "-"
+    }`,
+    appliedLeaveData.leaveType ? appliedLeaveData.leaveType : "-",
+    appliedLeaveData.description ? appliedLeaveData.description : "-",
+    appliedLeaveData.startDate ? appliedLeaveData.startDate : "-",
+    appliedLeaveData.endDate ? appliedLeaveData.endDate : "-",
+    appliedLeaveData.noOfDays ? appliedLeaveData.noOfDays : "-",
+    appliedLeaveData.balancedLeave ? appliedLeaveData.balancedLeave : "-",
     appliedLeaveData.status,
     // Action buttons for each leave request
     <div>
       {appliedLeaveData.status !== "Approved" && (
         <Tooltip title="Approve">
-          <button onClick={() => approveLeave(appliedLeaveData.id)}>
+          <button onClick={() => approveLeave(appliedLeaveData._id)}>
             <ThumbUpAltIcon style={{ color: "green" }} />
           </button>
         </Tooltip>
       )}
       {appliedLeaveData.status !== "Rejected" && (
         <Tooltip title="Reject">
-          <button onClick={() => rejectLeave(appliedLeaveData.id)}>
+          <button onClick={() => rejectLeave(appliedLeaveData._id)}>
             <ThumbDownAltIcon style={{ color: "red" }} />
           </button>
         </Tooltip>
@@ -137,6 +178,7 @@ const Request = () => {
             <h2 className="text-2xl font-semibold mb-4">Requested Leave</h2>
           </div>
           <div className="mt-4">
+            <Toaster reverseOrder={false} />
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
             {!loading && !error && (

@@ -14,7 +14,7 @@ import {
 } from "../../../hook/querie/useEmployeeEduction";
 
 interface EducationalData {
-  _id: string;
+  id: string;
   degree: string;
   institute: string;
   startDate: string;
@@ -119,7 +119,7 @@ const ViewEducationDetails = () => {
       key={`delete-${index}`}
       onClick={() => {
         handleOpen();
-        setDeleteEductionId(educationalData?._id);
+        setDeleteEductionId(educationalData?.id);
       }}
     >
       <DeleteIcon fontSize="small" className="text-red-600 cursor-pointer" />

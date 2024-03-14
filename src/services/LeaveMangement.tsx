@@ -28,3 +28,43 @@ export const GetLeaveMangement = async (id: string) => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
+
+//  Get All Request Leave
+export const GetAllRequestLeave = async () => {
+  const url = Endpoint.Leave.Get_AllRequestLeave;
+
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error get  all request:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};
+//  Post Approve Leave
+export const PostApproveLeave = async (id: string) => {
+  const url = parseTemplate(Endpoint.Leave.Post_ApproveLeave).expand({ id });
+
+  try {
+    const response = await axios.post(url);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error get  all request:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};
+//  Post Reaject Leave
+export const PostRejectLeave = async (id: string) => {
+  const url = parseTemplate(Endpoint.Leave.Post_RejectLeave).expand({ id });
+
+  try {
+    const response = await axios.post(url);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error get  all request:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};

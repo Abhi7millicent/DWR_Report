@@ -21,9 +21,19 @@ export const Endpoint = {
     Get_EductionList: `${API_URL}/educational-details/list/{id}`,
     Post_Eduction: `${API_URL}/educational-details/save`,
     Put_Eduction: `${API_URL}/educational-details/delete/{id}`,
+    Post_Leave: `${API_URL}/employee/addBalancedLeave`,
   },
   Leave: {
     Post_ById: `${API_URL}/leave-management/add`,
     Get_ById: `${API_URL}/leave-management/list/{id}`,
+    Get_AllRequestLeave: `${API_URL}/leave-management/requestedLeave`,
+    Post_ApproveLeave: `${API_URL}/leave-management/approve/{id}`,
+    Post_RejectLeave: `${API_URL}/leave-management/reject/{id}`,
+  },
+  Email: {
+    Post: `${API_URL}/email/send-mail`,
+  },
+  Letter: {
+    Post_GenerateOfferLetter: `${API_URL}/letter/{type}`,
   },
 };

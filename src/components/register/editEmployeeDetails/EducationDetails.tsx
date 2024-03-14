@@ -70,7 +70,17 @@ const EducationDetails: React.FC<ModalProps> = ({
       console.error("Error submitting form:", error);
     }
   };
-
+  const handleClose = () => {
+    onClose();
+    setEducation({
+      employeeId: "",
+      degree: "",
+      institute: "",
+      startDate: "",
+      endDate: "",
+      percentage: "",
+    });
+  };
   return (
     <div className={`${modalClasses} z-10`}>
       <div className="flex items-center justify-center">
@@ -87,6 +97,7 @@ const EducationDetails: React.FC<ModalProps> = ({
                     type="text"
                     id="degree"
                     name="degree"
+                    value={education.degree}
                     onChange={handleChange}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="Degree*"
@@ -107,6 +118,7 @@ const EducationDetails: React.FC<ModalProps> = ({
                     type="text"
                     id="institute"
                     name="institute"
+                    value={education.institute}
                     onChange={handleChange}
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
                     placeholder="Institute*"
@@ -127,6 +139,7 @@ const EducationDetails: React.FC<ModalProps> = ({
                     type="date"
                     id="startDate"
                     name="startDate"
+                    value={education.startDate}
                     onChange={handleChange}
                     placeholder="Start Date*"
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
@@ -152,6 +165,7 @@ const EducationDetails: React.FC<ModalProps> = ({
                     type="date"
                     id="endDate"
                     name="endDate"
+                    value={education.endDate}
                     onChange={handleChange}
                     placeholder="End Date*"
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
@@ -175,6 +189,7 @@ const EducationDetails: React.FC<ModalProps> = ({
                     type="text"
                     id="percentage"
                     name="percentage"
+                    value={education.percentage}
                     onChange={handleChange}
                     placeholder="Percentage*"
                     className="peer mt-1 p-2 w-full border-b border-blue-400 text-gray-900 focus:outline-none focus:border-blue-400 placeholder-transparent placeholder-shown:border-gray-300"
@@ -190,18 +205,15 @@ const EducationDetails: React.FC<ModalProps> = ({
               </div>
             </div>
 
-            {/* <button
-              type="submit"
-              className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-            >
-              Save
-            </button> */}
-
             <div className="flex justify-between">
               <Button
-                onClick={onClose}
+                onClick={handleClose}
                 variant="contained"
-                sx={{ backgroundColor: "#8a878f !important" }}
+                sx={{
+                  backgroundColor: "#fff !important",
+                  color: "var( --primary-color) !important",
+                  border: "2px solid var( --primary-color) !important",
+                }}
               >
                 close
               </Button>

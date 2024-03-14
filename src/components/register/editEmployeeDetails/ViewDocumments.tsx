@@ -16,7 +16,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
 interface DocumentData {
-  _id: string;
+  id: string;
   documentType: string;
   description: string;
   employeeId: string;
@@ -117,7 +117,7 @@ const ViewDocuments = () => {
 
     <a
       key={`download-${index}`}
-      href={`https://example.com/api/download/${documentData._id}`}
+      href={`https://example.com/api/download/${documentData.id}`}
       download
     >
       <CloudDownloadIcon />
@@ -128,7 +128,7 @@ const ViewDocuments = () => {
         className="text-red-600 cursor-pointer"
         onClick={() => {
           handleOpen();
-          setDeleteDocumentId(documentData?._id);
+          setDeleteDocumentId(documentData?.id);
         }}
       />
     </a>,

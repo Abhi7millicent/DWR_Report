@@ -58,8 +58,7 @@ const PersonalData: React.FC = () => {
       relation2: "",
     },
   });
-  //   const apiEndpoint = `http://localhost:8080/api/DWR/personalData/update/${id}`;
-  // const apiEndpoint = `http://localhost:8080/api/DWR/employeePersonalDetails/update/${id}`;
+
   useEffect(() => {
     // Fetch data from the API and set it to form fields
     const fetchPersonalDetails = async () => {
@@ -82,16 +81,6 @@ const PersonalData: React.FC = () => {
     };
     fetchPersonalDetails();
   }, [GetPersonalDataDetails]);
-
-  // const handleInputChange =
-  //   (field: keyof PersonalDataDetails) =>
-  //   (event: ChangeEvent<HTMLInputElement>) => {
-  //     const value = event.target.value;
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [field]: value,
-  //     }));
-  //   };
 
   const onSubmit = async (data: any) => {
     const personalDetailsData = {
@@ -151,7 +140,7 @@ const PersonalData: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("dateOfBirth")}
                   render={({ field: { onChange, value } }) => (
@@ -177,7 +166,7 @@ const PersonalData: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("bloodGroup")}
                   render={({ field: { onChange, value } }) => (
@@ -203,7 +192,7 @@ const PersonalData: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("emergencyContact1")}
                   render={({ field: { onChange, value } }) => (
@@ -229,13 +218,13 @@ const PersonalData: React.FC = () => {
                 <Controller
                   control={control}
                   rules={{
-                    required: false,
+                    required: true,
                   }}
                   {...register("relation1")}
                   render={({ field: { onChange, value } }) => (
                     <InputField
                       value={value}
-                      type="text"
+                      type="number"
                       label="Relation to Contact No. 1"
                       placeholder="Relation to Contact No. 1"
                       name="relation1"
@@ -287,7 +276,7 @@ const PersonalData: React.FC = () => {
                   render={({ field: { onChange, value } }) => (
                     <InputField
                       value={value}
-                      type="text"
+                      type="number"
                       label="Relation to Contact No. 2"
                       placeholder="Relation to Contact No. 2"
                       name="relation2"

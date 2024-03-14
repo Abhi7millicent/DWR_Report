@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+
 import { SetSessionItem } from "../../utils/SessionStorage";
 import { useNavigate } from "react-router";
 import "../../App.css";
@@ -9,18 +9,27 @@ import { motion } from "framer-motion";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import Icon from "../fontAwesomeIcon/Icon";
 import { usePostLogin } from "../../hook/querie/useLoginQueries";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login: React.FC = () => {
+  //------------------ Const -----------------//
+
+  const navigate = useNavigate();
+
+  //------------------ State -----------------//
+
   const [userId, setUserId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userIdError, setUserIdError] = useState("");
-
   const [passwordError, setPasswordError] = useState("");
 
+  //------------------ React query -----------------//
   const { mutateAsync: PostLogin } = usePostLogin();
-  const navigate = useNavigate();
+
+  //------------------ Handle login submit -----------------//
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -47,8 +56,6 @@ const Login: React.FC = () => {
       console.log(response);
 
       if (response.status === true) {
-        console.log("inside the if");
-
         SetSessionItem("status", response.status.toString());
         SetSessionItem("token", response.token);
         SetSessionItem("role", response.role);
@@ -56,14 +63,17 @@ const Login: React.FC = () => {
         SetSessionItem("name", response.name);
         if (response.role === "admin") {
           navigate("/employee");
-        } else if (response.role === "softwareEngineer") {
-          navigate("/attendance/:id");
+        } else if (response.role === "SoftwareEngineer") {
+          navigate(`/attendance/${response.id}`);
         }
         setLoading(false);
       } else {
         console.log("Invalid credentials");
       }
     } catch (error: any) {
+      toast.error("Invalid credentials!", {
+        position: "top-center",
+      });
       console.error("Error:", error.message);
     } finally {
       setLoading(false); // Reset loading state in both success and error cases
@@ -72,6 +82,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex items-center flex-col justify-center h-screen gap-4 overflow-x-hidden">
+      <Toaster reverseOrder={false} />
       <motion.div
         animate={{ opacity: 1, scale: 1 }}
         initial={{ opacity: 0, scale: 0 }}

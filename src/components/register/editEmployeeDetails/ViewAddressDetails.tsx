@@ -251,7 +251,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("permanentAddressLine1")}
                     render={({ field: { onChange, value } }) => (
@@ -307,7 +307,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("permanentPinCode")}
                     render={({ field: { onChange, value } }) => (
@@ -336,7 +336,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("permanentCity")}
                     render={({ field: { onChange, value } }) => (
@@ -362,7 +362,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("permanentState")}
                     render={({ field: { onChange, value } }) => (
@@ -388,7 +388,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("permanentCountry")}
                     render={({ field: { onChange, value } }) => (
@@ -416,7 +416,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("permanentContactno1")}
                     render={({ field: { onChange, value } }) => (
@@ -494,7 +494,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("temporaryAddressLine1")}
                     render={({ field: { onChange, value } }) => (
@@ -550,7 +550,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("temporaryPinCode")}
                     render={({ field: { onChange, value } }) => (
@@ -578,7 +578,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("temporaryCity")}
                     render={({ field: { onChange, value } }) => (
@@ -604,7 +604,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("temporaryState")}
                     render={({ field: { onChange, value } }) => (
@@ -630,7 +630,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("temporaryCountry")}
                     render={({ field: { onChange, value } }) => (
@@ -658,7 +658,7 @@ const ViewAddressDetails: React.FC = () => {
                   <Controller
                     control={control}
                     rules={{
-                      required: false,
+                      required: true,
                     }}
                     {...register("temporaryContactno1")}
                     render={({ field: { onChange, value } }) => (

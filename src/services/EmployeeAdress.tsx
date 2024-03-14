@@ -41,8 +41,6 @@ export const PutEmployeeAddressById = async (
     id,
   });
 
-  console.log(url, "urlurlurlurl");
-
   try {
     const response = await axios.put(url, data);
     return response.data;

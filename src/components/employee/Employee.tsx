@@ -8,16 +8,19 @@ import Calendar from "../../layout/calendar/Calendar";
 import { MRT_ColumnDef } from "material-react-table";
 import ViewListSharpIcon from "@mui/icons-material/ViewListSharp";
 import WysiwygSharpIcon from "@mui/icons-material/WysiwygSharp";
-import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+
 import UploadDWR from "../../layout/upload/UploadDWR";
 // import Register  from "../register/Register";
 import "../../App.css";
 import Register from "../register/Register";
 import { Button } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
-import { useGetEmployeeList } from "../../hook/querie/useEmployeeQueries";
+import {
+  useGetEmployeeList,
+  usePostEmployeeLeave,
+} from "../../hook/querie/useEmployeeQueries";
 interface empData {
-  _id: string;
+  id: string;
   firstName: string;
   middleName: string;
   lastName: string;
@@ -40,11 +43,11 @@ const Employee: React.FC = () => {
   );
 
   const [employeeData, setEmployeeData] = useState<empData[]>([]);
-
-  console.log(employeeData, "employeeData");
-
+  //React query
   const { data: GetEmployeeListData, refetch: GetEmployeeListDataRefetch } =
     useGetEmployeeList();
+
+  const { mutateAsync: PostEmployeeLeave } = usePostEmployeeLeave();
 
   // const handleDataFromChild = async (data: string) => {
   //   console.log("Data received from child:", data);
@@ -75,28 +78,28 @@ const Employee: React.FC = () => {
 
   const addLeave = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/DWR/updateBalancedLeave"
-      );
+      const response = await PostEmployeeLeave();
 
       // Show response in alert
-      toast.success(response.data, {
-        position: "top-center",
-        style: {
-          fontFamily: "var( --font-family)",
-          fontSize: "14px",
-        },
-        iconTheme: {
-          primary: "var(--primary-color)",
-          secondary: "#fff",
-        },
-      });
+      if (response) {
+        toast.success("Leave Added", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+      }
       // alert(JSON.stringify(responseData));
     } catch (error) {
       // Handle error
       console.error("Error:", error);
       // alert("An error occurred. Please try again later.");
-      toast.success("An error occurred. Please try again later.", {
+      toast.success("Leave already added for the current month.", {
         position: "top-center",
         style: {
           fontFamily: "var( --font-family)",
@@ -123,9 +126,12 @@ const Employee: React.FC = () => {
     },
     // { accessorKey: "1", header: "Employee Id", size: 15 },
     { accessorKey: "2", header: "Employee Name", size: 40 },
-    { accessorKey: "3", header: "Email", size: 15 },
-    { accessorKey: "4", header: "Full View", size: 15 },
-    { accessorKey: "5", header: "Calendar", size: 15 },
+    { accessorKey: "3", header: "Role", size: 40 },
+    { accessorKey: "4", header: "Project Name", size: 40 },
+    { accessorKey: "5", header: "Leave View", size: 40 },
+    // { accessorKey: "3", header: "Email", size: 15 },
+    // { accessorKey: "4", header: "Full View", size: 15 },
+    // { accessorKey: "5", header: "Calendar", size: 15 },
     // { accessorKey: "6", header:   "Upload", size: 15 },
     // ... add the rest of your headers in a similar fashion
   ];
@@ -133,41 +139,41 @@ const Employee: React.FC = () => {
   // const tableHead = ["Sr.No", "Employee Name", "Record", "Calendar"];
   const tableBody = employeeData?.map((empData, index) => [
     index + 1,
-    empData._id,
+    empData.id,
 
-    <a key={index} href={`/editEmployee/${empData._id}`}>
+    <a key={index} href={`/editEmployee/${empData.id}`}>
       {empData.firstName} {empData.lastName}
     </a>,
-    empData.email,
+    empData.role,
     <a
       key={index}
-      href={`/employee_record/${empData._id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
+      href={`/employee_record/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
     >
       <ViewListSharpIcon />
     </a>,
     <a
       key={index}
-      href={`/employee_record_data/${empData._id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
+      href={`/employee_record_data/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
     >
       <WysiwygSharpIcon />
     </a>,
-    <a
-      key={index}
-      href={`/attendance/${empData._id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
-    >
-      <CalendarMonthIcon />
-    </a>,
-    // <button key={index} onClick={() => openModal(empData.id.toString())}>
+    // <a
+    //   key={index}
+    //   href={`/attendance/${empData._id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
+    // >
     //   <CalendarMonthIcon />
-    // </button>,
-    <a>
-      <button
-        key={index}
-        onClick={() => openModalForUpload(empData._id.toString())}
-      >
-        <DriveFolderUploadIcon />
-      </button>
-    </a>,
+    // </a>,
+    <button key={index} onClick={() => openModal(empData.id)}>
+      <CalendarMonthIcon />
+    </button>,
+    // <a>
+    //   <button
+    //     key={index}
+    //     onClick={() => openModalForUpload(empData._id.toString())}
+    //   >
+    //     <DriveFolderUploadIcon />
+    //   </button>
+    // </a>,
   ]);
 
   return (

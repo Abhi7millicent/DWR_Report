@@ -13,7 +13,7 @@ import { useState } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
+
 interface ModelProps {
   isOpen: boolean;
   onClose: () => void;
@@ -33,6 +33,7 @@ type FormData = {
   currentLocation: string;
   hobbies: string;
   reference: string;
+  yearOfExperience: string;
   eductionDeatils: {
     eductionName: string;
     yearOfPassing: string;
@@ -70,6 +71,7 @@ function AddLead({ isOpen, onClose }: ModelProps) {
       currentCTC: "",
       expectedCTC: "",
       experience: "",
+      yearOfExperience: "",
       noticePeriod: "",
       currentLocation: "",
       hobbies: "",
@@ -508,6 +510,36 @@ function AddLead({ isOpen, onClose }: ModelProps) {
                   )}
                 </Box>
               </Grid>
+              {category === "experience" && (
+                <Grid item xs={12} sm={4}>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: false,
+                    }}
+                    {...register("yearOfExperience")}
+                    render={({ field: { onChange, value } }) => (
+                      <InputField
+                        value={value}
+                        type="text"
+                        label="Experience"
+                        placeholder="Experience"
+                        name="yearOfExperience"
+                        aria-invalid={
+                          errors.yearOfExperience ? "true" : "false"
+                        }
+                        onChange={(e) => {
+                          onChange(e);
+                          clearErrors("yearOfExperience");
+                        }}
+                      />
+                    )}
+                  />
+                  {errors.yearOfExperience?.type === "required" && (
+                    <p className="alert">This field is required</p>
+                  )}
+                </Grid>
+              )}
             </Grid>
             <div className="flex gap-3 mt-3">
               <label>Upload Resmune: </label>

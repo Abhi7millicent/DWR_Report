@@ -73,3 +73,14 @@ export const PostEmployeeRegister = async (data: EmployeeRegisterData) => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
+export const PostEmployeeLeave = async () => {
+  const url = Endpoint.Employee.Post_Leave;
+  try {
+    const response = await axios.post(url);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error in post Employee By Id:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};

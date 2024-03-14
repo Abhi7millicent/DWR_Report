@@ -17,38 +17,13 @@ import InputField from "../../InputField/InputField";
 import { useForm, Controller } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import {
-  fetchDataStart,
-  fetchEmployeeDataSuccess,
-  fetchDataFailure,
-} from "../../../features/appointmentLetterSlice";
+import { fetchEmployeeDataSuccess } from "../../../features/appointmentLetterSlice";
 import {
   useGetEmployeeById,
   usePutEmployeeById,
 } from "../../../hook/querie/useEmployeeQueries";
-// interface EmployeeData {
-//   firstName: string;
-//   middleName: string;
-//   lastName: string;
-//   email: string;
-//   role: string;
-//   reporting: string;
-//   loginId: string;
-//   password: string;
-// }
 
 const EditDetails: React.FC = () => {
-  // const [employeeData, setEmployeeData] = useState<EmployeeData>({
-  //   firstName: "",
-  //   middleName: "",
-  //   lastName: "",
-  //   email: "",
-  //   role: "",
-  //   reporting: "",
-  //   loginId: "",
-  //   password: "",
-  // });
-
   const {
     formState: { errors },
     handleSubmit,
@@ -268,7 +243,7 @@ const EditDetails: React.FC = () => {
                     />
                   )}
                 />
-                {errors.middleName?.type === "required" && (
+                {errors.lastName?.type === "required" && (
                   <p className="alert">This field is required</p>
                 )}
               </Grid>

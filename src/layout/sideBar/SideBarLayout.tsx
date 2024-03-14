@@ -91,7 +91,7 @@ const App: React.FC = () => {
   }, []);
 
   const sidebarItems: MenuItem[] =
-    employeeRole === "softwareEngineer"
+    employeeRole === "SoftwareEngineer"
       ? [
           getItem("Dashboard", "dashboard", <PieChartOutlined />),
           getItem(

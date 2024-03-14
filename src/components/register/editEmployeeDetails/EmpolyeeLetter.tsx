@@ -21,7 +21,10 @@ import {
 
 import loginBackground from "../../../assets/logo-color.png";
 import axios from "axios";
-
+import { usePostEmail } from "../../../hook/querie/useEmail";
+import toast, { Toaster } from "react-hot-toast";
+import { usePostGenerateOfferLetter } from "../../../hook/querie/useLetter";
+import { PDFDocument } from "pdf-lib";
 interface IAppointmentLetter {
   letter: string;
   referenceNo: string;
@@ -154,6 +157,7 @@ const EmployeeLetter: React.FC = () => {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [appointmentLetter, setAppointmentLetter] = useState<Blob | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [contentData, setContentData] = useState<AppointmentLetterData>({
     paragraph1: "",
     paragraph2: "",
@@ -163,6 +167,9 @@ const EmployeeLetter: React.FC = () => {
   });
 
   const currentDate = new Date();
+  //------------------------ React Query ----------------------//
+  const { mutateAsync: PostEmail } = usePostEmail();
+  const { mutateAsync: PostGenerateOfferLetter } = usePostGenerateOfferLetter();
 
   useEffect(() => {
     const day = ("0" + currentDate.getDate()).slice(-2);
@@ -206,8 +213,37 @@ const EmployeeLetter: React.FC = () => {
     console.log("employeeData:", employeeData);
   }, [employeeData]);
 
-  const handleLetterSubmit = (data: any) => {
-    console.log(data);
+  const handleLetterSubmit = async (data: IAppointmentLetter) => {
+    let emailData = {
+      email: employeeData?.email,
+      name: employeeData?.firstName,
+      subject: data.letter,
+      body: data.mailContext,
+      file: signature,
+    };
+
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(emailData)) {
+      formData.append(key, value as string); // Ensure `value` is treated as string
+    }
+
+    try {
+      const response = await PostEmail(formData);
+
+      if (response) {
+        toast.success("Employee letter send successfull!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+      }
+    } catch (error) {}
   };
 
   // useEffect(() => {
@@ -281,29 +317,78 @@ const EmployeeLetter: React.FC = () => {
   //   })();
   // }, [watch("letter"), signature]);
 
-  const downloadAppointmentLetter = () => {
-    // Define the data object to be sent in the request body
-    const requestData = {
-      date: date,
-      referanceNo: watch("referenceNo"),
-      name: name,
-      address1: address1,
-      address2: address2,
-      position: employeeData?.role,
-      annualy: employeeData?.annualSalary,
-      monthly: employeeData?.monthlySalary,
-    };
+  // const downloadAppointmentLetter = () => {
+  //   // Define the data object to be sent in the request body
+  //   const requestData = {
+  //     date: date,
+  //     referanceNo: watch("referenceNo"),
+  //     name: name,
+  //     address1: address1,
+  //     address2: address2,
+  //     position: employeeData?.role,
+  //     annualy: employeeData?.annualSalary,
+  //     monthly: employeeData?.monthlySalary,
+  //   };
 
-    // Make a POST request using Axios and send data in the request body
-    axios({
-      method: "post", // Assuming you want to send a POST request
-      url: "http://localhost:8080/api/DWR/appointmentletter/download/1",
-      data: requestData, // Send data in the request body
-      responseType: "blob", // Set the response type to blob
-    })
-      .then((response) => {
-        // Create a blob object from the response data
-        const blob = new Blob([response.data], { type: "application/docx" });
+  // Make a POST request using Axios and send data in the request body
+  // axios({
+  //   method: "post", // Assuming you want to send a POST request
+  //   url: "http://localhost:8080/api/DWR/appointmentletter/download/1",
+  //   data: requestData, // Send data in the request body
+  //   responseType: "blob", // Set the response type to blob
+  // })
+  //     .then((response) => {
+  //       // Create a blob object from the response data
+  //       const blob = new Blob([response.data], { type: "application/docx" });
+
+  //       // Create a URL for the blob object
+  //       const url = window.URL.createObjectURL(blob);
+
+  //       // Create a link element
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = "appointment_letter.docx"; // Set the download attribute
+
+  //       // Append the link to the document body and trigger the click event to initiate download
+  //       document.body.appendChild(a);
+  //       a.click();
+
+  //       // Clean up by revoking the URL object
+  //       window.URL.revokeObjectURL(url);
+  //     })
+  //     .catch((error) => {
+  //       // Handle errors
+  //       console.error("Error downloading appointment letter:", error);
+  //     });
+  // };
+
+  const handleGenerateOfferLetter = async (data: IAppointmentLetter) => {
+    let letter = data.letter;
+    let letterData = {
+      "{DATE}": date,
+      "{REFERENCENO}": data.referenceNo,
+      "{NAME}": employeeData?.firstName,
+      "{ADDRESS1}": employeeData?.addressLine1
+        ? employeeData?.addressLine1
+        : "",
+      "{ADDRESS2}": employeeData?.addressLine2
+        ? employeeData?.addressLine2
+        : "",
+      "{POSITION}": employeeData?.role,
+      "{ANNUALY}": employeeData?.annualSalary,
+      "{MONTHLY}": employeeData?.monthlySalary,
+    };
+    console.log(letterData, "letterData");
+
+    try {
+      const response = await PostGenerateOfferLetter({
+        type: letter,
+        data: letterData,
+      });
+      console.log(response, "response");
+
+      if (response) {
+        const blob = new Blob([response], { type: "application/docx" });
 
         // Create a URL for the blob object
         const url = window.URL.createObjectURL(blob);
@@ -319,15 +404,13 @@ const EmployeeLetter: React.FC = () => {
 
         // Clean up by revoking the URL object
         window.URL.revokeObjectURL(url);
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error("Error downloading appointment letter:", error);
-      });
+      }
+    } catch (error) {}
   };
 
   return (
     <div className="flex  mt-3 justify-center">
+      <Toaster reverseOrder={false} />
       <div className="bg-white p-8 shadow-md rounded-md w-full">
         <h2 className="text-2xl font-semibold mb-4"> Letter</h2>
         <form onSubmit={handleSubmit(handleLetterSubmit)}>
@@ -486,10 +569,12 @@ const EmployeeLetter: React.FC = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={downloadAppointmentLetter}
+              type="submit"
+              onClick={handleSubmit(handleGenerateOfferLetter)}
             >
               Generate offer letter
             </Button>
+
             <Button variant="contained" color="primary" type="submit">
               Send mail
             </Button>
