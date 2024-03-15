@@ -163,7 +163,7 @@ const Employee: React.FC = () => {
     // >
     //   <CalendarMonthIcon />
     // </a>,
-    <button key={index} onClick={() => openModal(empData.id)}>
+    <button key={index} onClick={() => openModal()}>
       <CalendarMonthIcon />
     </button>,
     // <a>
