@@ -180,7 +180,7 @@ const ProjectView = () => {
       </div>
       <div className="w-fit">
         <Toaster reverseOrder={false} />
-        <CommonModal isOpen={isModalOpen}>
+        <CommonModal isOpen={isModalOpen} onClose={closeModal}>
           {modalView === "" && <AddProject onClose={closeModal} />}
           {modalView !== "" && <AddTask data={data} onClose={closeModal} />}
         </CommonModal>

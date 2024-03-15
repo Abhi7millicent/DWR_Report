@@ -137,3 +137,11 @@
 // };
 
 // export default EmployeeRecord;
+
+import React from "react";
+
+const EmployeeRecord = () => {
+  return <div></div>;
+};
+
+export default EmployeeRecord;
