@@ -14,6 +14,7 @@ import {
   fetchDataSuccess,
   fetchDataFailure,
 } from "../../features/attendanceSlice";
+import { useGetDWRList } from "../../hook/querie/useDWR";
 
 interface empRecordsData {
   id: number;
@@ -63,6 +64,8 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
     setTodaysDate(formattedDate1);
   }, [currentDate]);
 
+  // -------------------- React query  ------------------//
+  const { data: GetDWRListData } = useGetDWRList(String(id), selectedDate);
   const fetchSelectedDateData = async () => {
     dispatch(fetchDataStart());
     try {
@@ -96,58 +99,62 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
   //   fetchSelectedDateData();
   // }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8080/api/DWR/employeeRecordData/list/${id}/${selectedDate}`
+  //       );
+
+  //       setEmployeeRecordsData(response.data);
+  //       console.log("data", response.data);
+  //     } catch (error) {
+  //       if (axios.isCancel(error)) {
+  //         // Request was canceled
+  //         console.log("Request canceled:", error.message);
+  //       } else {
+  //         // Handle other errors
+  //         console.error("Error fetching employee data:");
+  //       }
+  //     }
+  //   };
+
+  //   const source = axios.CancelToken.source();
+
+  //   fetchData();
+  //   fetchSelectedDateData();
+  //   // Cleanup function to cancel the request if the component unmounts
+  //   return () => {
+  //     source.cancel("Component is unmounting");
+  //   };
+  // }, [id, selectedDate]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/DWR/employeeRecordData/list/${id}/${selectedDate}`
-        );
-
-        setEmployeeRecordsData(response.data);
-        console.log("data", response.data);
-      } catch (error) {
-        if (axios.isCancel(error)) {
-          // Request was canceled
-          console.log("Request canceled:", error.message);
-        } else {
-          // Handle other errors
-          console.error("Error fetching employee data:");
-        }
-      }
-    };
-
-    const source = axios.CancelToken.source();
-
-    fetchData();
-    fetchSelectedDateData();
-    // Cleanup function to cancel the request if the component unmounts
-    return () => {
-      source.cancel("Component is unmounting");
-    };
-  }, [id, selectedDate]);
+    setEmployeeRecordsData(GetDWRListData?.data);
+  }, [GetDWRListData]);
 
   const tableHead: MRT_ColumnDef<any>[] = [
-    { accessorKey: "0", header: "Sr.No" },
-    { accessorKey: "1", header: "From Time" },
-    { accessorKey: "2", header: "To Time" },
-    { accessorKey: "3", header: "Project Name" },
-    { accessorKey: "4", header: "Issue/Support/TaskDescription" },
-    { accessorKey: "5", header: "Reported By/Allocated by" },
-    { accessorKey: "6", header: "Bug/New/Change/Support" },
-    { accessorKey: "7", header: "Resolved On/Completed On" },
+    { accessorKey: "0", header: "Sr.No", size: 20 },
+    { accessorKey: "1", header: "From Time", size: 50 },
+    { accessorKey: "2", header: "To Time", size: 50 },
+    { accessorKey: "3", header: "Project Name", size: 50 },
+    { accessorKey: "4", header: "Issue/Support/TaskDescription", size: 50 },
+    { accessorKey: "5", header: "Reported By/Allocated by", size: 50 },
+    { accessorKey: "6", header: "Bug/New/Change/Support", size: 50 },
+    { accessorKey: "7", header: "Resolved On/Completed On", size: 50 },
     { accessorKey: "8", header: "Comment Solution" },
   ];
 
-  const tableBody = employeeRecordsData.map((record, index) => ({
+  const tableBody = employeeRecordsData?.map((record, index) => ({
     "0": (index + 1).toString(),
-    "1": record.fromTime,
-    "2": record.toTime,
-    "3": record.projectName,
-    "4": record.taskDiscription,
-    "5": record.reportedBy,
-    "6": record.ticketType,
-    "7": record.status,
-    "8": record.solution,
+    "1": record.fromTime || "-",
+    "2": record.toTime || "-",
+    "3": record.projectName || "-",
+    "4": record.taskDiscription || "-",
+    "5": record.reportedBy || "-",
+    "6": record.ticketType || "-",
+    "7": record.status || "-",
+    "8": record.solution || "-",
   }));
 
   const handleToggleStart = async (e: any) => {
@@ -221,8 +228,8 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
             <h2 className="text-2xl font-semibold mb-4">
               {currentDate.toDateString()}
             </h2>
-            <div>
-              {/* Toggle button for start/end */}
+            {/* <div>
+
               {isStart && selectedDate === todaysDate && !startTime && (
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-lg"
@@ -239,7 +246,7 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
                   End
                 </button>
               )}
-            </div>
+            </div> */}
           </div>
 
           <div className="py-4">

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+
 import { employeeIdData } from "../../components/employee/Employee";
 import { CloudUploadOutlined } from "@ant-design/icons";
 import { useParams } from "react-router";
+import { usePostDWR } from "../../hook/querie/useDWR";
+import toast, { Toaster } from "react-hot-toast";
+import { Button } from "@mui/material";
 
 type Props = {
   data: employeeIdData | null; // Adjusted to accept null
@@ -14,6 +17,8 @@ const UploadDWR = (props: Props) => {
   const [dragging, setDragging] = useState<boolean>(false);
   const { id } = useParams();
 
+  const { mutateAsync: PostDWRData } = usePostDWR();
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
@@ -21,31 +26,36 @@ const UploadDWR = (props: Props) => {
   };
 
   const handleUpload = async () => {
-    console.log("data:", data);
     if (file) {
       // Ensure both file and data are not null
+      const formData = new FormData();
+      formData.append("file", file);
       try {
-        const formData = new FormData();
-        formData.append("file", file);
+        const response = await PostDWRData(formData);
 
-        // Replace the URL with your actual API endpoint
-        const apiUrl = `http://localhost:8080/api/DWR/employeeRecordData/import/${id}`;
-
-        await axios.post(apiUrl, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        console.log("File uploaded successfully");
-        alert("File uploaded successfully");
+        if (response) {
+          toast.success("DWR uploaded successfully!", {
+            position: "top-center",
+            style: {
+              fontFamily: "var( --font-family)",
+              fontSize: "14px",
+            },
+            iconTheme: {
+              primary: "var(--primary-color)",
+              secondary: "#fff",
+            },
+          });
+          setFile({});
+        }
       } catch (error) {
-        console.error("Error uploading file:", error);
-        alert("Error uploading file");
+        toast.error("Error uploading file", {
+          position: "top-center",
+        });
       }
     } else {
-      console.error("No file selected or data missing");
-      alert("No file selected or data missing");
+      toast.error("No file selected or data missing", {
+        position: "top-center",
+      });
     }
   };
 
@@ -75,6 +85,7 @@ const UploadDWR = (props: Props) => {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
+      <Toaster reverseOrder={false} />
       <label htmlFor="fileInput" className="cursor-pointer flex items-center">
         <div>
           <CloudUploadOutlined className="mr-2" color="black" />
@@ -88,12 +99,10 @@ const UploadDWR = (props: Props) => {
         id="fileInput"
       />
       {file && <p className="mt-2">Selected File: {file.name}</p>}
-      <button
-        onClick={handleUpload}
-        className="mt-4 border px-2 rounded-lg bg-green-300 border-green-700"
-      >
+
+      <Button onClick={handleUpload} variant="contained" color="primary">
         Upload
-      </button>
+      </Button>
     </div>
   );
 };

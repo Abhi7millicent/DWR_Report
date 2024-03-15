@@ -16,6 +16,13 @@ const InputField: React.FC<InputValue> = ({
   placeholder,
   InputLabelProps,
 }) => {
+  const getCurrentDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, "0");
+    const day = now.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
   return (
     <TextField
       label={label}
@@ -26,6 +33,7 @@ const InputField: React.FC<InputValue> = ({
       name={name}
       placeholder={placeholder}
       fullWidth
+      inputProps={{ min: type === "date" ? getCurrentDate() : undefined }}
       InputLabelProps={type === "date" ? { shrink: true } : undefined} // Conditionally apply shrink
       sx={{
         "& .MuiInputLabel-root": {

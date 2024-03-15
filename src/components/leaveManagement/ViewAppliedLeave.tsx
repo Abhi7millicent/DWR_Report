@@ -7,7 +7,10 @@ import { useParams } from "react-router";
 import { Button } from "@mui/material";
 import { Toaster } from "react-hot-toast";
 import { GetSessionItem } from "../../utils/SessionStorage";
-import { useGetLeaveMangement } from "../../hook/querie/useLeaveMangement";
+import {
+  useGetBalancedLeave,
+  useGetLeaveMangement,
+} from "../../hook/querie/useLeaveMangement";
 
 import "./applyLeave.css";
 
@@ -30,28 +33,16 @@ const ViewAppliedLeave = () => {
   let id = GetSessionItem("id");
   const { data: GetLeaveMangementData, refetch: GetLeaveMangementDataRefetch } =
     useGetLeaveMangement(String(id));
+  const { data: GetBalancedLeaveData } = useGetBalancedLeave(String(id));
+
   if (id === idp) {
     id = idp;
   }
-  const fetchBalancedLeave = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/DWR/balancedleave/${id}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch blanced leave");
-      }
-      const jsonData = await response.json();
-      setBalancedLeave(jsonData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   useEffect(() => {
-    fetchBalancedLeave();
+    setBalancedLeave(GetBalancedLeaveData?.data);
     setData(GetLeaveMangementData?.data);
-  }, [GetLeaveMangementData]); // Fetch data whenever id changes
+  }, [GetLeaveMangementData, GetBalancedLeaveData]); // Fetch data whenever id changes
 
   const tableHead: MRT_ColumnDef<any>[] = [
     { accessorKey: "0", header: "Sr.No", size: 10 },

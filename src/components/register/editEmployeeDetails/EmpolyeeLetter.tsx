@@ -24,7 +24,7 @@ import axios from "axios";
 import { usePostEmail } from "../../../hook/querie/useEmail";
 import toast, { Toaster } from "react-hot-toast";
 import { usePostGenerateOfferLetter } from "../../../hook/querie/useLetter";
-import { PDFDocument } from "pdf-lib";
+
 interface IAppointmentLetter {
   letter: string;
   referenceNo: string;
@@ -199,7 +199,6 @@ const EmployeeLetter: React.FC = () => {
       setContent2(`
     ${response.data.templateData2} 
     `);
-      console.log("contentData:", response.data);
     } catch (error) {
       console.error("Error fetching offer letter data:", error);
     }
@@ -208,10 +207,6 @@ const EmployeeLetter: React.FC = () => {
   useEffect(() => {
     setEmployeeData(data as EmployeeData);
   }, [data]);
-
-  useEffect(() => {
-    console.log("employeeData:", employeeData);
-  }, [employeeData]);
 
   const handleLetterSubmit = async (data: IAppointmentLetter) => {
     let emailData = {
@@ -264,7 +259,6 @@ const EmployeeLetter: React.FC = () => {
   // }, [contentData]);
 
   const handleChangeLetterType = (e: any) => {
-    console.log(e.target.value);
     fetchAppointmentData();
 
     setAddress1(`${employeeData?.addressLine1},${employeeData?.addressLine2}`);
@@ -365,27 +359,21 @@ const EmployeeLetter: React.FC = () => {
   const handleGenerateOfferLetter = async (data: IAppointmentLetter) => {
     let letter = data.letter;
     let letterData = {
-      "{DATE}": date,
-      "{REFERENCENO}": data.referenceNo,
-      "{NAME}": employeeData?.firstName,
-      "{ADDRESS1}": employeeData?.addressLine1
-        ? employeeData?.addressLine1
-        : "",
-      "{ADDRESS2}": employeeData?.addressLine2
-        ? employeeData?.addressLine2
-        : "",
-      "{POSITION}": employeeData?.role,
-      "{ANNUALY}": employeeData?.annualSalary,
-      "{MONTHLY}": employeeData?.monthlySalary,
+      DATE: date,
+      REFERENCENO: data.referenceNo,
+      NAME: employeeData?.firstName,
+      ADDRESS1: employeeData?.addressLine1 ? employeeData?.addressLine1 : "",
+      ADDRESS2: employeeData?.addressLine2 ? employeeData?.addressLine2 : "",
+      POSITION: employeeData?.role,
+      ANNUALY: employeeData?.annualSalary.toString(),
+      MONTHLY: employeeData?.monthlySalary.toString(),
     };
-    console.log(letterData, "letterData");
 
     try {
       const response = await PostGenerateOfferLetter({
         type: letter,
         data: letterData,
       });
-      console.log(response, "response");
 
       if (response) {
         const blob = new Blob([response], { type: "application/docx" });
@@ -404,8 +392,16 @@ const EmployeeLetter: React.FC = () => {
 
         // Clean up by revoking the URL object
         window.URL.revokeObjectURL(url);
+      } else {
+        toast.error("Letter not download!", {
+          position: "top-center",
+        });
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Intner Server error!", {
+        position: "top-center",
+      });
+    }
   };
 
   return (

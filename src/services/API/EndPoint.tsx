@@ -29,11 +29,16 @@ export const Endpoint = {
     Get_AllRequestLeave: `${API_URL}/leave-management/requestedLeave`,
     Post_ApproveLeave: `${API_URL}/leave-management/approve/{id}`,
     Post_RejectLeave: `${API_URL}/leave-management/reject/{id}`,
+    Get_BalancedLeave: `${API_URL}/employee/balanced-leave/{id}`,
   },
   Email: {
     Post: `${API_URL}/email/send-mail`,
   },
   Letter: {
     Post_GenerateOfferLetter: `${API_URL}/letter/{type}`,
+  },
+  DWR: {
+    Post: `${API_URL}/upload`,
+    Get_list: `${API_URL}/list/{employeeId}/{date}`,
   },
 };

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 import {
   GetAllRequestLeave,
+  GetBalancedLeave,
   GetLeaveMangement,
   PostApproveLeave,
   PostLeaveMangement,
@@ -24,4 +25,10 @@ export const usePostApproveLeave = () => {
 };
 export const usePostRejectLeave = () => {
   return useMutation(PostRejectLeave);
+};
+
+export const useGetBalancedLeave = (id: string) => {
+  return useQuery(["qGetBalancedLeave", id], () => GetBalancedLeave(id), {
+    enabled: !!id,
+  });
 };

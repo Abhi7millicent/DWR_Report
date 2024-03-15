@@ -32,7 +32,6 @@ const EmployeeRecordData = (props: Props) => {
   const [employeeRecordsData, setEmployeeRecordsData] = useState<
     empRecordsData[]
   >([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {

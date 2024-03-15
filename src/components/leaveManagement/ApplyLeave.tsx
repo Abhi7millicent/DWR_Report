@@ -110,7 +110,7 @@ const ApplyLeave: React.FC<ModalProps> = ({
       // Optionally, you can handle success here, like showing a success message to the user
     } catch (error) {
       console.error("Error submitting leave application:", error);
-      toast.error("Error submitting leave application!", {
+      toast.error("Sorry, you do not have sufficient leave balance.", {
         position: "top-center",
       });
 

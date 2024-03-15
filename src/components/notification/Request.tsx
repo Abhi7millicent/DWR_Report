@@ -13,7 +13,7 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 
 interface requestedData {
-  _id: string;
+  id: string;
   leaveType: string;
   description: string;
   startDate: string;
@@ -155,14 +155,14 @@ const Request = () => {
     <div>
       {appliedLeaveData.status !== "Approved" && (
         <Tooltip title="Approve">
-          <button onClick={() => approveLeave(appliedLeaveData._id)}>
+          <button onClick={() => approveLeave(appliedLeaveData.id)}>
             <ThumbUpAltIcon style={{ color: "green" }} />
           </button>
         </Tooltip>
       )}
       {appliedLeaveData.status !== "Rejected" && (
         <Tooltip title="Reject">
-          <button onClick={() => rejectLeave(appliedLeaveData._id)}>
+          <button onClick={() => rejectLeave(appliedLeaveData.id)}>
             <ThumbDownAltIcon style={{ color: "red" }} />
           </button>
         </Tooltip>

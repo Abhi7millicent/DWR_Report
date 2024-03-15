@@ -68,3 +68,18 @@ export const PostRejectLeave = async (id: string) => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
+// Get Balanced Leave
+export const GetBalancedLeave = async (id: string) => {
+  const url = parseTemplate(Endpoint.Leave.Get_BalancedLeave).expand({
+    id,
+  });
+
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error in posting document:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};
