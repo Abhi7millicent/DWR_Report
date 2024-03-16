@@ -16,13 +16,14 @@ interface requestedData {
   id: string;
   leaveType: string;
   description: string;
+  employeeId: string;
   startDate: string;
   endDate: string;
   noOfDays: string;
   status: string;
   balancedLeave: string;
   name: string;
-  employeeId: {
+  employee: {
     firstName: string;
     lastName: string;
   };
@@ -129,21 +130,23 @@ const Request = () => {
   const tableHead: MRT_ColumnDef<any>[] = [
     { accessorKey: "0", header: "Sr.No", size: 20 },
     { accessorKey: "1", header: "Name" },
-    { accessorKey: "2", header: "Leave Type" },
-    { accessorKey: "3", header: "Description" },
-    { accessorKey: "4", header: "Start Date" },
-    { accessorKey: "5", header: "End Date" },
-    { accessorKey: "6", header: "No.Days" },
-    { accessorKey: "7", header: "Balanced Leave" },
-    { accessorKey: "8", header: "Status" },
-    { accessorKey: "9", header: "Actions" }, // Action column
+    { accessorKey: "2", header: "Employee Id" },
+    { accessorKey: "3", header: "Leave Type" },
+    { accessorKey: "4", header: "Description" },
+    { accessorKey: "5", header: "Start Date" },
+    { accessorKey: "6", header: "End Date" },
+    { accessorKey: "7", header: "No.Days" },
+    { accessorKey: "8", header: "Balanced Leave" },
+    { accessorKey: "9", header: "Status" },
+    { accessorKey: "10", header: "Actions" }, // Action column
   ];
 
   const tableBody = data?.map((appliedLeaveData, index) => [
     index + 1,
-    `${appliedLeaveData.employeeId?.firstName ?? "-"} ${
-      appliedLeaveData.employeeId?.lastName ?? "-"
+    `${appliedLeaveData.employee?.firstName ?? "-"} ${
+      appliedLeaveData.employee?.lastName ?? "-"
     }`,
+    appliedLeaveData.employeeId ? appliedLeaveData.employeeId : "-",
     appliedLeaveData.leaveType ? appliedLeaveData.leaveType : "-",
     appliedLeaveData.description ? appliedLeaveData.description : "-",
     appliedLeaveData.startDate ? appliedLeaveData.startDate : "-",

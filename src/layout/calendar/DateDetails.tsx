@@ -14,7 +14,7 @@ import {
   fetchDataSuccess,
   fetchDataFailure,
 } from "../../features/attendanceSlice";
-import { useGetDWRList } from "../../hook/querie/useDWR";
+import { useGetDWRListBaseOnDate } from "../../hook/querie/useDWR";
 
 interface empRecordsData {
   id: number;
@@ -65,7 +65,10 @@ const DateDetails: React.FC<DateDetailsProps> = ({ currentDate }) => {
   }, [currentDate]);
 
   // -------------------- React query  ------------------//
-  const { data: GetDWRListData } = useGetDWRList(String(id), selectedDate);
+  const { data: GetDWRListData } = useGetDWRListBaseOnDate(
+    String(id),
+    selectedDate
+  );
   const fetchSelectedDateData = async () => {
     dispatch(fetchDataStart());
     try {

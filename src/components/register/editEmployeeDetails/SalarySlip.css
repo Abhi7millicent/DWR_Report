@@ -1,0 +1,14 @@
+.status-approved {
+    color: green;
+    /* or any other color you prefer for "Available" status */
+}
+
+.status-pending {
+    color: red;
+    /* or any other color you prefer for "Pending" status */
+}
+
+.status-process {
+    color: orange;
+    /* or any other color you prefer for "In Process" status */
+}

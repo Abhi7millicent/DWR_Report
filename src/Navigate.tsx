@@ -18,6 +18,7 @@ import CustomOfferLetter from "./components/customization/CustomOfferLetter";
 import CustomAppointmentLetter from "./components/customization/CustomAppointmentLetter";
 import LeadTable from "./components/Lead/LeadTable";
 import TaskHandlingTable from "./components/TaskHandling/TaskHandlingTable";
+// import Dashboard from "./pages/Dashboard/dashboard";
 
 const Navigate = () => {
   return (
@@ -33,6 +34,7 @@ const Navigate = () => {
         </div>
         <div className="overflow-auto w-full px-10 bg-gray-200">
           <Routes>
+            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route path="/employee" element={<Employee />} />
             <Route
               path="/employee_record/:id/:name"

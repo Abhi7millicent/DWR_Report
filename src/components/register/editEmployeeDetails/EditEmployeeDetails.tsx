@@ -8,6 +8,7 @@ import ViewEducationDetails from "./ViewEducationDetails";
 import PersonalData from "./PersonalData";
 
 import EmpolyeeLetter from "./EmpolyeeLetter";
+import SalarySlip from "./SalarySlip";
 const EditEmployeeDetails = () => {
   return (
     <div>
@@ -18,6 +19,7 @@ const EditEmployeeDetails = () => {
             <Tab>Educational Details</Tab>
             <Tab>Documents</Tab>
             <Tab>Letter</Tab>
+            <Tab>Salary slip</Tab>
           </TabList>
         </div>
 
@@ -46,6 +48,11 @@ const EditEmployeeDetails = () => {
         <TabPanel>
           <h2>
             <EmpolyeeLetter />
+          </h2>
+        </TabPanel>
+        <TabPanel>
+          <h2>
+            <SalarySlip />
           </h2>
         </TabPanel>
       </Tabs>

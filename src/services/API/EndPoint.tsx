@@ -39,6 +39,8 @@ export const Endpoint = {
   },
   DWR: {
     Post: `${API_URL}/upload`,
-    Get_list: `${API_URL}/list/{employeeId}/{date}`,
+    Get_listBaseOnDate: `${API_URL}/list/{employeeId}/{date}`,
+    Get_List: `${API_URL}/list/{employeeId}`,
+    Get_ListBaseOnRange: `${API_URL}/list/{employeeId}/{startDate}/{endDate}`,
   },
 };

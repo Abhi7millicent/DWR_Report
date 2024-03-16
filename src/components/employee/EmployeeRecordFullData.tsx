@@ -10,6 +10,11 @@ import autoTable, { UserOptions } from "jspdf-autotable";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import DateRange from "../../layout/dateRange/DateRange";
+import {
+  useGetDWRList,
+  useGetDWRListBaseOnRange,
+} from "../../hook/querie/useDWR";
+import moment from "moment";
 
 interface empRecordsFullData {
   id: number;
@@ -18,7 +23,7 @@ interface empRecordsFullData {
   fromTime: string;
   toTime: string;
   projectName: string;
-  taskDiscription: string;
+  taskDescription: string;
   reportedBy: string;
   ticketType: string;
   status: string;
@@ -26,12 +31,26 @@ interface empRecordsFullData {
 }
 
 const EmployeeRecordFullData: React.FC = () => {
-  const [formattedStartDate, setFormattedStartDate] = useState("");
-  const [formattedEndDate, setFormattedEndDate] = useState("");
+  const [formattedStartDate, setFormattedStartDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
+  const [formattedEndDate, setFormattedEndDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
   const { id, name } = useParams();
   const [employeeRecordsFullData, setEmployeeRecordsFullData] = useState<
     empRecordsFullData[]
   >([]);
+  console.log(formattedStartDate, "formattedStartDate");
+
+  // ----------------------- React Query --------------------//
+
+  const { data: GetDWRListData } = useGetDWRList(String(id));
+  const { data: GetDWRListBaseOnRangeData } = useGetDWRListBaseOnRange(
+    String(id),
+    formattedStartDate,
+    formattedEndDate
+  );
 
   function formatDateToString(date: Date): string {
     const year = date.getFullYear();
@@ -40,32 +59,37 @@ const EmployeeRecordFullData: React.FC = () => {
 
     return `${year}-${month}-${day}`;
   }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8080/api/DWR/employeeRecordData/list/${id}`
+  //       );
+
+  //       setEmployeeRecordsFullData(response.data);
+  //       console.log("data", response.data);
+  //     } catch (error) {
+  //       if (axios.isCancel(error)) {
+  //         console.log("Request canceled:", error.message);
+  //       } else {
+  //         console.error("Error fetching employee data:", error);
+  //       }
+  //     }
+  //   };
+
+  //   const source = axios.CancelToken.source();
+
+  //   fetchData();
+
+  //   return () => {
+  //     source.cancel("Component is unmounting");
+  //   };
+  // }, [id]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/DWR/employeeRecordData/list/${id}`
-        );
-
-        setEmployeeRecordsFullData(response.data);
-        console.log("data", response.data);
-      } catch (error) {
-        if (axios.isCancel(error)) {
-          console.log("Request canceled:", error.message);
-        } else {
-          console.error("Error fetching employee data:", error);
-        }
-      }
-    };
-
-    const source = axios.CancelToken.source();
-
-    fetchData();
-
-    return () => {
-      source.cancel("Component is unmounting");
-    };
-  }, [id]);
+    setEmployeeRecordsFullData(GetDWRListData?.data);
+    setEmployeeRecordsFullData(GetDWRListBaseOnRangeData?.data);
+  }, [GetDWRListData, GetDWRListBaseOnRangeData]);
 
   const DownloadData = async (format: "xlsx" | "pdf") => {
     try {
@@ -167,8 +191,9 @@ const EmployeeRecordFullData: React.FC = () => {
       }
     }
   };
+  console.log(employeeRecordsFullData, "employeeRecordsFullData");
 
-  const handleDateChange = (newDateRange: {
+  const handleDateChange = async (newDateRange: {
     startDate: Date;
     endDate: Date;
   }) => {
@@ -176,33 +201,33 @@ const EmployeeRecordFullData: React.FC = () => {
     const endDate = formatDateToString(newDateRange.endDate);
     setFormattedStartDate(formatDateToString(newDateRange.startDate));
     setFormattedEndDate(formatDateToString(newDateRange.endDate));
-    const fetchDataBasedOnRange = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/DWR/employeeRecordData/list/${id}/${startDate}/${endDate}`
-        );
+    try {
+      // const response = await axios.get(
+      //   `http://localhost:9000/api/DWR/list/${id}/${startDate}/${endDate}`
+      // );
+      // console.log(response, "response");
 
-        setEmployeeRecordsFullData(response.data);
-        console.log("data", response.data);
-      } catch (error) {
-        if (axios.isCancel(error)) {
-          console.log("Request canceled:", error.message);
-        } else {
-          console.error("Error fetching employee data:", error);
-        }
+      const response = await GetDWRListBaseOnRangeData(id, startDate, endDate);
+
+      setEmployeeRecordsFullData(response.data);
+
+      console.log("data", response.data);
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log("Request canceled:", error.message);
+      } else {
+        console.error("Error fetching employee data:", error);
       }
-    };
-
-    fetchDataBasedOnRange();
+    }
   };
 
   const tableHead: MRT_ColumnDef<any>[] = [
-    { accessorKey: "0", header: "Sr.No" },
+    { accessorKey: "0", header: "Sr.No", size: 25 },
     // { accessorKey: "1", header: "Emp Id" },
     { accessorKey: "1", header: "Date" },
-    { accessorKey: "2", header: "From Time" },
-    { accessorKey: "3", header: "To Time" },
-    { accessorKey: "4", header: "Project Name" },
+    { accessorKey: "2", header: "From Time", size: 25 },
+    { accessorKey: "3", header: "To Time", size: 30 },
+    { accessorKey: "4", header: "Project Name", size: 25 },
     { accessorKey: "5", header: "Issue/Support/TaskDescription" },
     { accessorKey: "6", header: "Reported By/Allocated by" },
     { accessorKey: "7", header: "Bug/New/Change/Support" },
@@ -210,18 +235,18 @@ const EmployeeRecordFullData: React.FC = () => {
     { accessorKey: "9", header: "Comment Solution" },
   ];
 
-  const tableBody = employeeRecordsFullData.map((record, index) => [
+  const tableBody = employeeRecordsFullData?.map((record, index) => [
     (index + 1).toString(),
     // record.employeeId,
-    record.date,
-    record.fromTime,
-    record.toTime,
-    record.projectName,
-    record.taskDiscription,
-    record.reportedBy,
-    record.ticketType,
-    record.status,
-    record.solution,
+    record.date || "-",
+    record.fromTime || "-",
+    record.toTime || "-",
+    record.projectName || "-",
+    record.taskDescription || "-",
+    record.reportedBy || "-",
+    record.ticketType || "-",
+    record.status || "-",
+    record.solution || "-",
   ]);
 
   return (
@@ -234,10 +259,10 @@ const EmployeeRecordFullData: React.FC = () => {
           <DateRange onDateChange={handleDateChange} />
         </div>
         <div className="text-3xl font-extrabold">
-          <button onClick={() => DownloadData("xlsx")}>
+          {/* <button onClick={() => DownloadData("xlsx")}>
             <CloudDownloadSharpIcon style={{ fontSize: 24 }} />{" "}
             <label className="text-sm">Excel</label>
-          </button>
+          </button> */}
           <button onClick={() => DownloadData("pdf")} className="px-4">
             <FileDownloadIcon style={{ fontSize: 24 }} />{" "}
             <label className="text-sm">PDF</label>

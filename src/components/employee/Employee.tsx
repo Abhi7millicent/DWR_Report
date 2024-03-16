@@ -124,11 +124,13 @@ const Employee: React.FC = () => {
       size: 15,
       visibleInShowHideMenu: true,
     },
-    // { accessorKey: "1", header: "Employee Id", size: 15 },
+    { accessorKey: "1", header: "Employee Id", size: 15 },
     { accessorKey: "2", header: "Employee Name", size: 40 },
     { accessorKey: "3", header: "Role", size: 40 },
     { accessorKey: "4", header: "Project Name", size: 40 },
-    { accessorKey: "5", header: "Leave View", size: 40 },
+    { accessorKey: "5", header: "Leave", size: 40 },
+    { accessorKey: "6", header: "DWR View", size: 40 },
+    // { accessorKey: "7", header: "Edit leave", size: 40 },
     // { accessorKey: "3", header: "Email", size: 15 },
     // { accessorKey: "4", header: "Full View", size: 15 },
     // { accessorKey: "5", header: "Calendar", size: 15 },
@@ -145,12 +147,8 @@ const Employee: React.FC = () => {
       {empData.firstName} {empData.lastName}
     </a>,
     empData.role,
-    <a
-      key={index}
-      href={`/employee_record/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
-    >
-      <ViewListSharpIcon />
-    </a>,
+    "CSE",
+    "2",
     <a
       key={index}
       href={`/employee_record_data/${empData.id}/${empData.firstName} ${empData.middleName} ${empData.lastName}`}
@@ -163,9 +161,9 @@ const Employee: React.FC = () => {
     // >
     //   <CalendarMonthIcon />
     // </a>,
-    <button key={index} onClick={() => openModal(empData.id)}>
-      <CalendarMonthIcon />
-    </button>,
+    // <button key={index} onClick={() => openModal(empData.id)}>
+    //   <CalendarMonthIcon />
+    // </button>,
     // <a>
     //   <button
     //     key={index}
