@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CommonTable from "../../layout/commonTable/CommonTable";
 import axios from "axios";
-import { modalData } from "./EmployeeRecord";
+// import { modalData } from "./EmployeeRecord";
 import { MRT_ColumnDef } from "material-react-table";
 
 export interface empRecordsData {
@@ -19,7 +19,8 @@ export interface empRecordsData {
 }
 
 type Props = {
-  data: modalData;
+  // data: modalData;
+  data: any;
 };
 
 const EmployeeRecordData = (props: Props) => {

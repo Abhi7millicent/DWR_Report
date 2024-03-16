@@ -5,11 +5,11 @@ interface SalaryDetailsData {
   bankAccountName: string;
   ifscCode: string;
   accountNo: string;
-  uan: string;
+  uanNo: string;
   epfoNo: string;
   panNo: string;
-  annualSalary: number; // Assuming annualSalary and monthlySalary are numbers
-  monthlySalary: number;
+  annualSalary: string; // Assuming annualSalary and monthlySalary are numbers
+  monthlySalary: string;
 }
 // Get Employee Salary Deatils By Id
 export const GetEmployeeSalaryDeatilsById = async (id: string) => {

@@ -114,9 +114,9 @@ const Register: React.FC<ModalProps> = ({
         });
       }
     } catch (error: unknown) {
-      toast.error(error?.response?.data?.message, {
-        position: "top-center",
-      });
+      // toast.error(error?.response?.data?.message, {
+      //   position: "top-center",
+      // });
     }
   };
 

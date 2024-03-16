@@ -45,7 +45,6 @@ const UploadDWR = (props: Props) => {
               secondary: "#fff",
             },
           });
-          setFile({});
         }
       } catch (error) {
         toast.error("Error uploading file", {

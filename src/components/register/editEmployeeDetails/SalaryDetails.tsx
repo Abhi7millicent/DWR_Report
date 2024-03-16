@@ -27,7 +27,7 @@ interface ISalaryDetails {
   bankAccountName: string;
   ifscCode: string;
   accountNo: string;
-  uan: string;
+  uanNo: string;
   epfoNo: string;
   panNo: string;
   annualSalary: string;
@@ -48,7 +48,7 @@ const SalaryDetails: React.FC = () => {
       bankAccountName: "",
       ifscCode: "",
       accountNo: "",
-      uan: "",
+      uanNo: "",
       epfoNo: "",
       panNo: "",
       annualSalary: "",
@@ -72,7 +72,7 @@ const SalaryDetails: React.FC = () => {
       setValue("bankAccountName", getSalaryData.bankAccountName || "");
       setValue("ifscCode", getSalaryData.ifscCode || "");
       setValue("accountNo", getSalaryData.accountNo || "");
-      setValue("uan", getSalaryData.uanNo || "");
+      setValue("uanNo", getSalaryData.uanNo || "");
       setValue("epfoNo", getSalaryData.epfoNo || "");
       setValue("panNo", getSalaryData.panNo || "");
       setValue("annualSalary", getSalaryData.annualSalary || "");
@@ -124,16 +124,16 @@ const SalaryDetails: React.FC = () => {
     const monthlyString = monthly.toFixed(2);
     setValue("monthlySalary", monthlyString);
   };
-  const handleSalaryDetails = async (data: any) => {
+  const handleSalaryDetails = async (data: ISalaryDetails) => {
     const salaryDetailsData = {
       bankAccountName: data.bankAccountName,
       ifscCode: data.ifscCode,
       accountNo: data.accountNo,
-      uanNo: data.uan,
+      uanNo: data.uanNo,
       epfoNo: data.epfoNo,
       panNo: data.panNo,
-      annualSalary: data.annualSalary,
-      monthlySalary: data.monthlySalary,
+      annualSalary: data.annualSalary.toString(),
+      monthlySalary: data.monthlySalary.toString(),
     };
 
     try {
@@ -265,23 +265,23 @@ const SalaryDetails: React.FC = () => {
                   rules={{
                     required: true,
                   }}
-                  {...register("uan")}
+                  {...register("uanNo")}
                   render={({ field: { onChange, value } }) => (
                     <InputField
                       value={value}
                       type="number"
                       label="UAN Number"
                       placeholder="UAN Number"
-                      name="uan"
-                      aria-invalid={errors.uan ? "true" : "false"}
+                      name="uanNo"
+                      aria-invalid={errors.uanNo ? "true" : "false"}
                       onChange={(e) => {
                         onChange(e);
-                        clearErrors("uan");
+                        clearErrors("uanNo");
                       }}
                     />
                   )}
                 />
-                {errors.uan?.type === "required" && (
+                {errors.uanNo?.type === "required" && (
                   <p className="alert">This field is required</p>
                 )}
               </Grid>

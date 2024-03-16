@@ -7,11 +7,11 @@ interface SalaryDetailsData {
   bankAccountName: string;
   ifscCode: string;
   accountNo: string;
-  uan: string;
+  uanNo: string;
   epfoNo: string;
   panNo: string;
-  annualSalary: number; // Assuming annualSalary and monthlySalary are numbers
-  monthlySalary: number;
+  annualSalary: string; // Assuming annualSalary and monthlySalary are numbers
+  monthlySalary: string;
 }
 export const useGetEmployeeSalaryDeatilsById = (id: String) => {
   return useQuery(["qGetEmployeeSalaryDeatilsById", id], () =>

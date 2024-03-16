@@ -3,9 +3,10 @@ import React, { ReactNode } from "react";
 interface ModalProps {
   isOpen: boolean;
   children: ReactNode;
+  onClose: () => void;
 }
 
-const CommonModal: React.FC<ModalProps> = ({ isOpen, children }) => {
+const CommonModal: React.FC<ModalProps> = ({ isOpen, children, onClose }) => {
   const modalClasses = isOpen
     ? "fixed inset-0 flex items-center justify-center "
     : "hidden";
