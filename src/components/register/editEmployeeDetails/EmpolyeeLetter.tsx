@@ -148,6 +148,8 @@ const EmployeeLetter: React.FC = () => {
 
   const { data } = useSelector((state: RootState) => state.appointmentLetter);
 
+  console.log("redux:", data);
+
   const [employeeData, setEmployeeData] = useState<EmployeeData | null>(null);
   const [signature, setSignature] = useState<File | null>(null);
   const [date, setDate] = useState("");

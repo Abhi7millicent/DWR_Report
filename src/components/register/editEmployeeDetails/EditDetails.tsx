@@ -310,7 +310,7 @@ const EditDetails: React.FC = () => {
                         }}
                       >
                         <MenuItem value="admin">Admin</MenuItem>
-                        <MenuItem value="softwareEngineer">
+                        <MenuItem value="SoftwareEngineer">
                           Software Engineer
                         </MenuItem>
                       </Select>
