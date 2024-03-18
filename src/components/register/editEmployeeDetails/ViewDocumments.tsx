@@ -14,6 +14,8 @@ import {
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../App/store";
 
 interface DocumentData {
   id: string;
@@ -36,9 +38,20 @@ const style = {
   borderRadius: 2,
 };
 
+interface EmployeeData {
+  firstName: string;
+  lastName: string;
+}
+
 const ViewDocuments = () => {
+  // ------------------ Redux ---------------- //
+  const { data } = useSelector((state: RootState) => state.appointmentLetter);
+  // Check if data is an array or not and extract the first item
   const { id } = useParams();
-  const [data, setData] = useState<DocumentData[]>([]);
+
+  // ------------------ State ---------------- //
+  const [employeeData, setEmployeeData] = useState<EmployeeData | null>(null);
+  const [documentData, setDocumentData] = useState<DocumentData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteDocumentId, setDeleteDocumentId] = useState("");
   const { mutateAsync: PutDocument } = usePutDocument();
@@ -61,8 +74,9 @@ const ViewDocuments = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  // ------------------ UseEffect ---------------- //
   useEffect(() => {
-    setData(GetDocumentListData?.data);
+    setDocumentData(GetDocumentListData?.data);
   }, [GetDocumentListData]);
 
   const handleDeleteClick = async () => {
@@ -110,7 +124,7 @@ const ViewDocuments = () => {
     { accessorKey: "4", header: "Delete" },
   ];
 
-  const tableBody = data?.map((documentData, index) => [
+  const tableBody = documentData?.map((documentData, index) => [
     index + 1,
     documentData.documentType,
     documentData.description,
@@ -139,18 +153,25 @@ const ViewDocuments = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    setEmployeeData(data as EmployeeData);
+  }, [data]);
   return (
     <div className="p-4">
       <div className="flex items-center justify-center">
         <div className="bg-white p-8 shadow-md rounded-md w-full">
           <div className="flex justify-between">
-            <h2 className="text-2xl font-semibold mb-4">Documents</h2>
+            <h2 className="text-2xl font-semibold">Documents</h2>
             <a onClick={openModal}>
               <Button variant="contained" color="primary">
                 Add Document
               </Button>
             </a>
           </div>
+          <p>
+            Employee Name: {employeeData?.firstName} {employeeData?.lastName}
+          </p>
           <div className="mt-4">
             <CommonTable tableHead={tableHead} tableBody={tableBody} />
           </div>

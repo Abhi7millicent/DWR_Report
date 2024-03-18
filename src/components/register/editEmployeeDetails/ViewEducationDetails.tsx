@@ -12,6 +12,8 @@ import {
   useGetEmployeeEductionList,
   usePutEmployeeEduction,
 } from "../../../hook/querie/useEmployeeEduction";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../App/store";
 
 interface EducationalData {
   id: string;
@@ -34,9 +36,18 @@ const style = {
   p: 3,
   borderRadius: 2,
 };
+interface EmployeeData {
+  firstName: string;
+  lastName: string;
+}
+
 const ViewEducationDetails = () => {
+  const { data } = useSelector((state: RootState) => state.appointmentLetter);
+
   const { id } = useParams();
-  const [data, setData] = useState<EducationalData[]>([]);
+  // ------------------ State ---------------- //
+  const [employeeData, setEmployeeData] = useState<EmployeeData | null>(null);
+  const [educationalData, setEducationalData] = useState<EducationalData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteEductionId, setDeleteEductionId] = useState("");
   const [open, setOpen] = useState(false);
@@ -44,8 +55,11 @@ const ViewEducationDetails = () => {
     data: GetEmployeeEductionList,
     refetch: GetEmployeeEductionListRefetch,
   } = useGetEmployeeEductionList(String(id));
+
   const { mutateAsync: PutEmployeeEduction } = usePutEmployeeEduction();
+
   // const fetchData = async () => {
+
   //   try {
   //     const response = await axios.get<EducationalData[]>(
   //       `http://localhost:8080/api/DWR/educationalDetails/list/${id}`
@@ -58,8 +72,12 @@ const ViewEducationDetails = () => {
   // };
 
   useEffect(() => {
-    setData(GetEmployeeEductionList?.data);
+    setEducationalData(GetEmployeeEductionList?.data);
   }, [GetEmployeeEductionList]);
+
+  useEffect(() => {
+    setEmployeeData(data as EmployeeData);
+  }, [data]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleDeleteClick = async () => {
@@ -108,7 +126,7 @@ const ViewEducationDetails = () => {
     { accessorKey: "6", header: "Delete", size: 30 },
   ];
 
-  const tableBody = data?.map((educationalData, index) => [
+  const tableBody = educationalData?.map((educationalData, index) => [
     index + 1,
     educationalData.degree,
     educationalData.institute,
@@ -136,13 +154,16 @@ const ViewEducationDetails = () => {
       <div className="flex items-center justify-center">
         <div className="bg-white p-8 shadow-md rounded-md w-full">
           <div className="flex justify-between">
-            <h2 className="text-2xl font-semibold mb-4">Educational Details</h2>
+            <h2 className="text-2xl font-semibold">Educational Details</h2>
             <a onClick={openModal}>
               <Button variant="contained" color="primary">
                 Add Education
               </Button>
             </a>
           </div>
+          <p className="flex ">
+            Employee Name: {employeeData?.firstName} {employeeData?.lastName}
+          </p>
           <div className="mt-4">
             <CommonTable tableHead={tableHead} tableBody={tableBody} />
           </div>

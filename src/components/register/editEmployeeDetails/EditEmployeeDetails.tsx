@@ -7,7 +7,7 @@ import ViewDocuments from "./ViewDocumments";
 import ViewEducationDetails from "./ViewEducationDetails";
 import PersonalData from "./PersonalData";
 
-import EmpolyeeLetter from "./EmpolyeeLetter";
+import EmpolyeeLetter from "./EmployeeLetter";
 import SalarySlip from "./SalarySlip";
 const EditEmployeeDetails = () => {
   return (
