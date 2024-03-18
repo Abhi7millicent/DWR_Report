@@ -410,7 +410,10 @@ const EmployeeLetter: React.FC = () => {
     <div className="flex  mt-3 justify-center">
       <Toaster reverseOrder={false} />
       <div className="bg-white p-8 shadow-md rounded-md w-full">
-        <h2 className="text-2xl font-semibold mb-4"> Letter</h2>
+        <h2 className="text-2xl font-semibold mb-1"> Letter</h2>
+        <p className="mb-3">
+          Employee Name: {employeeData?.firstName} {employeeData?.lastName}
+        </p>
         <form onSubmit={handleSubmit(handleLetterSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4}>
