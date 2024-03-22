@@ -1,24 +1,26 @@
 // import React from "react";
 import { Route, Routes } from "react-router";
-import Employee from "./components/employee/Employee";
-import EmployeeRecord from "./components/employee/EmployeeRecord";
-import EmployeeRecordFullData from "./components/employee/EmployeeRecordFullData";
+import Employee from "./pages/employee/Employee";
+import EmployeeRecord from "./pages/employee/EmployeeRecord";
+import EmployeeRecordFullData from "./pages/employee/EmployeeRecordFullData";
 // import Register from "./components/register/Register";
 import Navbar from "./layout/navbar/Navbar";
 import { Layout } from "antd";
 import SideBarLayout from "./layout/sideBar/SideBarLayout";
-import ProjectView from "./components/project/ProjectView";
-import EditEmployeeDetails from "./components/register/editEmployeeDetails/EditEmployeeDetails";
+import Project from "./pages/project/ProjectView";
+import EditEmployeeDetails from "./pages/register/editEmployeeDetails/EditEmployeeDetails";
 import AttendanceCalendar from "./layout/calendar/AttendanceCalendar";
 import Request from "./components/notification/Request";
 // import ApplyLeave from "./components/leaveManagement/ApplyLeave";
-import ViewAppliedLeave from "./components/leaveManagement/ViewAppliedLeave";
+import ViewAppliedLeave from "./pages/leaveManagement/ViewAppliedLeave";
 import OfferLetter from "./layout/offerLetter/OfferLetter";
 import CustomOfferLetter from "./components/customization/CustomOfferLetter";
 import CustomAppointmentLetter from "./components/customization/CustomAppointmentLetter";
-import LeadTable from "./components/Lead/LeadTable";
-import TaskHandlingTable from "./components/TaskHandling/TaskHandlingTable";
+import LeadTable from "./pages/Lead/LeadTable";
+import TaskHandlingTable from "./pages/TaskHandling/TaskHandlingTable";
 import Dashboard from "./pages/Dashboard/dashboard";
+import TaskTable from "./pages/task/TaskTable";
+import ProjectViewTable from "./pages/projectView/ProjectViewTable";
 
 const Navigate = () => {
   return (
@@ -48,7 +50,7 @@ const Navigate = () => {
             <Route path="/apply-leave" element={<ViewAppliedLeave />} />
             <Route path="/offerLetter" element={<OfferLetter />} />
             <Route path="/request" element={<Request />} />
-            <Route path="/project" element={<ProjectView />} />
+            <Route path="/project" element={<Project />} />
             <Route path="/editEmployee/:id" element={<EditEmployeeDetails />} />
             <Route
               path="/attendance/:id/:name"
@@ -64,7 +66,9 @@ const Navigate = () => {
               element={<CustomOfferLetter />}
             />
             <Route path="/lead" element={<LeadTable />} />
-            <Route path="/task-handling" element={<TaskHandlingTable />} />
+            <Route path="/assign-task" element={<TaskHandlingTable />} />
+            <Route path="/task" element={<TaskTable />} />
+            <Route path="/project-view" element={<ProjectViewTable />} />
           </Routes>
         </div>
       </div>

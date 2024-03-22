@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  AppstoreOutlined,
-  DesktopOutlined,
-  MailOutlined,
-  PieChartOutlined,
-  UserOutlined,
-  HomeOutlined,
-  UsergroupAddOutlined,
-} from "@ant-design/icons";
+import { PieChartOutlined, HomeOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import "../../App.css";
 import { GetSessionItem } from "../../utils/SessionStorage";
-// import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-// import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-// import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
-// import { clearSessionStorage } from "../../utils/SessionStorage";
+
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { FaRegUser, FaTasks } from "react-icons/fa";
+import { RiComputerLine } from "react-icons/ri";
+import { AiOutlineDashboard } from "react-icons/ai";
+import { HiMiniUsers } from "react-icons/hi2";
+import { IoSettingsOutline } from "react-icons/io5";
+import { MdOutlineForwardToInbox } from "react-icons/md";
+
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -114,12 +110,14 @@ const App: React.FC = () => {
         ]
       : employeeRole === "admin"
       ? [
-          getItem("Dashboard", "dashboard", <PieChartOutlined />),
-          getItem("Employee", "employee", <UserOutlined />),
-          getItem("Lead", "lead", <UsergroupAddOutlined />),
-          getItem("Task Handling", "task-handling", <UsergroupAddOutlined />),
-          getItem("Project", "project", <DesktopOutlined />),
-          getItem("Notification", "sub1", <MailOutlined />, [
+          getItem("Dashboard", "dashboard", <AiOutlineDashboard />),
+          getItem("Employee", "employee", <FaRegUser />),
+          getItem("Project", "project", <RiComputerLine />),
+          getItem("Task", "task", <FaTasks />),
+          getItem("Project View", "project-view", <FaTasks />),
+          getItem("Lead", "lead", <HiMiniUsers />),
+          getItem("Assign Task", "assign-task", <HiMiniUsers />),
+          getItem("Notification", "sub1", <MdOutlineForwardToInbox />, [
             getItem("Attendance Request", "request"),
             getItem("Mail", "sub2", null, [
               getItem("Offer Letter", "offerLetter"),
@@ -133,7 +131,7 @@ const App: React.FC = () => {
           //   getItem("Letter", "9"),
           //   getItem("Option 10", "10"),
           // ]),
-          getItem("Settings", "sub3", <AppstoreOutlined />, [
+          getItem("Settings", "sub3", <IoSettingsOutline />, [
             getItem("Customization", "9", null, [
               getItem("Offer Letter", "custom-offer-letter"),
               getItem("Appointment Letter", "custom-appointment-letter"),

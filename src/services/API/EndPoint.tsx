@@ -43,4 +43,22 @@ export const Endpoint = {
     Get_List: `${API_URL}/list/{employeeId}`,
     Get_ListBaseOnRange: `${API_URL}/list/{employeeId}/{startDate}/{endDate}`,
   },
+  Projects: {
+    Post: `${API_URL}/projects/add`,
+    Get_List: `${API_URL}/projects/list`,
+    Delete_ById: `${API_URL}/projects/delete/{id}`,
+    Get_ById: `${API_URL}/projects/{id}`,
+    Put_ById: `${API_URL}/projects/edit/{id}`,
+  },
+  Tasks: {
+    Post: `${API_URL}/task/add`,
+    Get_List: `${API_URL}/task/get-all-tasks`,
+    Delete_ById: `${API_URL}/task/update-delete-flag/{id}`,
+    Get_ById: `${API_URL}/task/get-task/{id}`,
+    Put_ById: `${API_URL}/task/update-task/{id}`,
+  },
+  DropDown: {
+    Get_RoleEmployee: `${API_URL}/role-master/list`,
+    Post_RoleEmployee: `${API_URL}/role-master/save`,
+  },
 };

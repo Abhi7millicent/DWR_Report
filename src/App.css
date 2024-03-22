@@ -127,7 +127,21 @@ body {
   /* overflow-Y: hidden; */
   background-color: #E5E7EB !important;
   font-family: var(--font-family) !important;
+  color: rgb(0, 0, 0);
 }
+
+input {
+  background-color: white !important;
+}
+
+textarea {
+  background-color: white !important;
+}
+
+select {
+  background-color: white !important;
+}
+
 
 *,
 *::before,
@@ -229,6 +243,9 @@ body {
   color: red;
   font-size: small;
   font-family: var(--font-family) !important;
+  background-color: white;
+  border: none;
+  padding: 8px;
 }
 
 .MuiButton-root {
@@ -281,4 +298,16 @@ input::-webkit-inner-spin-button {
 .MuiBox-root:focus-visible {
   outline: none !important;
   font-family: var(--font-family) !important;
+}
+
+
+
+.menu li>details>summary:active {
+  background-color: transparent !important;
+}
+
+
+.menu li>*:not(ul, .menu-title, details, .btn):active {
+  background-color: transparent !important;
+  color: var(--primary-color) !important;
 }

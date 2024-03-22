@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { employeeIdData } from "../../components/employee/Employee";
+import { employeeIdData } from "../../pages/employee/Employee";
 import { CloudUploadOutlined } from "@ant-design/icons";
 import { useParams } from "react-router";
 import { usePostDWR } from "../../hook/querie/useDWR";

@@ -6,7 +6,7 @@ import { isSunday } from "date-fns"; // Import date-fns functions
 import CommonModal from "../commonModal/CommonModal";
 import CommonTable from "../commonTable/CommonTable";
 import axios from "axios";
-import { employeeIdData } from "../../components/employee/Employee";
+import { employeeIdData } from "../../pages/employee/Employee";
 import { MRT_ColumnDef } from "material-react-table";
 
 interface empRecordsData {

@@ -98,7 +98,7 @@ const Dashboard = () => {
             value="50"
           />
           {/* Add more DashboardCards here for additional metrics */}
-          <Grid className="w-1/2 mt-6 ml-10">
+          <Grid className="w-1/2 mt-6 ml-10 bg-white p-4 rounded-lg   ">
             <Chart options={options} series={series} type="area" />
           </Grid>
         </Grid>
