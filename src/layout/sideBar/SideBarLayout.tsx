@@ -87,7 +87,7 @@ const App: React.FC = () => {
   }, []);
 
   const sidebarItems: MenuItem[] =
-    employeeRole === "SoftwareEngineer"
+    employeeRole === "Software Engineer"
       ? [
           getItem("Dashboard", "dashboard", <PieChartOutlined />),
           getItem(
@@ -108,7 +108,7 @@ const App: React.FC = () => {
           //   ), // Add onClick handler for Logout
           // ]),
         ]
-      : employeeRole === "admin"
+      : employeeRole === "Admin"
       ? [
           getItem("Dashboard", "dashboard", <AiOutlineDashboard />),
           getItem("Employee", "employee", <FaRegUser />),

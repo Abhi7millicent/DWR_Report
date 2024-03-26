@@ -61,9 +61,9 @@ const Login: React.FC = () => {
         SetSessionItem("role", response.role);
         SetSessionItem("id", response.id);
         SetSessionItem("name", response.name);
-        if (response.role === "admin") {
+        if (response.role === "Admin") {
           navigate("/employee");
-        } else if (response.role === "SoftwareEngineer") {
+        } else if (response.role === "Software Engineer") {
           navigate(`/attendance/${response.id}`);
         }
         setLoading(false);
