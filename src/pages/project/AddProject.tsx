@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import InputField from "../../components/InputField/InputField";
+import MultiSelect from "multiselect-react-dropdown";
 import {
   usePostProject,
   usePutProjectById,
@@ -19,8 +20,13 @@ interface ModalProps {
 
 interface IProjectData {
   projectName: "";
+  clientName: "";
+  clientLocation: "";
+  contact: "";
+  emailId: "";
   startDate: "";
   endDate: "";
+  technology: "";
   description: "";
 }
 const AddProject: React.FC<ModalProps> = ({
@@ -42,6 +48,10 @@ const AddProject: React.FC<ModalProps> = ({
   } = useForm({
     defaultValues: {
       projectName: "",
+      clientName: "",
+      clientLocation: "",
+      contact: "",
+      emailId: "",
       startDate: "",
       endDate: "",
       description: "",
@@ -63,6 +73,10 @@ const AddProject: React.FC<ModalProps> = ({
   const onSubmitProject = async (data: IProjectData) => {
     const projectData = {
       name: data.projectName,
+      clientName: data.clientName,
+      clientLocation: data.clientLocation,
+      contact: data.contact,
+      emailId: data.emailId,
       description: data.description,
       startDate: data.startDate,
       endDate: data.endDate,
@@ -128,7 +142,7 @@ const AddProject: React.FC<ModalProps> = ({
     <div className="p-4">
       <h2 className="text-2xl font-semibold mb-4">
         {" "}
-        {editProject === true ? "Add Project" : "Edit Project"}
+        {editProject === true ? "Create Project" : "Edit Project"}
       </h2>
       <form onSubmit={handleSubmit(onSubmitProject)}>
         <Grid container spacing={2} alignItems="center" marginBottom={1}>
@@ -150,6 +164,110 @@ const AddProject: React.FC<ModalProps> = ({
                   onChange={(e) => {
                     onChange(e);
                     clearErrors("projectName");
+                  }}
+                />
+              )}
+            />
+            {errors.projectName?.type === "required" && (
+              <p className="alert">This field is required</p>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Controller
+              control={control}
+              rules={{
+                required: false,
+              }}
+              {...register("clientName")}
+              render={({ field: { onChange, value } }) => (
+                <InputField
+                  value={value}
+                  type="text"
+                  label="Client Name"
+                  placeholder="Client Name"
+                  name="clientName"
+                  aria-invalid={errors.clientName ? "true" : "false"}
+                  onChange={(e) => {
+                    onChange(e);
+                    clearErrors("clientName");
+                  }}
+                />
+              )}
+            />
+            {errors.projectName?.type === "required" && (
+              <p className="alert">This field is required</p>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Controller
+              control={control}
+              rules={{
+                required: false,
+              }}
+              {...register("clientLocation")}
+              render={({ field: { onChange, value } }) => (
+                <InputField
+                  value={value}
+                  type="text"
+                  label="Client Location"
+                  placeholder="Client Location"
+                  name="clientLocation"
+                  aria-invalid={errors.clientLocation ? "true" : "false"}
+                  onChange={(e) => {
+                    onChange(e);
+                    clearErrors("clientLocation");
+                  }}
+                />
+              )}
+            />
+            {errors.projectName?.type === "required" && (
+              <p className="alert">This field is required</p>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Controller
+              control={control}
+              rules={{
+                required: false,
+              }}
+              {...register("contact")}
+              render={({ field: { onChange, value } }) => (
+                <InputField
+                  value={value}
+                  type="text"
+                  label="Contact"
+                  placeholder="Contact"
+                  name="contact"
+                  aria-invalid={errors.contact ? "true" : "false"}
+                  onChange={(e) => {
+                    onChange(e);
+                    clearErrors("contact");
+                  }}
+                />
+              )}
+            />
+            {errors.projectName?.type === "required" && (
+              <p className="alert">This field is required</p>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Controller
+              control={control}
+              rules={{
+                required: false,
+              }}
+              {...register("emailId")}
+              render={({ field: { onChange, value } }) => (
+                <InputField
+                  value={value}
+                  type="email"
+                  label="Email Id"
+                  placeholder="Email Id"
+                  name="emailId"
+                  aria-invalid={errors.emailId ? "true" : "false"}
+                  onChange={(e) => {
+                    onChange(e);
+                    clearErrors("emailId");
                   }}
                 />
               )}
