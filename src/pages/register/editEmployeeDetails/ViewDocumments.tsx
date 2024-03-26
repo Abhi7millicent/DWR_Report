@@ -147,6 +147,15 @@ const ViewDocuments = () => {
     URL.revokeObjectURL(url);
   };
 
+  const handleDownload = (fileUrl) => {
+    if (fileUrl) {
+      // Initiate file download
+      window.open(fileUrl, "_blank");
+    } else {
+      console.error("File URL not available");
+    }
+  };
+
   const tableHead: MRT_ColumnDef<any>[] = [
     { accessorKey: "0", header: "Sr.No", size: 20 },
     { accessorKey: "1", header: "Document Type" },
@@ -159,9 +168,12 @@ const ViewDocuments = () => {
     index + 1,
     documentData.documentType,
     documentData.description,
-
-    <a key={`download-${index}`} download onClick={() => downloadPdf()}>
-      <CloudDownloadIcon onClick={() => downloadPdf()} />
+    <a
+      key={`download-${index}`}
+      download
+      onClick={() => handleDownload(documentData.uploadFilePath)}
+    >
+      <CloudDownloadIcon />
     </a>,
     // <a href="#" download key={`download`} onClick={downloadPdf}>
     //   Download PDF
@@ -187,6 +199,7 @@ const ViewDocuments = () => {
   useEffect(() => {
     setEmployeeData(data as EmployeeData);
   }, [data]);
+
   return (
     <div className="p-4">
       <div className="flex items-center justify-center">

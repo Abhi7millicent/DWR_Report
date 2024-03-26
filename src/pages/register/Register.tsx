@@ -47,12 +47,13 @@ const Register: React.FC<ModalProps> = ({
     password: "",
     confirmPassword: "",
   });
+  // ---------------------------- React Query ------------------------//
 
   const { mutateAsync: PostEmployeeRegister } = usePostEmployeeRegister();
-  const { mutateAsync: PostRoleEmployeeList } = usePostRoleEmployeeList();
-  const { data: GetRoleEmployeeListData } = useGetRoleEmployeeList();
-
-  console.log(GetRoleEmployeeListData);
+  const { mutateAsync: PostRoleEmployeeListMutateAsync } =
+    usePostRoleEmployeeList();
+  const { data: GetRoleEmployeeListData, refetch: GetRoleEmployeeListRefetch } =
+    useGetRoleEmployeeList();
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -271,15 +272,17 @@ const Register: React.FC<ModalProps> = ({
                   <option value="" disabled selected>
                     Select Role
                   </option>
+                  {GetRoleEmployeeListData?.data?.map((item) => {
+                    return <option value={item.name}>{item.name}</option>;
+                  })}
+
+                  {/* <option value="" disabled selected>
+                    Select Role
+                  </option>
                   <option value="admin">Admin</option>
-                  <option value="softwareEngineer">Software Engineer</option>
+                  <option value="softwareEngineer">Software Engineer</option> */}
                 </select>
-                {/* <label
-                  htmlFor="role"
-                  className="mt-1 p-2 w-full absolute left-0 -top-4 text-xs peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-0.5 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-black"
-                >
-                  Role*
-                </label> */}
+
                 <div className="mt-3 text-2xl cursor-pointer">
                   <CiSquarePlus onClick={openModal} />
                 </div>
@@ -390,7 +393,16 @@ const Register: React.FC<ModalProps> = ({
             </div>
           </form>
           <CommonModal isOpen={isModalOpen} onClose={closeModal}>
-            <CommonSelectModel />
+            <CommonSelectModel
+              heading="Create Role"
+              inputLabel="Add Role"
+              buttonName="Create Role"
+              closeModal={closeModal}
+              postRequestApi={PostRoleEmployeeListMutateAsync}
+              message="Role created successful!!"
+              errorMessage="Role created failed !!"
+              refetch={GetRoleEmployeeListRefetch}
+            />
           </CommonModal>
         </div>
       </div>

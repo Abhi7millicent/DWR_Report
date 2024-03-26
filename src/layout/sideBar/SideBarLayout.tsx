@@ -133,8 +133,8 @@ const App: React.FC = () => {
           // ]),
           getItem("Settings", "sub3", <IoSettingsOutline />, [
             getItem("Customization", "9", null, [
-              getItem("Offer Letter", "custom-offer-letter"),
-              getItem("Appointment Letter", "custom-appointment-letter"),
+              getItem("Letter", "custom-offer-letter"),
+              // getItem("Appointment Letter", "custom-appointment-letter"),
             ]),
             // getItem("Option 10", "10"),
           ]),
