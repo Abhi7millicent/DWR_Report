@@ -2,7 +2,31 @@ import { Button, Grid } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import InputField from "../InputField/InputField";
 
-const CommonSelectModel = () => {
+import toast from "react-hot-toast";
+
+interface ISelectModelData {
+  heading: string;
+  inputLabel: string;
+  message: string;
+  errorMessage: string;
+  buttonName: string;
+  closeModal: () => void;
+  refetch: () => void;
+  postRequestApi: (requestData: { name: string }) => any;
+}
+interface IPostData {
+  selectName: string;
+}
+const CommonSelectModel: React.FC<ISelectModelData> = ({
+  heading,
+  inputLabel,
+  buttonName,
+  closeModal,
+  postRequestApi,
+  message,
+  errorMessage,
+  refetch,
+}) => {
   const {
     formState: { errors },
     control,
@@ -13,38 +37,71 @@ const CommonSelectModel = () => {
     setValue,
   } = useForm({
     defaultValues: {
-      TaskName: "",
+      selectName: "",
     },
   });
-  const onSubmitSelect = () => {};
+  const onSubmitSelect = async (data: IPostData) => {
+    const requestData = {
+      name: data.selectName,
+    };
+
+    try {
+      const response = await postRequestApi(requestData);
+      //   console.log("Log: resposne", response);
+      if (response) {
+        toast.success(message, {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+        refetch();
+        closeModal();
+        reset();
+      } else {
+        toast.error(errorMessage, {
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      toast.error("Server Error", {
+        position: "top-center",
+      });
+    }
+  };
   return (
     <div className="w-96">
-      <h2 className="text-2xl font-semibold mb-2">Add role</h2>
-      <form onSubmit={handleSubmit(onSubmitSelect)}>
+      <h2 className="text-2xl font-semibold mb-2">{heading}</h2>
+      <form onSubmit={handleSubmit(onSubmitSelect)} autoComplete="off">
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={12}>
             <Controller
               control={control}
               rules={{
-                required: false,
+                required: true,
               }}
-              {...register("TaskName")}
+              {...register("selectName")}
               render={({ field: { onChange, value } }) => (
                 <InputField
                   value={value}
                   type="text"
-                  label="Task Name"
-                  placeholder="Task Name"
-                  name="TaskName"
-                  aria-invalid={errors.TaskName ? "true" : "false"}
+                  label={inputLabel}
+                  placeholder={inputLabel}
+                  name="selectName"
+                  aria-invalid={errors.selectName ? "true" : "false"}
                   onChange={(e) => {
                     onChange(e);
-                    clearErrors("TaskName");
+                    clearErrors("selectName");
                   }}
                 />
               )}
             />
-            {errors.TaskName?.type === "required" && (
+            {errors.selectName?.type === "required" && (
               <p className="alert">This field is required</p>
             )}
           </Grid>
@@ -52,6 +109,7 @@ const CommonSelectModel = () => {
         <div className="flex justify-between mt-4">
           <Button
             onClick={() => {
+              closeModal();
               reset();
             }}
             variant="contained"
@@ -65,7 +123,7 @@ const CommonSelectModel = () => {
             close
           </Button>
           <Button variant="contained" color="primary" type="submit">
-            Add role
+            {buttonName}
           </Button>
         </div>
       </form>

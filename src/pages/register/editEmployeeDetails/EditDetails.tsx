@@ -22,6 +22,7 @@ import {
   useGetEmployeeById,
   usePutEmployeeById,
 } from "../../../hook/querie/useEmployeeQueries";
+import { useGetRoleEmployeeList } from "../../../hook/querie/useDropDown";
 
 const EditDetails: React.FC = () => {
   const {
@@ -48,7 +49,7 @@ const EditDetails: React.FC = () => {
   const dispatch = useDispatch();
 
   // const employeeId = id ? id : "";
-
+  // ---------------------------- React Query ------------------------//
   const {
     data: getEmployeeData,
     isLoading,
@@ -57,6 +58,8 @@ const EditDetails: React.FC = () => {
 
   const { mutateAsync: updateEmployee, isLoading: UpdateEmployeeIsLoading } =
     usePutEmployeeById();
+
+  const { data: GetRoleEmployeeListData } = useGetRoleEmployeeList();
 
   useEffect(() => {
     if (!isLoading && !isError && getEmployeeData) {
@@ -306,10 +309,13 @@ const EditDetails: React.FC = () => {
                           },
                         }}
                       >
-                        <MenuItem value="admin">Admin</MenuItem>
+                        {GetRoleEmployeeListData?.data?.map((item) => (
+                          <MenuItem value={item.name}>{item.name}</MenuItem>
+                        ))}
+                        {/* <MenuItem value="admin">Admin</MenuItem>
                         <MenuItem value="SoftwareEngineer">
                           Software Engineer
-                        </MenuItem>
+                        </MenuItem> */}
                       </Select>
                     )}
                   />

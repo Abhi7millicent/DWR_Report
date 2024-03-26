@@ -1,171 +1,180 @@
-import { Button, TextareaAutosize } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import { useMemo, CSSProperties } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useDropzone, FileWithPath } from "react-dropzone";
+
+const baseStyle: CSSProperties = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  padding: "14px",
+  borderWidth: 2,
+  borderRadius: 2,
+  borderColor: "var(--primary-color)",
+  borderStyle: "dashed",
+  backgroundColor: "#fafafa",
+  color: "#bdbdbd",
+  outline: "none",
+  transition: "border .24s ease-in-out",
+  cursor: "pointer",
+};
+
+const focusedStyle = {
+  borderColor: "var(--primary-color)",
+};
+
+const acceptStyle = {
+  borderColor: "#00e676",
+};
+
+const rejectStyle = {
+  borderColor: "#ff1744",
+};
 
 function CustomOfferLetter() {
   const {
     formState: { errors },
     control,
-    clearErrors,
-    register,
-
+    setValue,
     handleSubmit,
   } = useForm({
     defaultValues: {
-      paragraph1: "",
-      paragraph2: "",
-      paragraph3: "",
-      paragraph4: "",
-      paragraph5: "",
+      selectLetter: "",
+      uploadAttendance: null, // Set default value to null for file upload
     },
   });
+
+  const {
+    acceptedFiles,
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    onDrop: (acceptedFiles: FileWithPath[]) => {
+      // When files are dropped, update form value with the file(s)
+      setValue("uploadAttendance", acceptedFiles);
+    },
+  });
+
+  const files = acceptedFiles.map((file: FileWithPath) => (
+    <li key={file.path}>{file.path}</li>
+  ));
+
+  const style = useMemo(
+    () => ({
+      ...baseStyle,
+      ...(isFocused ? focusedStyle : {}),
+      ...(isDragAccept ? acceptStyle : {}),
+      ...(isDragReject ? rejectStyle : {}),
+    }),
+    [isFocused, isDragAccept, isDragReject]
+  );
 
   const handleLetterSubmit = (data: any) => {
     console.log(data);
   };
+
   return (
     <div className="flex  mt-3 justify-center">
       <div className="bg-white p-8 shadow-md rounded-md w-full">
-        <h2 className="text-2xl font-semibold mb-4">Offer Letter</h2>
+        <h2 className="text-2xl font-semibold mb-4">Custom Letter</h2>
         <form onSubmit={handleSubmit(handleLetterSubmit)}>
-          <div className="w-full mt-3">
-            <label>Paragraph 1:</label>
-            <div className="border border-[#226d6dbf] w-full rounded-md">
-              <Controller
-                control={control}
-                rules={{
-                  required: false,
-                }}
-                {...register("paragraph1")}
-                render={({ field: { onChange, value } }) => (
-                  <TextareaAutosize
-                    id="paragraph1"
-                    value={value}
-                    placeholder="Paragraph 1"
-                    onChange={(e) => {
-                      onChange(e);
-                      clearErrors("paragraph1");
-                    }}
-                    className="w-full p-3"
-                  />
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel
+                  id="selectLetter"
+                  sx={{
+                    "&.MuiInputLabel-root": {
+                      color: "var(--primary-color) !important",
+                    },
+                  }}
+                >
+                  Select Letter
+                </InputLabel>
+                <Controller
+                  control={control}
+                  name="selectLetter"
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      labelId="selectLetter"
+                      id="demo-simple-select"
+                      label="Select Letter"
+                      onChange={(e) => field.onChange(e.target.value)}
+                      value={field.value}
+                      sx={{
+                        ".MuiOutlinedInput-notchedOutline": {
+                          borderColor: "var(--primary-color) !important",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "var(--primary-color) !important",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "var(--primary-color) !important",
+                        },
+                      }}
+                    >
+                      <MenuItem value="Appointment Letter">
+                        Appointment Letter
+                      </MenuItem>
+                      <MenuItem value="Offer Letter">Offer Letter</MenuItem>
+                    </Select>
+                  )}
+                />
+              </FormControl>
+              {errors.selectLetter &&
+                errors.selectLetter.type === "required" && (
+                  <p className="alert">This field is required</p>
                 )}
-              />
-              {errors.paragraph1?.type === "required" && (
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <div>
+                <section className="container">
+                  <div {...getRootProps({ style })}>
+                    <input {...getInputProps()} />
+                    <p>
+                      Drag 'n' drop some files here, or click to select files
+                    </p>
+                  </div>
+                  <aside className="flex mt-1 gap-2">
+                    <h4>FileName: </h4>
+                    <ul>{files}</ul>
+                  </aside>
+                </section>
+              </div>
+              {errors.uploadAttendance?.type === "required" && (
                 <p className="alert">This field is required</p>
               )}
-            </div>
-          </div>
-          <div className="w-full mt-3">
-            <label>Paragraph 2:</label>
-            <div className="border border-[#226d6dbf] w-full rounded-md">
-              <Controller
-                control={control}
-                rules={{
-                  required: false,
-                }}
-                {...register("paragraph2")}
-                render={({ field: { onChange, value } }) => (
-                  <TextareaAutosize
-                    id="paragraph2"
-                    value={value}
-                    placeholder="Paragraph 2"
-                    onChange={(e) => {
-                      onChange(e);
-                      clearErrors("paragraph2");
-                    }}
-                    className="w-full p-3"
-                  />
-                )}
-              />
-              {errors.paragraph2?.type === "required" && (
-                <p className="alert">This field is required</p>
-              )}
-            </div>
-          </div>
-
-          <div className="w-full mt-3">
-            <label>Paragraph 3:</label>
-            <div className="border border-[#226d6dbf] w-full rounded-md">
-              <Controller
-                control={control}
-                rules={{
-                  required: false,
-                }}
-                {...register("paragraph3")}
-                render={({ field: { onChange, value } }) => (
-                  <TextareaAutosize
-                    id="paragraph3"
-                    value={value}
-                    placeholder="Paragraph 3"
-                    onChange={(e) => {
-                      onChange(e);
-                      clearErrors("paragraph3");
-                    }}
-                    className="w-full p-3"
-                  />
-                )}
-              />
-              {errors.paragraph2?.type === "required" && (
-                <p className="alert">This field is required</p>
-              )}
-            </div>
-          </div>
-          <div className="w-full mt-3">
-            <label>Paragraph 4:</label>
-            <div className="border border-[#226d6dbf] w-full rounded-md">
-              <Controller
-                control={control}
-                rules={{
-                  required: false,
-                }}
-                {...register("paragraph4")}
-                render={({ field: { onChange, value } }) => (
-                  <TextareaAutosize
-                    id="paragraph4,"
-                    value={value}
-                    placeholder="Paragraph 4"
-                    onChange={(e) => {
-                      onChange(e);
-                      clearErrors("paragraph4");
-                    }}
-                    className="w-full p-3"
-                  />
-                )}
-              />
-              {errors.paragraph4?.type === "required" && (
-                <p className="alert">This field is required</p>
-              )}
-            </div>
-          </div>
-          <div className="w-full mt-3">
-            <label>Paragraph 5</label>
-            <div className="border border-[#226d6dbf] w-full rounded-md">
-              <Controller
-                control={control}
-                rules={{
-                  required: false,
-                }}
-                {...register("paragraph5")}
-                render={({ field: { onChange, value } }) => (
-                  <TextareaAutosize
-                    id="paragraph5,"
-                    value={value}
-                    placeholder="Paragraph 5"
-                    onChange={(e) => {
-                      onChange(e);
-                      clearErrors("paragraph5");
-                    }}
-                    className="w-full p-3"
-                  />
-                )}
-              />
-              {errors.paragraph5?.type === "required" && (
-                <p className="alert">This field is required</p>
-              )}
-            </div>
-          </div>
+            </Grid>
+          </Grid>
 
           <div className="mt-4 flex justify-end">
-            <Button variant="contained" color="primary" type="submit">
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              // sx={
+              //   acceptedFiles.length === 0
+              //     ? {
+              //         cursor: "not-allowed",
+              //         opacity: 0.5,
+              //       }
+              //     : {} // No additional styles when button is enabled
+              // }
+              disabled={acceptedFiles.length === 0}
+            >
               Save
             </Button>
           </div>

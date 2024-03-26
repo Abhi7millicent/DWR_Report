@@ -1,6 +1,9 @@
 import axios from "axios";
 import { Endpoint } from "./API/EndPoint";
 
+interface IRoleEmployee {
+  name: string;
+}
 // Get Employee List
 export const GetRoleEmployeeList = async () => {
   const url = Endpoint.DropDown.Get_RoleEmployee;
@@ -15,11 +18,12 @@ export const GetRoleEmployeeList = async () => {
   }
 };
 // Post role Employee List
-export const PostRoleEmployeeList = async () => {
+
+export const PostRoleEmployeeList = async (data: IRoleEmployee) => {
   const url = Endpoint.DropDown.Post_RoleEmployee;
 
   try {
-    const response = await axios.post(url);
+    const response = await axios.post(url, data);
     return response.data;
   } catch (error) {
     // Handle errors
