@@ -84,3 +84,16 @@ export const PostEmployeeLeave = async () => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
+
+// Get Project Develpoer Name
+export const GetProjectDevelpoerName = async () => {
+  const url = Endpoint.Employee.Get_ProjectDevelpoerName;
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error in get Get Project Develpoer Name:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};

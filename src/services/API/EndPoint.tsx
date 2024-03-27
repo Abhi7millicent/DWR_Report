@@ -22,6 +22,7 @@ export const Endpoint = {
     Post_Eduction: `${API_URL}/educational-details/save`,
     Put_Eduction: `${API_URL}/educational-details/delete/{id}`,
     Post_Leave: `${API_URL}/employee/addBalancedLeave`,
+    Get_ProjectDevelpoerName: `${API_URL}/employee/namelist`,
   },
   Leave: {
     Post_ById: `${API_URL}/leave-management/add`,
@@ -50,6 +51,8 @@ export const Endpoint = {
     Delete_ById: `${API_URL}/projects/delete/{id}`,
     Get_ById: `${API_URL}/projects/{id}`,
     Put_ById: `${API_URL}/projects/edit/{id}`,
+    Get_TechnologiesList: `${API_URL}/technologies`,
+    Post_TechnologiesList: `${API_URL}/technologies`,
   },
   Tasks: {
     Post: `${API_URL}/task/add`,

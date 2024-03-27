@@ -16,7 +16,7 @@ import ViewAppliedLeave from "./pages/leaveManagement/ViewAppliedLeave";
 import OfferLetter from "./layout/offerLetter/OfferLetter";
 import CustomOfferLetter from "./components/customization/CustomOfferLetter";
 import CustomAppointmentLetter from "./components/customization/CustomAppointmentLetter";
-// import LeadTable from "./pages/Lead/LeadTable";
+import LeadTable from "./pages/Lead/LeadTable";
 import TaskHandlingTable from "./pages/TaskHandling/TaskHandlingTable";
 import Dashboard from "./pages/Dashboard/dashboard";
 import TaskTable from "./pages/task/TaskTable";
@@ -65,7 +65,7 @@ const Navigate = () => {
               path="/custom-offer-letter"
               element={<CustomOfferLetter />}
             />
-            {/* <Route path="/lead" element={<LeadTable />} /> */}
+            <Route path="/lead" element={<LeadTable />} />
             <Route path="/assign-task" element={<TaskHandlingTable />} />
             <Route path="/task" element={<TaskTable />} />
             <Route path="/project-view" element={<ProjectViewTable />} />

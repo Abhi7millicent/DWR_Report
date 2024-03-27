@@ -12,6 +12,10 @@ interface IEditProject {
   startDate: string;
   endDate: string;
 }
+
+interface IProjectTechnologiesData {
+  name: string;
+}
 // Post Project
 export const PostProject = async (data) => {
   const url = Endpoint.Projects.Post;
@@ -70,6 +74,31 @@ export const PutProjectById = async (id: string, data: IEditProject) => {
   } catch (error) {
     // Handle errors
     console.error("Error in  get Project By id:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};
+// Get Project Technologie List
+export const GetProjectTechnologiesList = async () => {
+  const url = Endpoint.Projects.Get_TechnologiesList;
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error in  get Project Technologies List :", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};
+
+// Post Technologies List
+export const PostTechnologiesList = async (data: IProjectTechnologiesData) => {
+  const url = Endpoint.Projects.Post_TechnologiesList;
+  try {
+    const response = await axios.post(url, data);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error in  get Project Technologies List :", error);
     throw error; // Re-throw the error for the caller to handle
   }
 };

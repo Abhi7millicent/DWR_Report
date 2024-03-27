@@ -3,7 +3,9 @@ import {
   DeleteProjectById,
   GetProjectById,
   GetProjectList,
+  GetProjectTechnologiesList,
   PostProject,
+  PostTechnologiesList,
   PutProjectById,
 } from "../../services/Projects";
 
@@ -42,4 +44,12 @@ export const usePutProjectById = () => {
 
 export const useGetProjectById = (id: string) => {
   return useQuery(["qGetProjectById", id], () => GetProjectById(id));
+};
+export const useGetProjectTechnologiesList = () => {
+  return useQuery(["GetProjectTechnologiesList"], () =>
+    GetProjectTechnologiesList()
+  );
+};
+export const usePostTechnologiesList = () => {
+  return useMutation(PostTechnologiesList);
 };
