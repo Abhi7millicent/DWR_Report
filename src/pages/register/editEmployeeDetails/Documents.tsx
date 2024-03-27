@@ -63,7 +63,7 @@ const Documents: React.FC<ModalProps> = ({ isOpen, onClose, refechData }) => {
     formData.append("uploadFilePath", droppedFiles[0]); // Assuming only one file is allowed
     formData.append("description", description);
     formData.append("employeeId", id);
-    console.log(formData, "fromdat");
+    // console.log(formData, "fromdat");
 
     try {
       const response = await PostDocument(formData);

@@ -9,6 +9,8 @@ import {
 import { useMemo, CSSProperties } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDropzone, FileWithPath } from "react-dropzone";
+import { usePostUploadLetter } from "../../hook/querie/useLetter";
+import toast, { Toaster } from "react-hot-toast";
 
 const baseStyle: CSSProperties = {
   flex: 1,
@@ -45,10 +47,11 @@ function CustomOfferLetter() {
     control,
     setValue,
     handleSubmit,
+    reset,
   } = useForm({
     defaultValues: {
       selectLetter: "",
-      uploadAttendance: null, // Set default value to null for file upload
+      uploadLetter: null, // Set default value to null for file upload
     },
   });
 
@@ -62,9 +65,13 @@ function CustomOfferLetter() {
   } = useDropzone({
     onDrop: (acceptedFiles: FileWithPath[]) => {
       // When files are dropped, update form value with the file(s)
-      setValue("uploadAttendance", acceptedFiles);
+      setValue("uploadLetter", acceptedFiles);
     },
   });
+
+  // React Query
+  const { mutateAsync: PostUploadLetter } = usePostUploadLetter();
+  console.log(acceptedFiles, "acceptedFiles");
 
   const files = acceptedFiles.map((file: FileWithPath) => (
     <li key={file.path}>{file.path}</li>
@@ -80,14 +87,53 @@ function CustomOfferLetter() {
     [isFocused, isDragAccept, isDragReject]
   );
 
-  const handleLetterSubmit = (data: any) => {
+  const handleLetterSubmit = async (data: any) => {
     console.log(data);
+    const formData = new FormData();
+    formData.append("letterType", data.selectLetter);
+    formData.append("path", data.uploadLetter[0]);
+
+    try {
+      const response = await PostUploadLetter(formData);
+
+      if (response) {
+        console.log("Document saved letter!");
+        toast.success("Document saved letter!", {
+          position: "top-center",
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+          iconTheme: {
+            primary: "var(--primary-color)",
+            secondary: "#fff",
+          },
+        });
+        reset();
+        setValue("uploadLetter", []);
+
+        // Optionally, you can reset the form fields or fetch updated data
+      } else {
+        console.error("Failed to upload letter.");
+        toast.error("Failed to upload letter.", {
+          style: {
+            fontFamily: "var( --font-family)",
+            fontSize: "14px",
+          },
+        });
+        // Handle error or display a message to the user
+      }
+    } catch (error) {
+      console.error("An error occurred while saving the letter:", error);
+      // Handle error or display a message to the user
+    }
   };
 
   return (
     <div className="flex  mt-3 justify-center">
+      <Toaster reverseOrder={false} />
       <div className="bg-white p-8 shadow-md rounded-md w-full">
-        <h2 className="text-2xl font-semibold mb-4">Custom Letter</h2>
+        <h2 className="text-2xl font-semibold mb-4">Add Letter</h2>
         <form onSubmit={handleSubmit(handleLetterSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -154,7 +200,7 @@ function CustomOfferLetter() {
                   </aside>
                 </section>
               </div>
-              {errors.uploadAttendance?.type === "required" && (
+              {errors.uploadLetter?.type === "required" && (
                 <p className="alert">This field is required</p>
               )}
             </Grid>

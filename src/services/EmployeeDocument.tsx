@@ -21,7 +21,6 @@ export const GetDocumentList = async (id: string) => {
 
 export const PostDocument = async (data: any) => {
   const url = Endpoint.Employee.Post_Document;
-
   try {
     const response = await axios.post(url, data);
     return response.data;

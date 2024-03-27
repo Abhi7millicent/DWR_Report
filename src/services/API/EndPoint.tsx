@@ -36,6 +36,7 @@ export const Endpoint = {
   },
   Letter: {
     Post_GenerateOfferLetter: `${API_URL}/letter/{type}`,
+    Post_updateLetter: `${API_URL}/letter/upload`,
   },
   DWR: {
     Post: `${API_URL}/upload`,
