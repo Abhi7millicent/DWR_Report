@@ -181,20 +181,22 @@ const ProjectView = () => {
   };
   const tableHead: MRT_ColumnDef<any>[] = [
     { accessorKey: "0", header: "Sr.No", size: 20 },
-    { accessorKey: "1", header: "Project Logo" },
-    { accessorKey: "2", header: "Project Name" },
-    { accessorKey: "3", header: "Task Count" },
-    { accessorKey: "4", header: "Start Date" },
-    { accessorKey: "5", header: "End Date" },
-    { accessorKey: "6", header: "Edit" },
-    { accessorKey: "7", header: "Delete" },
+    { accessorKey: "1", header: "Project Name" },
+    { accessorKey: "2", header: "Client Name" },
+    { accessorKey: "3", header: "Client Number" },
+    { accessorKey: "4", header: "Email" },
+    { accessorKey: "5", header: "Start Date" },
+    { accessorKey: "6", header: "End Date" },
+    { accessorKey: "7", header: "Edit" },
+    { accessorKey: "8", header: "Delete" },
   ];
 
   const tableBody = projectData?.map((item, index) => [
     index + 1,
-    <img src={ConpmayLogo} className="w-10 ml-10 rounded" />,
     item.name,
-    "12",
+    item.clientName,
+    item.contactNo,
+    item.emailId,
     item.startDate,
     item.endDate,
     <a onClick={() => handleEditClick(item.id)}>

@@ -5,6 +5,7 @@ import {
   PutEmployeeById,
   PostEmployeeRegister,
   PostEmployeeLeave,
+  GetProjectDevelpoerName,
 } from "../../services/Employee";
 
 interface EmployeeData {
@@ -49,4 +50,8 @@ export const usePostEmployeeRegister = () => {
 
 export const usePostEmployeeLeave = () => {
   return useMutation(PostEmployeeLeave);
+};
+
+export const useGetProjectDevelpoerName = () => {
+  return useQuery(["GetProjectDevelpoerName"], () => GetProjectDevelpoerName());
 };

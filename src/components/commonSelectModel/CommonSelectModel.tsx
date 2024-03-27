@@ -41,10 +41,11 @@ const CommonSelectModel: React.FC<ISelectModelData> = ({
     },
   });
   const onSubmitSelect = async (data: IPostData) => {
+    console.log(data, "data");
+
     const requestData = {
       name: data.selectName,
     };
-
     try {
       const response = await postRequestApi(requestData);
       //   console.log("Log: resposne", response);

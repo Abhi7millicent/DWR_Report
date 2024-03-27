@@ -311,3 +311,27 @@ input::-webkit-inner-spin-button {
   background-color: transparent !important;
   color: var(--primary-color) !important;
 }
+
+
+/* Multiple select */
+
+.select__control {
+  height: 55px !important;
+  box-shadow: 0 0 0 1px var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  border-width: 0px !important;
+}
+
+.select__control:hover {
+  border-color: var(--primary-color) !important;
+}
+
+.select__placeholder {
+  color: var(--primary-color) !important;
+  margin-left: 5px !important;
+}
+
+.select__value-container {
+  overflow: auto !important;
+  height: 50px !important;
+}
