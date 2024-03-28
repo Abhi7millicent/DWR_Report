@@ -191,14 +191,14 @@ const Employee: React.FC = () => {
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4 px-4">Employee List</h2>
             <div>
-              <Button
+              {/* <Button
                 variant="contained"
                 color="primary"
                 sx={{ margin: "5px !important" }} // Properly defining inline styles
                 onClick={openModalUploadAttendance}
               >
                 Upload attendance
-              </Button>
+              </Button> */}
               <Button
                 variant="contained"
                 color="primary"

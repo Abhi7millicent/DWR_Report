@@ -98,7 +98,19 @@ export const PostTechnologiesList = async (data: IProjectTechnologiesData) => {
     return response.data;
   } catch (error) {
     // Handle errors
-    console.error("Error in  get Project Technologies List :", error);
+    console.error("Error in  post Project Technologies List :", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+};
+// Get Project Name List
+export const GetProjectNameList = async () => {
+  const url = Endpoint.Projects.Get_ProjectNameList;
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error("Error in  get Project name List :", error);
     throw error; // Re-throw the error for the caller to handle
   }
 };

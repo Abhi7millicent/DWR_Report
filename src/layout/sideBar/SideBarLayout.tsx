@@ -7,7 +7,7 @@ import "../../App.css";
 import { GetSessionItem } from "../../utils/SessionStorage";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { FaRegUser, FaTasks } from "react-icons/fa";
+import { FaRegUser, FaTasks, FaRegCalendarAlt } from "react-icons/fa";
 import { RiComputerLine } from "react-icons/ri";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { HiMiniUsers } from "react-icons/hi2";
@@ -112,6 +112,7 @@ const App: React.FC = () => {
       ? [
           getItem("Dashboard", "dashboard", <AiOutlineDashboard />),
           getItem("Employee", "employee", <FaRegUser />),
+          getItem("Attendance", "upload-attendance", <FaRegCalendarAlt />),
           getItem("Project", "project", <RiComputerLine />),
           getItem("Task", "task", <FaTasks />),
           getItem("Project View", "project-view", <FaTasks />),

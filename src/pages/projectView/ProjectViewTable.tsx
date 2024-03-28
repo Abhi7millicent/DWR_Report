@@ -5,6 +5,8 @@ import ProjectViewAssignTask from "./ProjectViewAssignTask";
 import CommonModal from "../../layout/commonModal/CommonModal";
 import CommonMaterialTable from "../../layout/commonTable/CommonTable";
 import { MRT_ColumnDef } from "material-react-table";
+import { useGetProjectNameList } from "../../hook/querie/useProjects";
+import { useGetTaskList } from "../../hook/querie/useTasks";
 
 // Define menuData outside the component
 export const menuData = [
@@ -37,6 +39,10 @@ function ProjectViewTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalView, setModalView] = useState("");
 
+  // ---------------------- React query -------------------- //
+
+  const { data: GetProjectNameListData } = useGetProjectNameList();
+  const { data: GetTaskListData } = useGetTaskList();
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -77,7 +83,7 @@ function ProjectViewTable() {
           </div>
           <div className="flex justify-between gap-2">
             <div className="mt-2">
-              {menuData.map((item, index) => (
+              {GetProjectNameListData?.map((item, index) => (
                 <ul
                   key={index}
                   className="menu menu-xs bg-slate-200 rounded-lg max-w-xs w-full"
@@ -99,10 +105,10 @@ function ProjectViewTable() {
                             d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
                           />
                         </svg>
-                        {item.title}
+                        {item.name}
                       </summary>
                       <ul>
-                        {item.items.map((subItem, subIndex) => (
+                        {GetTaskListData?.map((subItem, subIndex) => (
                           <li key={subIndex}>{renderSubMenu(subItem)}</li>
                         ))}
                       </ul>
@@ -142,9 +148,9 @@ function renderSubMenu(subItem) {
             d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
           />
         </svg>
-        {subItem.title}
+        {subItem.name}
       </summary>
-      <ul>
+      {/* <ul>
         {subItem.items.map((nestedItem, nestedIndex) => (
           <li key={nestedIndex}>
             {nestedItem.title ? (
@@ -170,7 +176,7 @@ function renderSubMenu(subItem) {
             )}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </details>
   );
 }

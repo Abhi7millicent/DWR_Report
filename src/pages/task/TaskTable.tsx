@@ -100,18 +100,22 @@ const TaskTable = () => {
   };
   const tableHead: MRT_ColumnDef<any>[] = [
     { accessorKey: "0", header: "Sr.No", size: 20 },
-    { accessorKey: "1", header: "Task Name" },
-    { accessorKey: "2", header: "Sub Task Count" },
-    { accessorKey: "3", header: "Start Date" },
-    { accessorKey: "4", header: "End Date" },
-    { accessorKey: "5", header: "Edit" },
-    { accessorKey: "6", header: "Delete" },
+    { accessorKey: "1", header: "Project Name", size: 20 },
+    { accessorKey: "2", header: "Task Name" },
+    { accessorKey: "3", header: "Task Type" },
+    { accessorKey: "4", header: "Assign Name" },
+    { accessorKey: "5", header: "Start Date" },
+    { accessorKey: "6", header: "End Date" },
+    { accessorKey: "7", header: "Edit" },
+    { accessorKey: "8", header: "Delete" },
   ];
 
   const tableBody = taskData?.map((item, index) => [
     index + 1,
+    item.projectId.label,
     item.name,
-    "12",
+    item.taskType.label,
+    item.assignTo.label,
     item.startDate,
     item.endDate,
     <a onClick={() => handleEditClick(item.id)}>

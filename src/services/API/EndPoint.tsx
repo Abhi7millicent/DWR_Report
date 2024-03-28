@@ -53,6 +53,7 @@ export const Endpoint = {
     Put_ById: `${API_URL}/projects/edit/{id}`,
     Get_TechnologiesList: `${API_URL}/technologies`,
     Post_TechnologiesList: `${API_URL}/technologies`,
+    Get_ProjectNameList: `${API_URL}/projects/name`,
   },
   Tasks: {
     Post: `${API_URL}/task/add`,
@@ -64,5 +65,10 @@ export const Endpoint = {
   DropDown: {
     Get_RoleEmployee: `${API_URL}/role-master/list`,
     Post_RoleEmployee: `${API_URL}/role-master/save`,
+    Post_TaskType: `${API_URL}/drop-down/task-type`,
+    Get_TaskType: `${API_URL}/drop-down/task-type`,
+  },
+  Attendance: {
+    Post: `${API_URL}/attendance/upload`,
   },
 };

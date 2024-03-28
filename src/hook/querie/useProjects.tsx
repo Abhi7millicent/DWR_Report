@@ -3,6 +3,7 @@ import {
   DeleteProjectById,
   GetProjectById,
   GetProjectList,
+  GetProjectNameList,
   GetProjectTechnologiesList,
   PostProject,
   PostTechnologiesList,
@@ -46,10 +47,15 @@ export const useGetProjectById = (id: string) => {
   return useQuery(["qGetProjectById", id], () => GetProjectById(id));
 };
 export const useGetProjectTechnologiesList = () => {
-  return useQuery(["GetProjectTechnologiesList"], () =>
+  return useQuery(["qGetProjectTechnologiesList"], () =>
     GetProjectTechnologiesList()
   );
 };
 export const usePostTechnologiesList = () => {
   return useMutation(PostTechnologiesList);
+};
+
+// Get Project Name List
+export const useGetProjectNameList = () => {
+  return useQuery(["qGetProjectNameList"], () => GetProjectNameList());
 };

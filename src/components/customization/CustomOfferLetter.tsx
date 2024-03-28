@@ -114,7 +114,6 @@ function CustomOfferLetter() {
 
         // Optionally, you can reset the form fields or fetch updated data
       } else {
-        console.error("Failed to upload letter.");
         toast.error("Failed to upload letter.", {
           style: {
             fontFamily: "var( --font-family)",

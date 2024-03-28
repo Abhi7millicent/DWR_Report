@@ -21,6 +21,7 @@ import TaskHandlingTable from "./pages/TaskHandling/TaskHandlingTable";
 import Dashboard from "./pages/Dashboard/dashboard";
 import TaskTable from "./pages/task/TaskTable";
 import ProjectViewTable from "./pages/projectView/ProjectViewTable";
+import Attendance from "./pages/Attendance/attendance";
 
 const Navigate = () => {
   return (
@@ -69,6 +70,7 @@ const Navigate = () => {
             <Route path="/assign-task" element={<TaskHandlingTable />} />
             <Route path="/task" element={<TaskTable />} />
             <Route path="/project-view" element={<ProjectViewTable />} />
+            <Route path="/upload-attendance" element={<Attendance />} />
           </Routes>
         </div>
       </div>
