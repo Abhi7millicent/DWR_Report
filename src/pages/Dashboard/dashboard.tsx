@@ -82,7 +82,7 @@ const Dashboard = () => {
             <Typography variant="h5">Dashboard</Typography>
           </Grid>
           <DashboardCard
-            title="Total Users"
+            title="Total Employees"
             icon={<FaRegUser />}
             value="2,678"
           />
